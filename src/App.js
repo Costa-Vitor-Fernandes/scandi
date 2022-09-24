@@ -2,6 +2,7 @@ import "./App.css";
 import styled from "styled-components";
 import { Component } from "react";
 import Card from "./Classes/Card";
+import axios from 'axios'
 
 const Header = styled.header`
   display: flex;
@@ -39,11 +40,15 @@ const ActionsMenu = styled(HeaderContainer)`
 `;
 
 const Main = styled.main`
-  text-align: left;
-  margin: 0 8em;
+display:flex;
+flex-direction: column;
+& #categoryName{
+  margin-left:3em;
+}
 `;
 const ProductGrid = styled.div`
   display: grid;
+  align-self: center;
   grid-template-columns: 25em 25em 25em;
   width: 70em;
 `;
@@ -58,7 +63,12 @@ const ActionButton = styled.div`
     background-color: rgb(249,249,249);
     transform: scale(1.15)
   }
-`;
+`
+const Footer = styled.div`
+margin-top: 1.5em;
+background-color:#fefece;
+height:50px;
+`
 
 // const ProductCard = styled.div`
 //   /* background-color: red; */
@@ -107,16 +117,24 @@ class App extends Component {
     super(props);
 
     this.state = {
-      arrProductImg: ['Product%20B.svg','Product%20B.svg', 'Product%20B.svg'],
-      arrProductName: ['p1','p2','p3'],
-      arrProductPrice: ['$50','$60','$70'],
-      categoryName: "WOMEN",
+      arrProductImg: ['https://s1.static.brasilescola.uol.com.br/be/conteudo/images/1-canario-da-terra.jpg','Product%20B.svg', 'Product%20B.svg','Product%20B.svg'],
+      arrProductName: [],
+      arrProductPrice: ['$50','$60','$70', '$80'],
+      categoryName: "ALL",
     };
   }
 
   componentDidMount() {
-    // axios.get()
-    // this.setState({});
+    axios.get(`http://localhost:4000/graphql?query={category{products{name}}}`).then((res)=>{
+    const allProducts = res.data.data.category.products  
+    console.log(allProducts,'response from graphql')
+      // this.setState({});
+      let arrAllProducts = allProducts.map((v,i,arr)=>{
+        return arr[i].name
+      })
+      this.setState({arrProductName: arrAllProducts})
+      console.log(arrAllProducts, 'arrAllProducts')
+    })
   }
 
   render() {
@@ -124,9 +142,9 @@ class App extends Component {
       <div>
         <Header>
           <HeaderContainer>
-            <Nav>WOMEN</Nav>
-            <Nav>MEN</Nav>
-            <Nav>KIDS</Nav>
+            <Nav><a href="/women">WOMEN</a></Nav>
+            <Nav><a href="/men">MEN</a></Nav>
+            <Nav><a href="/kids">KIDS</a></Nav>
           </HeaderContainer>
           <Logo></Logo>
           <ActionsMenu>
@@ -140,9 +158,10 @@ class App extends Component {
           </ActionsMenu>
         </Header>
         <Main>
-          <h1>{this.state.categoryName}</h1>
+          <h1 id="categoryName">{this.state.categoryName}</h1>
           <ProductGrid>
             {/* aqui eu faço a chamada pra classe que controla os cards */}
+            <Card state={this.state}></Card>
             {/* <ProductCard>
             <ImageHolder>
             <img id="productImg" src="Product%20B.svg" alt="product"></img>
@@ -150,11 +169,13 @@ class App extends Component {
             <ProductName>Product Name</ProductName>
             <Price>$50</Price>
           </ProductCard> */}
-            <Card state={this.state}></Card>
           </ProductGrid>
         </Main>
         {/* <Button>Normal Button</Button>
     <TomatoButton>Tomato Button</TomatoButton> */}
+    <Footer>
+      FooterSpacer
+    </Footer>
       </div>
     );
   }
