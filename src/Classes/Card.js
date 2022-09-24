@@ -7,7 +7,7 @@ width: 386px;
 height: 444px;
 &:hover{
   background-color:#fff;
-  box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
+  box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.4);//0.4 instead of 0.19 to better contrast
 }
 `
 const ImageHolder = styled.div`
@@ -36,7 +36,7 @@ export default class Card extends Component {
             return(
                 <ProductCard>
                 <ImageHolder>
-                <img id="productImg" src={this.props.state.arrProductImg[i]} alt="product"></img>
+                <img id="productImg" src={this.props.state.arrProductImg[i]} alt={this.props.state.arrProductName[i]}></img>
                 </ImageHolder>
                 <ProductName>{this.props.state.arrProductName[i]}</ProductName>
                 <Price>{this.props.state.arrProductPrice[i]}</Price>
