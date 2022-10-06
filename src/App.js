@@ -1,8 +1,10 @@
 import "./App.css";
 import styled from "styled-components";
 import { Component } from "react";
-import Card from "./Classes/Card";
+import Cards from "./Classes/Cards";
 import axios from 'axios'
+
+
 
 const Header = styled.header`
   display: flex;
@@ -18,6 +20,7 @@ const Nav = styled.nav`
   &:hover {
     border-bottom: 1px solid green;
   }
+  /* media query here to size */
 `;
 const HeaderContainer = styled.div`
   display: flex;
@@ -37,20 +40,28 @@ const ActionsMenu = styled(HeaderContainer)`
   /* background-color:green; */
   display: flex;
   justify-content: space-around;
+  /* ???? query to size ???? */
 `;
 
 const Main = styled.main`
 display:flex;
 flex-direction: column;
-& #categoryName{
-  margin-left:3em;
-}
-`;
+background-color: #fff;
+/* background-color:  ${props => props.primary ? "white" : "palevioletred"}; */
+filter : ${props => props.opaque ? "brightness(70%)" : "brightness(100%)"};
+`
+const CategoryName = styled.h1`
+font-size: 3em;
+padding-left:3em;
+`
+
 const ProductGrid = styled.div`
   display: grid;
   align-self: center;
-  grid-template-columns: 25em 25em 25em;
-  width: 70em;
+  grid-template-columns: 30em 30em 30em;
+  gap: 10px;
+  /* media query here to display flex column */
+
 `;
 const ActionButton = styled.div`
   display: flex;
@@ -64,11 +75,36 @@ const ActionButton = styled.div`
     transform: scale(1.15)
   }
 `
+const Modal = styled.div`
+position:absolute;
+align-self:flex-end;
+margin: 0 5vw;
+width:10em;
+top:50px;
+/* border:1px solid black; */
+background-color: #fff;
+z-index:3;
+
+`
+
+const CurrencyModal = styled(Modal)`
+margin: 0 12vw;
+padding: 0.5em 0;
+width: 8em;
+`
+
+const CurrencyActionButton = styled(ActionButton)`
+width:4em;
+height: 1em;
+margin-left: 0.5em;
+`
+
 const Footer = styled.div`
 margin-top: 1.5em;
 background-color:#fefece;
 height:50px;
 `
+
 
 // const ProductCard = styled.div`
 //   /* background-color: red; */
@@ -115,64 +151,112 @@ height:50px;
 class App extends Component {
   constructor(props) {
     super(props);
+    this.currencyModal = this.currencyModal.bind(this)
+    this.cartModal = this.cartModal.bind(this);
 
     this.state = {
-      arrProductImg: ['https://s1.static.brasilescola.uol.com.br/be/conteudo/images/1-canario-da-terra.jpg','Product%20B.svg', 'Product%20B.svg','Product%20B.svg'],
-      arrProductName: [],
-      arrProductPrice: ['$50','$60','$70', '$80'],
-      categoryName: "ALL",
+      productImgs: [],
+      productNames: [],
+      productPrices: [],
+      currencySymbols:[],
+      currencyLabels:[],
+      categoryNames: [],
+      defaultCurrencyIndex: 0,
+      currencyModal: false,
+      cartModal:false,
+      opaque: '',
     };
   }
 
   componentDidMount() {
-    axios.get(`http://localhost:4000/graphql?query={category{products{name}}}`).then((res)=>{
-    const allProducts = res.data.data.category.products  
-    console.log(allProducts,'response from graphql')
-      // this.setState({});
-      let arrAllProducts = allProducts.map((v,i,arr)=>{
-        return arr[i].name
+    //fetching the symbols and labels of the currencies
+    axios.get('http://localhost:4000/graphql?query={currencies{symbol,label}}').then((res)=>{
+      let allCurrencies = res.data.data.currencies
+      let arrAllSymbols = allCurrencies.map((v,i,arr)=>{
+        return arr[i].symbol
       })
-      this.setState({arrProductName: arrAllProducts})
-      console.log(arrAllProducts, 'arrAllProducts')
+      let arrAllLabels = allCurrencies.map((v,i,arr)=>{
+        return arr[i].label
+      })
+      this.setState({currencySymbols: arrAllSymbols, currencyLabels: arrAllLabels})
     })
+    //fetching product stuff
+    axios.get(`http://localhost:4000/graphql?query={category{products{category,inStock,gallery,name,description,prices{amount,currency{symbol}}}}}`).then((res)=>{
+    const allProducts = res.data.data.category.products
+
+      let arrAllProductNames = allProducts.map((v,i,arr)=>arr[i].name)
+      let arrAllProductPrices = allProducts.map((v,i,arr)=>arr[i].prices)
+      // returning a obj for each product with {amount : x, currency: {symbol : y} }
+      
+      let arrAllProductImgs = allProducts.map((v,i,arr)=> arr[i].gallery)
+    // returning a arr with links to the product images
+      let arrAllCategories  = allProducts.map((v,i,arr)=>arr[i].category)
+      let allCategories = [...new Set(arrAllCategories)] 
+      
+
+      this.setState({productNames: arrAllProductNames, productImgs: arrAllProductImgs, productPrices: arrAllProductPrices, categoryNames: allCategories})
+    })
+  }
+  currencyModal = () =>{
+    this.setState({currencyModal:!this.state.currencyModal, cartModal:false, opaque:'opaque'})
+  }
+  cartModal = () =>{
+    this.setState({cartModal:!this.state.cartModal, currencyModal:false, opaque:'opaque'})
+  }
+  turnOffModals = () =>{
+    this.setState({cartModal: false, currencyModal: false, opaque:''})
   }
 
   render() {
     return (
-      <div>
+      <div id="page">
         <Header>
           <HeaderContainer>
-            <Nav><a href="/women">WOMEN</a></Nav>
+            <Nav><a href="/">All</a></Nav>
             <Nav><a href="/men">MEN</a></Nav>
             <Nav><a href="/kids">KIDS</a></Nav>
           </HeaderContainer>
           <Logo></Logo>
           <ActionsMenu>
-            <ActionButton>
+            <ActionButton onClick={()=>this.currencyModal()}>
               <img src="dollar-sign.svg" alt="dollar-sign" />
               <img src="caret-down.svg" alt="sign" />
             </ActionButton>
-            <ActionButton>
+            <ActionButton onClick={()=>this.cartModal()}>
               <img src="cart-shopping.svg" alt="cart" />
             </ActionButton>
           </ActionsMenu>
         </Header>
-        <Main>
-          <h1 id="categoryName">{this.state.categoryName}</h1>
+
+          {/* opens the currency modal */}
+          {this.state.currencyModal ?
+           <CurrencyModal>
+            {this.state.currencySymbols.map((v,i,arr)=>{
+              return <CurrencyActionButton onClick={()=>{
+                this.setState({defaultCurrencyIndex: i})
+                this.setState({currencyModal:false})
+                  }}>
+                      {this.state.currencySymbols[i]}  {this.state.currencyLabels[i]}
+                </CurrencyActionButton>
+            })}
+             {/* currency action button styled component to override */}
+            </CurrencyModal> :
+            null}
+            {/* opens the currency modal */}
+         
+          {/* opens the cart Modal */}
+          {this.state.cartModal ? <Modal>CartModal<div>cart stuff here</div></Modal> : null}
+           {/* opens the cart Modal */}
+
+        
+        
+        <Main opaque={this.state.cartModal || this.state.currencyModal} onClick={()=>this.turnOffModals()}>
+          <CategoryName id="categoryName">all</CategoryName>
           <ProductGrid>
-            {/* aqui eu faço a chamada pra classe que controla os cards */}
-            <Card state={this.state}></Card>
-            {/* <ProductCard>
-            <ImageHolder>
-            <img id="productImg" src="Product%20B.svg" alt="product"></img>
-            </ImageHolder>
-            <ProductName>Product Name</ProductName>
-            <Price>$50</Price>
-          </ProductCard> */}
+            <Cards state={this.state}></Cards>
           </ProductGrid>
         </Main>
-        {/* <Button>Normal Button</Button>
-    <TomatoButton>Tomato Button</TomatoButton> */}
+
     <Footer>
       FooterSpacer
     </Footer>

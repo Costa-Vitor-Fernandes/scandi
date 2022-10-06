@@ -1,11 +1,21 @@
-.App {
+/* .App {
   text-align: center;
+} */
+
+body {
+all:unset;
+width:100%;
+}
+#page{
+  display:flex;
+  flex-direction:column;
+  /* align-items: center; */
 }
 
 a{
 all:unset;
 }
-
+/* 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -30,8 +40,8 @@ all:unset;
 
 .App-link {
   color: #61dafb;
-}
-
+} */
+/* 
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -39,4 +49,4 @@ all:unset;
   to {
     transform: rotate(360deg);
   }
-}
+} */

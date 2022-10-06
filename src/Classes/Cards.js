@@ -3,8 +3,7 @@ import styled from "styled-components";
 
 const ProductCard = styled.div`
 /* background-color: red; */
-width: 386px;
-height: 444px;
+min-width: 27vw;
 &:hover{
   background-color:#fff;
   box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.4);//0.4 instead of 0.19 to better contrast
@@ -12,9 +11,9 @@ height: 444px;
 `
 const ImageHolder = styled.div`
 display:flex;
-padding: 1em 1em 1.5em 1em;
+padding: 1vw 1vw 1.5vw 1vw;
 & #productImg{
-  width:100%; 
+  min-width:23vw;
 }
 `
 const ProductName = styled.h3`
@@ -25,21 +24,21 @@ const Price = styled.p`
 /* background-color: red; */
 margin: 0.5em 0.8em;
 font-size:1em;
+padding-bottom:2em;
 `
 
-export default class Card extends Component {
+export default class Cards extends Component {
 
     render(){
-        console.log(this.props.state.arrProductName)
-
-        const allCards = this.props.state.arrProductName.map((v, i, arr)=>{
+      let currencyIndex = this.props.state.defaultCurrencyIndex;
+        const allCards = this.props.state.productNames.map((v, i, arr)=>{
             return(
                 <ProductCard>
                 <ImageHolder>
-                <img id="productImg" src={this.props.state.arrProductImg[i]} alt={this.props.state.arrProductName[i]}></img>
+                <img id="productImg" src={this.props.state.productImgs[i][0]} alt={this.props.state.productNames[i]}></img>
                 </ImageHolder>
-                <ProductName>{this.props.state.arrProductName[i]}</ProductName>
-                <Price>{this.props.state.arrProductPrice[i]}</Price>
+                <ProductName>{this.props.state.productNames[i]}</ProductName>
+                <Price>{this.props.state.currencyLabels[currencyIndex]} {this.props.state.currencySymbols[currencyIndex]} {this.props.state.productPrices[i][currencyIndex].amount}</Price>
               </ProductCard>
             )
         })
