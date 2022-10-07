@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Component } from "react";
 import Cards from "./Classes/Cards";
 import axios from "axios";
+// import PDPage from "./View/PDPage";
 
 const Header = styled.header`
   display: flex;
@@ -127,7 +128,12 @@ class App extends Component {
     this.cartModal = this.cartModal.bind(this);
 
     this.state = {
-      productCategories:[],
+      productInStock : [],
+      productDescription : [],
+      // productAttributes :[],
+      productBrands:[],
+
+      productCategories: [],
       productImgs: [],
       productNames: [],
       productPrices: [],
@@ -137,7 +143,10 @@ class App extends Component {
       defaultCurrencyIndex: 0,
       currencyModal: false,
       cartModal: false,
+      // opaque is a trigger to styled-components, it darkens the Main stuff when modal opens
       opaque: "",
+      // categorySelected defaults to all
+      categorySelected: 'all',
     };
   }
 
@@ -190,7 +199,18 @@ class App extends Component {
         );
         let allCategories = [...new Set(arrAllCategories)];
 
+        let arrAllDescriptions = allProducts.map((v,i,arr)=> arr[i].description)
+        let arrAllBrands = allProducts.map((v,i,arr)=> arr[i].brand )
+        let arrInStock = allProducts.map((v,i,arr)=> arr[i].inStock)
+
+
         this.setState({
+
+      productInStock : arrInStock,
+      productDescription : arrAllDescriptions,
+      // productAttributes :[],
+      productBrands: arrAllBrands,
+          
           productCategories: arrAllProductCategories,
           productNames: arrAllProductNames,
           productImgs: arrAllProductImgs,
@@ -224,16 +244,18 @@ class App extends Component {
     return (
       <div id="page">
         <Header>
-          <HeaderContainer>
+          <HeaderContainer onClick={() => this.turnOffModals()}>
             <Nav>
-              <a href="/">All</a>
+              {/* decided to fetch 'all' and hard code 'all' by default, i imagine every store having a 'all' category */}
+              <div  onClick={()=>this.setState({categorySelected: 'all'})} >ALL</div>
             </Nav>
+            {/* mapping the category names */}
             {this.state.allCategoryNames.map((v, i, arr) => {
               return (
                 <Nav>
-                  <a href={this.state.allCategoryNames[i]}>
+                  <div  onClick={()=>this.setState({categorySelected : this.state.allCategoryNames[i]})}>
                     {this.state.allCategoryNames[i]}
-                  </a>
+                  </div>
                 </Nav>
               );
             })}
@@ -244,7 +266,7 @@ class App extends Component {
               <img src="dollar-sign.svg" alt="dollar-sign" />
               <img src="caret-down.svg" alt="sign" />
             </ActionButton>
-            <ActionButton onClick={() => this.cartModal()}>
+            <ActionButton onClick={() => this.cartModal()} >
               <img src="cart-shopping.svg" alt="cart" />
             </ActionButton>
           </ActionsMenu>
@@ -283,9 +305,9 @@ class App extends Component {
           onClick={() => this.turnOffModals()}
         >
           <CategoryName id="categoryName">
-            {window.location.pathname === "/"
-              ? "ALL"
-              : window.location.pathname.slice(1).toUpperCase()}
+            {this.state.categorySelected.toUpperCase()}
+
+
           </CategoryName>
           <ProductGrid>
             <Cards state={this.state}></Cards>

@@ -3,11 +3,47 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {
+  createBrowserRouter,
+  
+  RouterProvider,
+
+  
+} from "react-router-dom";
+import CartPage from './View/CartPage';
+import PDPage from './View/PDPage';
+import NotFound from './View/NotFound';
+
+
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+  {
+    path: '/cart',
+    element: <CartPage />
+  },
+  {
+    path:'/products/:id',
+    render: ({props}) => <PDPage {...props}  />,
+    element: <PDPage state={'aosetate'} />,
+  },
+  {
+    path: '*',
+    element:<NotFound />
+  }
+]);
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    
+    <RouterProvider router={router} />
+
   </React.StrictMode>
 );
 

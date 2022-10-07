@@ -1,5 +1,6 @@
 import { Component } from "react";
 import styled from "styled-components";
+import {Link} from 'react-router-dom'
 
 const ProductCard = styled.div`
   /* background-color: red; */
@@ -31,19 +32,38 @@ export default class Cards extends Component {
   render() {
     let currencyIndex = this.props.state.defaultCurrencyIndex;
     const allCards = this.props.state.productNames.map((v, i, arr) => {
-         let categoryNameFilter = window.location.pathname
-            .slice(1)
-            .toLowerCase();
-      if(window.location.pathname !== "/"){
 
-        if(this.props.state.productCategories[i] !== categoryNameFilter){
-          i++ 
-          return <></>
+      // if(window.location.pathname !== "/"){
+      //   let categoryNameFilter = window.location.pathname
+      //      .slice(1)
+      //      .toLowerCase();
+
+      //   if(this.props.state.productCategories[i] !== categoryNameFilter){
+      //     i++ 
+      //     return <></>
+      //   }
+      // }
+      if(this.props.state.categorySelected !== 'all'){
+        if(this.props.state.categorySelected.toLowerCase() !== this.props.state.productCategories[i]){
+          return void i++
         }
       }
-   
+      // const newTo = { 
+      //   pathname: "/category/595212758daa6810cbba4104", 
+      //   param1: "Par1" 
+      // };
+      // // link to the "location"
+      // // see (https://reacttraining.com/react-router/web/api/location)
+      // <Link to={newTo}> </Link>
+      
+      // // In your Category Component, you can access the data like this
+      // this.props.match.params.catId // this is 595212758daa6810cbba4104 
+      // this.props.location.param1 // this is Par1
+
       return (
-        <ProductCard onClick={()=>console.log(this.props.state.productNames[i])}>
+        <ProductCard onClick={()=>console.log(i, 'index do produto')}>
+          <Link to={`/products/${i}`} state={this.props.state}>
+            
           <ImageHolder>
             <img
               id="productImg"
@@ -57,6 +77,8 @@ export default class Cards extends Component {
             {this.props.state.currencySymbols[currencyIndex]}{" "}
             {this.props.state.productPrices[i][currencyIndex].amount}
           </Price>
+
+          </Link>
         </ProductCard>
       );
     });
