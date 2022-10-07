@@ -37,13 +37,13 @@ export default class Cards extends Component {
       if(window.location.pathname !== "/"){
 
         if(this.props.state.productCategories[i] !== categoryNameFilter){
-          i++
-          return
+          i++ 
+          return <></>
         }
       }
    
       return (
-        <ProductCard>
+        <ProductCard onClick={()=>console.log(this.props.state.productNames[i])}>
           <ImageHolder>
             <img
               id="productImg"

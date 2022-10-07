@@ -219,7 +219,7 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.state)
+    // console.log(this.state)
     // console.log(window.location.pathname, " window href"); // /kids
     return (
       <div id="page">
