@@ -30,7 +30,7 @@ const Price = styled.p`
 
 export default class Cards extends Component {
   render() {
-    let currencyIndex = this.props.state.defaultCurrencyIndex;
+    let currencyIndex = this.props.state.currencyIndex;
     const allCards = this.props.state.productNames.map((v, i, arr) => {
 
       // if(window.location.pathname !== "/"){
@@ -61,8 +61,9 @@ export default class Cards extends Component {
       // this.props.location.param1 // this is Par1
 
       return (
-        <ProductCard onClick={()=>console.log(i, 'index do produto')}>
-          <Link to={`/products/${i}`} state={this.props.state}>
+        <ProductCard onClick={()=>console.log(i, 'index do produto')} key={i}>
+          {/* onClick pra passar props lá na raiz */}
+          <Link to={`/products/${i}`} state={'aostate'} >
             
           <ImageHolder>
             <img

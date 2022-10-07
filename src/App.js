@@ -140,7 +140,9 @@ class App extends Component {
       currencySymbols: [],
       currencyLabels: [],
       allCategoryNames: [],
-      defaultCurrencyIndex: 0,
+      //save this in localStorage instead of state
+      currencyIndex: 0,
+      //save this in localStorage instead of state
       currencyModal: false,
       cartModal: false,
       // opaque is a trigger to styled-components, it darkens the Main stuff when modal opens
@@ -252,7 +254,7 @@ class App extends Component {
             {/* mapping the category names */}
             {this.state.allCategoryNames.map((v, i, arr) => {
               return (
-                <Nav>
+                <Nav key={i}>
                   <div  onClick={()=>this.setState({categorySelected : this.state.allCategoryNames[i]})}>
                     {this.state.allCategoryNames[i]}
                   </div>
@@ -279,7 +281,7 @@ class App extends Component {
               return (
                 <CurrencyActionButton
                   onClick={() => {
-                    this.setState({ defaultCurrencyIndex: i });
+                    this.setState({ currencyIndex: i });
                     this.setState({ currencyModal: false });
                   }}
                 >
