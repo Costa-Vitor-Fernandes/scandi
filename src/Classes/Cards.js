@@ -31,6 +31,17 @@ export default class Cards extends Component {
   render() {
     let currencyIndex = this.props.state.defaultCurrencyIndex;
     const allCards = this.props.state.productNames.map((v, i, arr) => {
+         let categoryNameFilter = window.location.pathname
+            .slice(1)
+            .toLowerCase();
+      if(window.location.pathname !== "/"){
+
+        if(this.props.state.productCategories[i] !== categoryNameFilter){
+          i++
+          return
+        }
+      }
+   
       return (
         <ProductCard>
           <ImageHolder>

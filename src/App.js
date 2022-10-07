@@ -127,12 +127,13 @@ class App extends Component {
     this.cartModal = this.cartModal.bind(this);
 
     this.state = {
+      productCategories:[],
       productImgs: [],
       productNames: [],
       productPrices: [],
       currencySymbols: [],
       currencyLabels: [],
-      categoryNames: [],
+      allCategoryNames: [],
       defaultCurrencyIndex: 0,
       currencyModal: false,
       cartModal: false,
@@ -164,20 +165,21 @@ class App extends Component {
       )
       .then((res) => {
         let allProducts = res.data.data.category.products;
-        console.log("original allproducts", allProducts);
-        if (window.location.pathname !== "/") {
-          let categoryNameFilter = window.location.pathname
-            .slice(1)
-            .toLowerCase();
-          // console.log(categoryNameFilter ,'category name filter')
+        // console.log("original allproducts", allProducts);
+        // if (window.location.pathname !== "/") {
+        //   let categoryNameFilter = window.location.pathname
+        //     .slice(1)
+        //     .toLowerCase();
+        //   // console.log(categoryNameFilter ,'category name filter')
 
-          // allProducts = res.data.data.category.products.forEach((v,i,arr)=>{
-          //   if(arr[i].category === categoryNameFilter) return arr[i]
-          // })
-          // console.log(allProducts ,'all products filtrado com category name filter')
-        }
+        //   // allProducts = res.data.data.category.products.forEach((v,i,arr)=>{
+        //   //   if(arr[i].category === categoryNameFilter) return arr[i]
+        //   // })
+        //   // console.log(allProducts ,'all products filtrado com category name filter')
+        // }
 
         let arrAllProductNames = allProducts.map((v, i, arr) => arr[i].name);
+        let arrAllProductCategories = allProducts.map((v, i, arr) => arr[i].category);
         let arrAllProductPrices = allProducts.map((v, i, arr) => arr[i].prices);
         // returning a obj for each product with {amount : x, currency: {symbol : y} }
 
@@ -189,10 +191,12 @@ class App extends Component {
         let allCategories = [...new Set(arrAllCategories)];
 
         this.setState({
+          productCategories: arrAllProductCategories,
           productNames: arrAllProductNames,
           productImgs: arrAllProductImgs,
           productPrices: arrAllProductPrices,
-          categoryNames: allCategories,
+          allCategoryNames: allCategories,
+
         });
       });
   }
@@ -215,6 +219,7 @@ class App extends Component {
   };
 
   render() {
+    console.log(this.state)
     // console.log(window.location.pathname, " window href"); // /kids
     return (
       <div id="page">
@@ -223,11 +228,11 @@ class App extends Component {
             <Nav>
               <a href="/">All</a>
             </Nav>
-            {this.state.categoryNames.map((v, i, arr) => {
+            {this.state.allCategoryNames.map((v, i, arr) => {
               return (
                 <Nav>
-                  <a href={this.state.categoryNames[i]}>
-                    {this.state.categoryNames[i]}
+                  <a href={this.state.allCategoryNames[i]}>
+                    {this.state.allCategoryNames[i]}
                   </a>
                 </Nav>
               );
