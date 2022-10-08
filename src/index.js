@@ -17,7 +17,7 @@ import NotFound from './View/NotFound';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <App pdpage={false} />,
   },
   {
     path: '/cart',
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
   },
   {
     path:'/products/:id',
-    element: <PDPage />,
+    element: <App pdpage={true} />,
   },
   {
     path: '*',
