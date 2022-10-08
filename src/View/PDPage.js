@@ -38,45 +38,45 @@ export default class PDPage extends Component {
     super(props);
     this.state = {
       photoIndex: 0,
-      name: this.props.productFactory.name,
-      description: this.props.productFactory.description,
-      currencyIndex: this.props.currencyIndex,
-      imgs: this.props.productFactory.imgs,
+      name: '',
+      description:'', 
+      currencyIndex: '',
+      imgs: '',
     };
   }
 
   componentDidMount() {
-    
+    let product = this.props.productFactory
+    this.setState({
+      name: product.name,
+      description: product.description,
+      currencyIndex: this.props.currencyIndex,
+      imgs:product.imgs,
+    })
   }
 
   render() {
-    console.log(this.props.productFactory);
-    
+    let product = this.props.productFactory
+    if(product.name){
+        console.log(product.name,'name is valid')
     return (
       <MainProductPage opaque={this.props.opaque}>
-        {/* <h1>
-                PDPage {this.props.id}
-                </h1> */}
-        <Images>
-          {this.state.imgs?this.state.imgs.map((v, i, arr) => {
-            // if (i !==0)
-              return (
-                <img
-                  onClick={() => this.setState({ photoIndex: i })}
-                  src={arr[i]}
-                />
-              );
-          }):null}
-        </Images>
-        <BigImage>
-          <img src={this.state.imgs[this.state.photoIndex]}></img>
-        </BigImage>
+                <Images>
+                    {product.imgs.map((v, i, arr)=>{
+                        return <img key={i} src={v} onClick={()=>this.setState({photoIndex: i})}/>
+                    })}
+                </Images>
+                <BigImage>
+                    <img src={product.imgs[this.state.photoIndex]} />
+                </BigImage>
         <div>
-          <div>{this.state.name}</div>
-          <div>{this.state.description.toString()}</div>
+          <h1>{this.props.productFactory.name}</h1>
+          <div dangerouslySetInnerHTML={{__html:this.props.productFactory.description}}></div>
         </div>
       </MainProductPage>
     );
+    }
+    return <div>Loading...</div>
   
 }
 }
