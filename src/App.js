@@ -153,9 +153,10 @@ class App extends Component {
     };
   }
 
- async componentDidMount() {
+
+ componentDidMount() {
     //fetching the symbols and labels of the currencies
-   await axios
+   axios
       .get("http://localhost:4000/graphql?query={currencies{symbol,label}}")
       .then((res) => {
         let allCurrencies = res.data.data.currencies;
@@ -171,7 +172,7 @@ class App extends Component {
         });
       });
     //fetching product stuff
-    axios
+   axios
       .get(
         `http://localhost:4000/graphql?query={category{products{attributes{id,name,type,items{id,value,displayValue}},category,inStock,gallery,name,description,prices{amount,currency{symbol}}}}}`
       )
@@ -244,20 +245,18 @@ class App extends Component {
     this.setState({ cartModal: false, currencyModal: false, opaque: "" });
   };
   productFactory = (id) => {
-
-    // if(!this.state.productNames[0]){
-    //    return void
-    // }
     let product = {
-      name: this.state.productNames[id],
-      category: this.state.productCategories[id],
-      imgs: this.state.productImgs[id],
-      prices: this.state.productPrices[id],
-      attributes: this.state.productAttributes[id],
-      description: this.state.productDescription[id],
-    };
-    return product;
+    name: this.state.productNames[id],
+    category: this.state.productCategories[id],
+    imgs: this.state.productImgs[id],
+    prices: this.state.productPrices[id],
+    attributes: this.state.productAttributes[id],
+    description: this.state.productDescription[id],
   };
+  return product;
+
+  };
+
 
   render() {
     // console.log(this.state)
