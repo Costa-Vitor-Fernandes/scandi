@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { Component } from "react";
 import Cards from "./Classes/Cards";
 import axios from "axios";
-// import PDPage from "./View/PDPage";
+import PDPage from "./View/PDPage";
+import { Link } from "react-router-dom";
 
 const Header = styled.header`
   display: flex;
@@ -126,13 +127,13 @@ class App extends Component {
     super(props);
     this.currencyModal = this.currencyModal.bind(this);
     this.cartModal = this.cartModal.bind(this);
+    this.productFactory = this.productFactory.bind(this);
 
     this.state = {
-      productInStock : [],
-      productDescription : [],
-      // productAttributes :[],
-      productBrands:[],
-
+      productInStock: [],
+      productDescription: [],
+      productAttributes: [],
+      productBrands: [],
       productCategories: [],
       productImgs: [],
       productNames: [],
@@ -148,13 +149,13 @@ class App extends Component {
       // opaque is a trigger to styled-components, it darkens the Main stuff when modal opens
       opaque: "",
       // categorySelected defaults to all
-      categorySelected: 'all',
+      categorySelected: "all",
     };
   }
 
-  componentDidMount() {
+ async componentDidMount() {
     //fetching the symbols and labels of the currencies
-    axios
+   await axios
       .get("http://localhost:4000/graphql?query={currencies{symbol,label}}")
       .then((res) => {
         let allCurrencies = res.data.data.currencies;
@@ -172,7 +173,7 @@ class App extends Component {
     //fetching product stuff
     axios
       .get(
-        `http://localhost:4000/graphql?query={category{products{category,inStock,gallery,name,description,prices{amount,currency{symbol}}}}}`
+        `http://localhost:4000/graphql?query={category{products{attributes{id,name,type,items{id,value,displayValue}},category,inStock,gallery,name,description,prices{amount,currency{symbol}}}}}`
       )
       .then((res) => {
         let allProducts = res.data.data.category.products;
@@ -190,7 +191,9 @@ class App extends Component {
         // }
 
         let arrAllProductNames = allProducts.map((v, i, arr) => arr[i].name);
-        let arrAllProductCategories = allProducts.map((v, i, arr) => arr[i].category);
+        let arrAllProductCategories = allProducts.map(
+          (v, i, arr) => arr[i].category
+        );
         let arrAllProductPrices = allProducts.map((v, i, arr) => arr[i].prices);
         // returning a obj for each product with {amount : x, currency: {symbol : y} }
 
@@ -201,24 +204,25 @@ class App extends Component {
         );
         let allCategories = [...new Set(arrAllCategories)];
 
-        let arrAllDescriptions = allProducts.map((v,i,arr)=> arr[i].description)
-        let arrAllBrands = allProducts.map((v,i,arr)=> arr[i].brand )
-        let arrInStock = allProducts.map((v,i,arr)=> arr[i].inStock)
-
+        let arrAllDescriptions = allProducts.map(
+          (v, i, arr) => arr[i].description
+        );
+        let arrAllBrands = allProducts.map((v, i, arr) => arr[i].brand);
+        let arrInStock = allProducts.map((v, i, arr) => arr[i].inStock);
+        let arrAllProductAttributes = allProducts.map(
+          (v, i, arr) => arr[i].attributes
+        );
 
         this.setState({
-
-      productInStock : arrInStock,
-      productDescription : arrAllDescriptions,
-      // productAttributes :[],
-      productBrands: arrAllBrands,
-          
+          productInStock: arrInStock,
+          productDescription: arrAllDescriptions,
+          productAttributes: arrAllProductAttributes,
+          productBrands: arrAllBrands,
           productCategories: arrAllProductCategories,
           productNames: arrAllProductNames,
           productImgs: arrAllProductImgs,
           productPrices: arrAllProductPrices,
           allCategoryNames: allCategories,
-
         });
       });
   }
@@ -239,25 +243,53 @@ class App extends Component {
   turnOffModals = () => {
     this.setState({ cartModal: false, currencyModal: false, opaque: "" });
   };
+  productFactory = (id) => {
+
+    // if(!this.state.productNames[0]){
+    //    return void
+    // }
+    let product = {
+      name: this.state.productNames[id],
+      category: this.state.productCategories[id],
+      imgs: this.state.productImgs[id],
+      prices: this.state.productPrices[id],
+      attributes: this.state.productAttributes[id],
+      description: this.state.productDescription[id],
+    };
+    return product;
+  };
 
   render() {
     // console.log(this.state)
     // console.log(window.location.pathname, " window href"); // /kids
+    let productId = window.location.pathname.slice(10);
     return (
       <div id="page">
         <Header>
           <HeaderContainer onClick={() => this.turnOffModals()}>
             <Nav>
-              {/* decided to fetch 'all' and hard code 'all' by default, i imagine every store having a 'all' category */}
-              <div  onClick={()=>this.setState({categorySelected: 'all'})} >ALL</div>
+              <Link to={"/"}>
+                {/* decided to fetch 'all' and hard code 'all' by default by now, i imagine every store having a 'all' category */}
+                <div onClick={() => this.setState({ categorySelected: "all" })}>
+                  ALL
+                </div>
+              </Link>
             </Nav>
             {/* mapping the category names */}
             {this.state.allCategoryNames.map((v, i, arr) => {
               return (
                 <Nav key={i}>
-                  <div  onClick={()=>this.setState({categorySelected : this.state.allCategoryNames[i]})}>
-                    {this.state.allCategoryNames[i]}
-                  </div>
+                  <Link to={"/"}>
+                    <div
+                      onClick={() => {
+                        this.setState({
+                          categorySelected: this.state.allCategoryNames[i],
+                        });
+                      }}
+                    >
+                      {this.state.allCategoryNames[i]}
+                    </div>
+                  </Link>
                 </Nav>
               );
             })}
@@ -265,11 +297,11 @@ class App extends Component {
           <Logo></Logo>
           <ActionsMenu>
             <ActionButton onClick={() => this.currencyModal()}>
-              <img src="dollar-sign.svg" alt="dollar-sign" />
-              <img src="caret-down.svg" alt="sign" />
+              <img src="/dollar-sign.svg" alt="dollar-sign" />
+              <img src="/caret-down.svg" alt="sign" />
             </ActionButton>
-            <ActionButton onClick={() => this.cartModal()} >
-              <img src="cart-shopping.svg" alt="cart" />
+            <ActionButton onClick={() => this.cartModal()}>
+              <img src="/cart-shopping.svg" alt="cart" />
             </ActionButton>
           </ActionsMenu>
         </Header>
@@ -280,6 +312,7 @@ class App extends Component {
             {this.state.currencySymbols.map((v, i, arr) => {
               return (
                 <CurrencyActionButton
+                  key={i}
                   onClick={() => {
                     this.setState({ currencyIndex: i });
                     this.setState({ currencyModal: false });
@@ -302,21 +335,29 @@ class App extends Component {
         ) : null}
         {/* opens the cart Modal */}
 
-        <Main
-          opaque={this.state.cartModal || this.state.currencyModal}
-          onClick={() => this.turnOffModals()}
-        >
-          <CategoryName id="categoryName">
-            {this.state.categorySelected.toUpperCase()}
+        {/* opens the product description page when url changes */}
+        {this.props.pdpage ? (
+          <PDPage
+            opaque={this.state.cartModal || this.state.currencyModal}
+            currencyIndex={this.state.currencyIndex}
+            id={productId}
+            productFactory={this.productFactory(productId)}
+          />
+        ) : (
+          <Main
+            opaque={this.state.cartModal || this.state.currencyModal}
+            onClick={() => this.turnOffModals()}
+          >
+            <CategoryName id="categoryName">
+              {this.state.categorySelected.toUpperCase()}
+            </CategoryName>
+            <ProductGrid>
+              <Cards state={this.state}></Cards>
+            </ProductGrid>
+          </Main>
+        )}
 
-
-          </CategoryName>
-          <ProductGrid>
-            <Cards state={this.state}></Cards>
-          </ProductGrid>
-        </Main>
-
-        <Footer>FooterSpacer</Footer>
+        <Footer>JustAFooterSpacer</Footer>
       </div>
     );
   }
