@@ -9,29 +9,39 @@ const MainProductPage = styled.div`
   justify-content: space-around;
   background-color: #fff;
   filter: ${(props) => (props.opaque ? "brightness(80%)" : "brightness(100%)")};
-  height: 90vh;
+  /* min-height:90vh; */
 `;
 
-const Images = styled.div`
+const SmallImages = styled.div`
   display: flex;
   border: 1px solid black;
   flex-direction: column;
-  background-color: red;
+  /* background-color: red; */
   max-width: 10vw;
-  margin: 5px 0px;
   & img {
-    /* max-width: 40vw; */
-    height: 100px;
+    height: auto;
   }
   & :hover {
     transform: scale(1.1);
   }
 `;
 const BigImage = styled.div`
-  display: flex;
-  width: 40%;
-  background-color: green;
+padding: 0 2em;
+  /* display: flex; */
+  /* justify-content:center; */
+  border: 1px solid green;
+  max-width:50vw;
+  & img{
+    width:100%;
+    height:auto;
+    max-width: 50vw;
+  };
 `;
+const TextSection = styled.section`
+padding:2em;
+border:1px solid red;
+width:40vw;
+`
 
 export default class PDPage extends Component {
   constructor(props) {
@@ -58,25 +68,23 @@ export default class PDPage extends Component {
   render() {
     let product = this.props.productFactory
     if(product.name){
-        console.log(product.name,'name is valid')
     return (
       <MainProductPage opaque={this.props.opaque}>
-                <Images>
+                <SmallImages>
                     {product.imgs.map((v, i, arr)=>{
                         return <img key={i} src={v} onClick={()=>this.setState({photoIndex: i})}/>
                     })}
-                </Images>
+                </SmallImages>
                 <BigImage>
                     <img src={product.imgs[this.state.photoIndex]} />
                 </BigImage>
-        <div>
+        <TextSection>
           <h1>{this.props.productFactory.name}</h1>
           <div dangerouslySetInnerHTML={{__html:this.props.productFactory.description}}></div>
-        </div>
+        </TextSection>
       </MainProductPage>
     );
     }
-    return <div>Loading...</div>
-  
+    return <div>Loading...</div>  
 }
 }
