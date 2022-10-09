@@ -68,7 +68,7 @@ export default class Cards extends Component {
       // this.props.location.param1 // this is Par1
 
       return (
-        <ProductCard onClick={() => console.log(i, "index do produto")} key={i}>
+        <ProductCard key={i}>
           {/* onClick pra passar props lá na raiz */}
           <Link to={{ pathname: `/products/${i}`, state: "statefrom link" }}>
             <ImageHolder>
