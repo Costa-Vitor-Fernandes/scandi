@@ -336,8 +336,8 @@ class App extends Component {
 
         {/* opens the product description page when url changes */}
         {this.props.pdpage ? (
-          <PDPage
-          currencyLabels={this.state.currencyLabels}
+          <PDPage turnOffModals={()=>this.turnOffModals()} 
+          currencyLabels={this.state.currencyLabels}  
           currencySymbols={this.state.currencySymbols}
             opaque={this.state.cartModal || this.state.currencyModal}
             currencyIndex={this.state.currencyIndex}
@@ -357,6 +357,7 @@ class App extends Component {
             </ProductGrid>
           </Main>
         )}
+        {/* opens the product description page when url changes */}
 
         <Footer>JustAFooterSpacer</Footer>
       </div>
