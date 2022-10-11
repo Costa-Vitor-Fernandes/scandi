@@ -337,6 +337,8 @@ class App extends Component {
         {/* opens the product description page when url changes */}
         {this.props.pdpage ? (
           <PDPage
+          currencyLabels={this.state.currencyLabels}
+          currencySymbols={this.state.currencySymbols}
             opaque={this.state.cartModal || this.state.currencyModal}
             currencyIndex={this.state.currencyIndex}
             id={productId}
