@@ -123,22 +123,26 @@ export default class PDPage extends Component {
           </BigImage>
           <TextSection>
             <h1>{product.name}</h1>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: product.description,
-              }}
-            ></div>
+            
             {/* just to log attrs*/}
             <button onClick={() => console.log(product.attributes)}>attrs log</button>
               {/* calls the attributes */}
               <AttributesPicker attributes={product.attributes} ></AttributesPicker>
               {/* i should have a getter function that gets the attributes picked and passes them to the cartAction function */}
             <Price>
+              <h4>Price</h4>
               {this.props.currencyLabels[this.props.currencyIndex]}{" "}
               {this.props.currencySymbols[this.props.currencyIndex]}{" "}
               {product.prices[this.props.currencyIndex].amount}
             </Price>
             <button onClick={() => this.cartAction()}>addToCart</button>
+            {/* description */}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: product.description,
+              }}
+            ></div>
+            {/* description */}
           </TextSection>
         </MainProductPage>
       );
