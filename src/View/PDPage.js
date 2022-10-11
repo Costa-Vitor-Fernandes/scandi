@@ -2,31 +2,6 @@ import { Component } from "react";
 import styled from "styled-components";
 import AttributesPicker from "../Classes/AttributesPicker";
 
-// const attributesGen = ()=>{
-//   let attributes = product.attributes
-//   if(attributes.length > 0){
-//     if(attributes.length > 1){
-//       attributes.map((v,i,arr)=>{
-//         console.log(v.id)
-//         return (<div>
-//         <AttrTitle>{v.id}</AttrTitle>
-//         {/* <div onClick={()=>console.log(v.type)}>Type</div> */}
-//         {/* options */}
-//         {/* <div>{v.items[0].id}</div> */}
-
-//       </div>
-//         )
-//       })
-//       return
-//     }
-//     // if attr is > 0
-//     return console.log('one attribute only')
-//   }
-//   //if no attr is specified
-//   return  console.log('no attr specified')
-
-// }
-
 const MainProductPage = styled.div`
   padding: 2em;
   display: flex;
@@ -67,27 +42,9 @@ const TextSection = styled.section`
   border: 1px solid red;
   width: 40vw;
 `;
-
-
 const Price = styled.div`
   border: 1px solid blue;
 `;
-// const SelectAttr = styled.div`
-//   border: 1px solid orange;
-//   box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.4) // random shadow
-// ;
-// `;
-
-// const Attributes = styled.div`
-//   background-color: gray;
-// `;
-// const AttrTitle = styled.div`
-//   display: flex;
-// `;
-// const AttrButtons = styled.div`
-//   display: flex;
-//   flex-direction: row;
-// `;
 
 export default class PDPage extends Component {
   constructor(props) {
@@ -112,7 +69,7 @@ export default class PDPage extends Component {
     });
   }
 
-  //i still need to pass the attributes and quantity of products to this function
+  //i still need to passs attributes and quantity of products to this function
   cartAction = () => {
     let product = this.props.productFactory;
 
@@ -174,25 +131,8 @@ export default class PDPage extends Component {
             {/* just to log attrs*/}
             <button onClick={() => console.log(product.attributes)}>attrs log</button>
               {/* calls the attributes */}
-              <AttributesPicker attributes={product.attributes}></AttributesPicker>
-            {/* {product.attributes.length > 1
-              ? product.attributes.map((v, i, arr) => {
-                  return (
-                    <Attributes key={i}>
-                      <AttrTitle key={i}>{v.id}</AttrTitle>
-                      <AttrButtons>
-                        {v.items.map((v, i, arr) => {
-                          return (
-                            <SelectAttr key={i}>{v.displayValue}</SelectAttr>
-                          );
-                        })}
-                      </AttrButtons>
-                    </Attributes>
-                  );
-                })
-              : null}
-            {product.attributes.length === 0 ? null : null} */}
-
+              <AttributesPicker attributes={product.attributes} ></AttributesPicker>
+              {/* i should have a getter function that gets the attributes picked and passes them to the cartAction function */}
             <Price>
               {this.props.currencyLabels[this.props.currencyIndex]}{" "}
               {this.props.currencySymbols[this.props.currencyIndex]}{" "}
