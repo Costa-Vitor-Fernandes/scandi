@@ -50,12 +50,14 @@ export default class PDPage extends Component {
   constructor(props) {
     super(props);
     this.cartAction = this.cartAction.bind(this);
+    this.attrGetter = this.attrGetter.bind(this);
     this.state = {
       photoIndex: 0,
       name: "",
       description: "",
       currencyIndex: "",
       imgs: "",
+      attributesSelected:{},
     };
   }
 
@@ -72,7 +74,8 @@ export default class PDPage extends Component {
   //i still need to passs attributes and quantity of products to this function
   cartAction = () => {
     let product = this.props.productFactory;
-
+    
+    
     // to parse string to Obj
     // JSON.parse(window.localStorage.getItem('cart'))
     let getterObj = JSON.parse(window.localStorage.getItem("cart"));
@@ -94,10 +97,16 @@ export default class PDPage extends Component {
     }
   };
 
+  attrGetter = (props) =>{
+    console.log(props, 'state drilling?')
+    // this.setState({attributesSelected: props})
+  }
+
   render() {
     let product = this.props.productFactory;
     //if there is a valid name in product, we load stuff
     if (product.name) {
+      // console.log(product)
       return (
         <MainProductPage
           opaque={this.props.opaque}
@@ -122,13 +131,19 @@ export default class PDPage extends Component {
             />
           </BigImage>
           <TextSection>
-            <h1>{product.name}</h1>
-            
+            <h1>{product.brand}</h1>
+            <h3>{product.name}</h3>
+
             {/* just to log attrs*/}
-            <button onClick={() => console.log(product.attributes)}>attrs log</button>
-              {/* calls the attributes */}
-              <AttributesPicker attributes={product.attributes} ></AttributesPicker>
-              {/* i should have a getter function that gets the attributes picked and passes them to the cartAction function */}
+            <button onClick={() => console.log(product.attributes)}>
+              attrs log
+            </button>
+            {/* calls the attributes */}
+            <AttributesPicker
+              attributes={product.attributes}
+              attrGetter={this.attrGetter}
+            ></AttributesPicker>
+            {/* i should have a getter function that gets the attributes picked and passes them to the cartAction function */}
             <Price>
               <h4>Price</h4>
               {this.props.currencyLabels[this.props.currencyIndex]}{" "}
