@@ -4,7 +4,11 @@ import { Component } from "react";
 import Cards from "./Classes/Cards";
 import axios from "axios";
 import PDPage from "./View/PDPage";
+import MiniCart from "./Classes/MiniCart";
 import { Link } from "react-router-dom";
+
+
+
 
 const Header = styled.header`
   display: flex;
@@ -300,23 +304,23 @@ class App extends Component {
         ) : null}
         {/* opens the currency modal */}
 
-        {/* opens the cart Modal */}
+        {/* opens the mini cart Modal */}
         {this.state.cartModal ? (
           <Modal>
-            CartModal<div>cart stuff here</div>
+            <MiniCart currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}></MiniCart>
           </Modal>
         ) : null}
-        {/* opens the cart Modal */}
+        {/* opens the mini cart Modal */}
 
         {/* opens the PLP/PDP when url changes */}
         {this.props.pdpage ? (
           <PDPage turnOffModals={()=>this.turnOffModals()} 
           currencyLabels={this.state.currencyLabels}  
           currencySymbols={this.state.currencySymbols}
-            opaque={this.state.cartModal || this.state.currencyModal}
-            currencyIndex={this.state.currencyIndex}
-            id={productId}
-            productFactory={this.productFactory(productId)}
+          opaque={this.state.cartModal || this.state.currencyModal}
+          currencyIndex={this.state.currencyIndex}
+          id={productId}
+          productFactory={this.productFactory(productId)}
           />
         ) : (
           <Main

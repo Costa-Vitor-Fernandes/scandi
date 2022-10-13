@@ -57,7 +57,7 @@ export default class PDPage extends Component {
       description: "",
       currencyIndex: "",
       imgs: "",
-      attributesSelected:{},
+      attributesSelected:[],
     };
   }
 
@@ -71,36 +71,42 @@ export default class PDPage extends Component {
     });
   }
 
+  attrGetter = (props) =>{
+    this.setState({attributesSelected: props})
+  }
+
   //i still need to passs attributes and quantity of products to this function
   cartAction = () => {
     let product = this.props.productFactory;
-    
+    product.attributesSelected = [this.state.attributesSelected]
+    console.log(product, 'full product action')
     
     // to parse string to Obj
     // JSON.parse(window.localStorage.getItem('cart'))
-    let getterObj = JSON.parse(window.localStorage.getItem("cart"));
+    let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
     //logic to when the user has a Cart LocalStorage object
-    if (getterObj !== null) {
-      if (getterObj.length >= 2) {
+    if (getFromLocalStorage !== null) {
+      if (getFromLocalStorage.length >= 2) {
         let newCart = [];
-        getterObj.map((v, i, arr) => newCart.push(v));
+        
+        getFromLocalStorage.map((v, i, arr) => newCart.push(v));
         newCart.push(product);
         return window.localStorage.setItem("cart", JSON.stringify(newCart));
       }
       let newCart = [];
-      newCart.push(getterObj);
+      
+      newCart.push(getFromLocalStorage);
       newCart.push(product);
       return window.localStorage.setItem("cart", JSON.stringify(newCart));
     }
-    if (getterObj === null) {
+    if (getFromLocalStorage === null) {
+      
+      // console.log(product)
       return window.localStorage.setItem("cart", JSON.stringify(product));
     }
   };
 
-  attrGetter = (props) =>{
-    console.log(props, 'state drilling?')
-    // this.setState({attributesSelected: props})
-  }
+
 
   render() {
     let product = this.props.productFactory;
@@ -150,7 +156,7 @@ export default class PDPage extends Component {
               {this.props.currencySymbols[this.props.currencyIndex]}{" "}
               {product.prices[this.props.currencyIndex].amount}
             </Price>
-            <button onClick={() => this.cartAction()}>addToCart</button>
+            <button onClick={()=>this.cartAction()}>addToCart</button>
             {/* description */}
             <div
               dangerouslySetInnerHTML={{

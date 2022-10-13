@@ -3,21 +3,25 @@ import styled from "styled-components";
 
 const Attributes = styled.div`
   /* background-color: gray; */
+  padding:3px 0;
 `;
 const AttrTitle = styled.div`
   display: flex;
   font-size:1.4em;
+  padding:  5px 0;
 `;
 const AttrButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
 const SelectAttr = styled.div`
-  border: ${(props)=> (props.selected ? '1px solid orange' : 'none' )};
+  border: ${(props)=> (props.selected ? '1px solid green' : 'none' )};
   padding:20px;
+  margin: 0 3px;
   background-color: ${(props) => (props.swatch ? props.swatch : "white")};
+  box-shadow: 0px -2px 10px rgba(168, 172, 176, 0.4);
   :hover{
-    box-shadow: 0px 4px 1px rgba(168, 172, 176, 0.4) // random shadow
+    box-shadow: 0px -2px 50px rgba(168, 172, 176, 0.4) // random shadow
   };
 `;
 
@@ -29,7 +33,6 @@ export default class AttributesPicker extends Component {
         this.selectedProps = this.selectedProps.bind(this);
         this.state = {
             attributes: {
-             
             },    
            
         }
@@ -38,12 +41,16 @@ export default class AttributesPicker extends Component {
       const attrStatePrep= {};
       // console.log(this.props.attributes,' componentDidMount');
       this.props.attributes.map((v, i, arr)=>{
-       return Object.defineProperty(attrStatePrep,i, {
+       return Object.defineProperty(attrStatePrep,v.id, {
         value:0,
-        writable:true,
+        writable: true,
+  configurable: true,
+  enumerable: true
        })
       })
       this.setState({attributes:attrStatePrep});
+      this.props.attrGetter(attrStatePrep)
+
     }
 
     attrAction = (firstId, secondId) => {
@@ -61,43 +68,27 @@ export default class AttributesPicker extends Component {
       return false
     }
 
-
-
   render() {
-    
+
     let attributes = this.props.attributes;
-
-    
-    // console.log(this.state,'state')
-   
-    
-
       return attributes.map((e, index, arr) => {
-       
-        // console.log(arr[index].id) // keys of the object
-        
         return (
           <Attributes key={index}>
             <AttrTitle key={index}>{e.id}</AttrTitle>
             <AttrButtonsContainer>
               {e.items.map((v, i, arr) => {
+
                 // conditional for colored options 
                 if(e.type ==='swatch'){
-                  return  <SelectAttr selected={this.selectedProps(index,i)} key={i} swatch={v.value} onClick={()=>{
-                    console.log(index, 'index',i, e.id, v.displayValue)
-                    this.attrAction(index, i)
-                  }}></SelectAttr>
-                }
-                // conditional for colored options
-
-
-                  return <SelectAttr selected={this.selectedProps(index,i)} key={i} onClick={()=>{
+                  return  <SelectAttr selected={this.selectedProps(e.id,i)} key={i} swatch={v.value} onClick={()=>{
                     // console.log(index, 'index',i, e.id, v.displayValue)
-                    this.attrAction(index, i)
-                    //values of the object
-                    // this.setState({attributes: {attrIndex: index, attrIndexSelected:i , description: `${e.id} ${v.displayValue}`}})
+                    this.attrAction(e.id, i)
+                  }}></SelectAttr>}
+                // conditional for colored options
+                return <SelectAttr selected={this.selectedProps(e.id,i)} key={i} onClick={()=>{
+                  this.attrAction(e.id, i)
                 }
-                }>{v.displayValue}</SelectAttr>;
+                }>{v.value}</SelectAttr>;
               })}
             </AttrButtonsContainer>
           </Attributes>
