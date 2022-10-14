@@ -95,14 +95,14 @@ export default class PDPage extends Component {
       }
       let newCart = [];
       
-      newCart.push(getFromLocalStorage);
+      newCart.push(getFromLocalStorage[0]);
       newCart.push(product);
       return window.localStorage.setItem("cart", JSON.stringify(newCart));
     }
     if (getFromLocalStorage === null) {
       
       // console.log(product)
-      return window.localStorage.setItem("cart", JSON.stringify(product));
+      return window.localStorage.setItem("cart", JSON.stringify([product]));
     }
   };
 
@@ -156,7 +156,7 @@ export default class PDPage extends Component {
               {this.props.currencySymbols[this.props.currencyIndex]}{" "}
               {product.prices[this.props.currencyIndex].amount}
             </Price>
-            <button onClick={()=>this.cartAction()}>addToCart</button>
+            <button onClick={()=>this.props.cartAction(product)}>addToCart</button>
             {/* description */}
             <div
               dangerouslySetInnerHTML={{
