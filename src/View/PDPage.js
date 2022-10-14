@@ -50,12 +50,14 @@ export default class PDPage extends Component {
   constructor(props) {
     super(props);
     this.cartAction = this.cartAction.bind(this);
+    this.attrGetter = this.attrGetter.bind(this);
     this.state = {
       photoIndex: 0,
       name: "",
       description: "",
       currencyIndex: "",
       imgs: "",
+      attributesSelected:[],
     };
   }
 
@@ -69,35 +71,48 @@ export default class PDPage extends Component {
     });
   }
 
+  attrGetter = (props) =>{
+    this.setState({attributesSelected: props})
+  }
+
   //i still need to passs attributes and quantity of products to this function
   cartAction = () => {
     let product = this.props.productFactory;
-
+    product.attributesSelected = [this.state.attributesSelected]
+    console.log(product, 'full product action')
+    
     // to parse string to Obj
     // JSON.parse(window.localStorage.getItem('cart'))
-    let getterObj = JSON.parse(window.localStorage.getItem("cart"));
+    let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
     //logic to when the user has a Cart LocalStorage object
-    if (getterObj !== null) {
-      if (getterObj.length >= 2) {
+    if (getFromLocalStorage !== null) {
+      if (getFromLocalStorage.length >= 2) {
         let newCart = [];
-        getterObj.map((v, i, arr) => newCart.push(v));
+        
+        getFromLocalStorage.map((v, i, arr) => newCart.push(v));
         newCart.push(product);
         return window.localStorage.setItem("cart", JSON.stringify(newCart));
       }
       let newCart = [];
-      newCart.push(getterObj);
+      
+      newCart.push(getFromLocalStorage);
       newCart.push(product);
       return window.localStorage.setItem("cart", JSON.stringify(newCart));
     }
-    if (getterObj === null) {
+    if (getFromLocalStorage === null) {
+      
+      // console.log(product)
       return window.localStorage.setItem("cart", JSON.stringify(product));
     }
   };
+
+
 
   render() {
     let product = this.props.productFactory;
     //if there is a valid name in product, we load stuff
     if (product.name) {
+      // console.log(product)
       return (
         <MainProductPage
           opaque={this.props.opaque}
@@ -122,23 +137,33 @@ export default class PDPage extends Component {
             />
           </BigImage>
           <TextSection>
-            <h1>{product.name}</h1>
+            <h1>{product.brand}</h1>
+            <h3>{product.name}</h3>
+
+            {/* just to log attrs*/}
+            <button onClick={() => console.log(product.attributes)}>
+              attrs log
+            </button>
+            {/* calls the attributes */}
+            <AttributesPicker
+              attributes={product.attributes}
+              attrGetter={this.attrGetter}
+            ></AttributesPicker>
+            {/* i should have a getter function that gets the attributes picked and passes them to the cartAction function */}
+            <Price>
+              <h4>Price</h4>
+              {this.props.currencyLabels[this.props.currencyIndex]}{" "}
+              {this.props.currencySymbols[this.props.currencyIndex]}{" "}
+              {product.prices[this.props.currencyIndex].amount}
+            </Price>
+            <button onClick={()=>this.cartAction()}>addToCart</button>
+            {/* description */}
             <div
               dangerouslySetInnerHTML={{
                 __html: product.description,
               }}
             ></div>
-            {/* just to log attrs*/}
-            <button onClick={() => console.log(product.attributes)}>attrs log</button>
-              {/* calls the attributes */}
-              <AttributesPicker attributes={product.attributes} ></AttributesPicker>
-              {/* i should have a getter function that gets the attributes picked and passes them to the cartAction function */}
-            <Price>
-              {this.props.currencyLabels[this.props.currencyIndex]}{" "}
-              {this.props.currencySymbols[this.props.currencyIndex]}{" "}
-              {product.prices[this.props.currencyIndex].amount}
-            </Price>
-            <button onClick={() => this.cartAction()}>addToCart</button>
+            {/* description */}
           </TextSection>
         </MainProductPage>
       );

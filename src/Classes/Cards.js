@@ -53,24 +53,11 @@ export default class Cards extends Component {
           return void i++;
         }
       }
-      // const newTo = {
-      //   pathname: "/products/1",
-      //   param1: "Par1",
-      //   state:'state newto',
-      // };
-      // // link to the "location"
-      // // see (https://reacttraining.com/react-router/web/api/location)
-      // <Link to={newTo}>
-      //  </Link>
 
-      // // In your Category Component, you can access the data like this
-      // this.props.match.params.catId // this is 595212758daa6810cbba4104
-      // this.props.location.param1 // this is Par1
 
       return (
         <ProductCard key={i}>
-          {/* onClick pra passar props lá na raiz */}
-          <Link to={{ pathname: `/products/${i}`, state: "statefrom link" }}>
+          <Link to={{ pathname: `/products/${i}`}}>
             <ImageHolder>
               <img
                 id="productImg"
@@ -78,9 +65,9 @@ export default class Cards extends Component {
                 alt={this.props.state.productNames[i]}
               ></img>
             </ImageHolder>
-            <ProductName>{this.props.state.productNames[i]}</ProductName>
+            <ProductName>{this.props.state.productBrands[i]}{' '}{this.props.state.productNames[i]}</ProductName>
             <Price>
-              {this.props.state.currencyLabels[currencyIndex]}{" "}
+              {/* {this.props.state.currencyLabels[currencyIndex]}{" "} */}
               {this.props.state.currencySymbols[currencyIndex]}{" "}
               {this.props.state.productPrices[i][currencyIndex].amount}
             </Price>

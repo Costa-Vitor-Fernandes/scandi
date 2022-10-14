@@ -4,7 +4,11 @@ import { Component } from "react";
 import Cards from "./Classes/Cards";
 import axios from "axios";
 import PDPage from "./View/PDPage";
+import MiniCart from "./Classes/MiniCart";
 import { Link } from "react-router-dom";
+
+
+
 
 const Header = styled.header`
   display: flex;
@@ -80,7 +84,7 @@ const Modal = styled.div`
   position: absolute;
   align-self: flex-end;
   margin: 0 4vw;
-  width: 10em;
+  width: 20em;
   top: 50px;
   /* border:1px solid black; */
   background-color: #fff;
@@ -105,22 +109,6 @@ const Footer = styled.div`
   background-color: #fefece;
   height: 50px;
 `;
-
-// The Button from the last section without the interpolations
-// const Button = styled.button`
-//   color: palevioletred;
-//   font-size: 1em;
-//   margin: 1em;
-//   padding: 0.25em 1em;
-//   border: 2px solid palevioletred;
-//   border-radius: 3px;
-// `;
-
-// A new component based on Button, but with some override styles
-// const TomatoButton = styled(Button)`
-//   color: tomato;
-//   border-color: tomato;
-// `;
 
 class App extends Component {
   constructor(props) {
@@ -174,23 +162,10 @@ class App extends Component {
     //fetching product stuff
    axios
       .get(
-        `http://localhost:4000/graphql?query={category{products{attributes{id,name,type,items{id,value,displayValue}},category,inStock,gallery,name,description,prices{amount,currency{symbol}}}}}`
+        `http://localhost:4000/graphql?query={category{products{attributes{id,name,type,items{id,value,displayValue}},category,brand,inStock,gallery,name,description,prices{amount,currency{symbol}}}}}`
       )
       .then((res) => {
         let allProducts = res.data.data.category.products;
-        // console.log("original allproducts", allProducts);
-        // if (window.location.pathname !== "/") {
-        //   let categoryNameFilter = window.location.pathname
-        //     .slice(1)
-        //     .toLowerCase();
-        //   // console.log(categoryNameFilter ,'category name filter')
-
-        //   // allProducts = res.data.data.category.products.forEach((v,i,arr)=>{
-        //   //   if(arr[i].category === categoryNameFilter) return arr[i]
-        //   // })
-        //   // console.log(allProducts ,'all products filtrado com category name filter')
-        // }
-
         let arrAllProductNames = allProducts.map((v, i, arr) => arr[i].name);
         let arrAllProductCategories = allProducts.map(
           (v, i, arr) => arr[i].category
@@ -203,8 +178,10 @@ class App extends Component {
         let arrAllCategories = allProducts.map((v, i, arr) =>
           arr[i].category.toUpperCase()
         );
+        //this could be a req to the graphql server
         let allCategories = [...new Set(arrAllCategories)];
-
+        //this could be a req to the graphql server
+        
         let arrAllDescriptions = allProducts.map(
           (v, i, arr) => arr[i].description
         );
@@ -213,7 +190,7 @@ class App extends Component {
         let arrAllProductAttributes = allProducts.map(
           (v, i, arr) => arr[i].attributes
         );
-
+     
         this.setState({
           productInStock: arrInStock,
           productDescription: arrAllDescriptions,
@@ -247,6 +224,7 @@ class App extends Component {
   productFactory = (id) => {
     let product = {
     name: this.state.productNames[id],
+    brand:this.state.productBrands[id],
     category: this.state.productCategories[id],
     imgs: this.state.productImgs[id],
     prices: this.state.productPrices[id],
@@ -326,23 +304,23 @@ class App extends Component {
         ) : null}
         {/* opens the currency modal */}
 
-        {/* opens the cart Modal */}
+        {/* opens the mini cart Modal */}
         {this.state.cartModal ? (
           <Modal>
-            CartModal<div>cart stuff here</div>
+            <MiniCart currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}></MiniCart>
           </Modal>
         ) : null}
-        {/* opens the cart Modal */}
+        {/* opens the mini cart Modal */}
 
-        {/* opens the product description page when url changes */}
+        {/* opens the PLP/PDP when url changes */}
         {this.props.pdpage ? (
           <PDPage turnOffModals={()=>this.turnOffModals()} 
           currencyLabels={this.state.currencyLabels}  
           currencySymbols={this.state.currencySymbols}
-            opaque={this.state.cartModal || this.state.currencyModal}
-            currencyIndex={this.state.currencyIndex}
-            id={productId}
-            productFactory={this.productFactory(productId)}
+          opaque={this.state.cartModal || this.state.currencyModal}
+          currencyIndex={this.state.currencyIndex}
+          id={productId}
+          productFactory={this.productFactory(productId)}
           />
         ) : (
           <Main
@@ -357,7 +335,7 @@ class App extends Component {
             </ProductGrid>
           </Main>
         )}
-        {/* opens the product description page when url changes */}
+        {/* opens the PLP/PDP when url changes */}
 
         <Footer>JustAFooterSpacer</Footer>
       </div>

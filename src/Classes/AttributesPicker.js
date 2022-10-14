@@ -2,34 +2,95 @@ import { Component } from "react";
 import styled from "styled-components";
 
 const Attributes = styled.div`
-  background-color: gray;
+  /* background-color: gray; */
+  padding:3px 0;
 `;
 const AttrTitle = styled.div`
   display: flex;
+  font-size:1.4em;
+  padding:  5px 0;
 `;
-const AttrButtons = styled.div`
+const AttrButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
 const SelectAttr = styled.div`
-  border: 1px solid orange;
-  box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.4) // random shadow
-;
+  border: ${(props)=> (props.selected ? '1px solid green' : 'none' )};
+  padding:20px;
+  margin: 0 3px;
+  background-color: ${(props) => (props.swatch ? props.swatch : "white")};
+  box-shadow: 0px -2px 10px rgba(168, 172, 176, 0.4);
+  :hover{
+    box-shadow: 0px -2px 50px rgba(168, 172, 176, 0.4) // random shadow
+  };
 `;
 
 export default class AttributesPicker extends Component {
-  render() {
-    let attributes = this.props.attributes;
 
-      return attributes.map((v, i, arr) => {
+    constructor(props) {
+        super(props);
+        this.attrAction = this.attrAction.bind(this);
+        this.selectedProps = this.selectedProps.bind(this);
+        this.state = {
+            attributes: {
+            },    
+           
+        }
+    }
+    componentDidMount(){
+      const attrStatePrep= {};
+      // console.log(this.props.attributes,' componentDidMount');
+      this.props.attributes.map((v, i, arr)=>{
+       return Object.defineProperty(attrStatePrep,v.id, {
+        value:0,
+        writable: true,
+  configurable: true,
+  enumerable: true
+       })
+      })
+      this.setState({attributes:attrStatePrep});
+      this.props.attrGetter(attrStatePrep)
+
+    }
+
+    attrAction = (firstId, secondId) => {
+      let attrs = this.state.attributes
+      attrs[firstId] = secondId
+      this.setState({attributes:attrs});
+      this.props.attrGetter(this.state.attributes)
+    }
+    selectedProps = (firstId,secondId) =>{
+      // console.log(this.state.attributes[firstId], secondId, 'wtf')
+      if(this.state.attributes[firstId] === secondId){
+        // console.log(this.state.attributes[firstId], secondId, 'works now')
+        return true
+      }else
+      return false
+    }
+
+  render() {
+
+    let attributes = this.props.attributes;
+      return attributes.map((e, index, arr) => {
         return (
-          <Attributes key={i}>
-            <AttrTitle key={i}>{v.id}</AttrTitle>
-            <AttrButtons>
-              {v.items.map((v, i, arr) => {
-                return <SelectAttr key={i}>{v.displayValue}</SelectAttr>;
+          <Attributes key={index}>
+            <AttrTitle key={index}>{e.id}</AttrTitle>
+            <AttrButtonsContainer>
+              {e.items.map((v, i, arr) => {
+
+                // conditional for colored options 
+                if(e.type ==='swatch'){
+                  return  <SelectAttr selected={this.selectedProps(e.id,i)} key={i} swatch={v.value} onClick={()=>{
+                    // console.log(index, 'index',i, e.id, v.displayValue)
+                    this.attrAction(e.id, i)
+                  }}></SelectAttr>}
+                // conditional for colored options
+                return <SelectAttr selected={this.selectedProps(e.id,i)} key={i} onClick={()=>{
+                  this.attrAction(e.id, i)
+                }
+                }>{v.value}</SelectAttr>;
               })}
-            </AttrButtons>
+            </AttrButtonsContainer>
           </Attributes>
         );
       });
