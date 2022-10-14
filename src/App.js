@@ -84,7 +84,7 @@ const Modal = styled.div`
   position: absolute;
   align-self: flex-end;
   margin: 0 4vw;
-  width: 10em;
+  width: 20em;
   top: 50px;
   /* border:1px solid black; */
   background-color: #fff;
