@@ -13,14 +13,15 @@ import { Link } from "react-router-dom";
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
-  height: 50px;
-  border-bottom: 1px solid black;
+  height: 80px;
+  /* border-bottom: 1px solid black; */
 `;
 
 const Nav = styled.nav`
-  padding: 0px 1.25em;
+  padding: 0px 1em;
   font-size: 1em;
-  line-height: 1.5em;
+  line-height: 1.25em;
+  height:50px;
   &:hover {
     border-bottom: 1px solid green;
   }
@@ -33,7 +34,7 @@ const HeaderContainer = styled.div`
   align-self: center;
   height: 2em;
   width: 14em;
-  margin: 0 2em;
+  margin: 0 100px;
 `;
 const Logo = styled(HeaderContainer)`
   background-color: green;
@@ -47,8 +48,9 @@ const ActionsMenu = styled(HeaderContainer)`
   /* ???? query to size ???? */
 `;
 
-const Main = styled.main`
+const PLP = styled.main`
   display: flex;
+  /* padding-left:1vw; */
   flex-direction: column;
   background-color: #fff;
   /* background-color:  ${(props) =>
@@ -57,7 +59,7 @@ const Main = styled.main`
 `;
 const CategoryName = styled.h1`
   font-size: 3em;
-  padding-left: 2em;
+  padding-left: 100px;
 `;
 
 const ProductGrid = styled.div`
@@ -116,6 +118,7 @@ class App extends Component {
     this.currencyModal = this.currencyModal.bind(this);
     this.cartModal = this.cartModal.bind(this);
     this.productFactory = this.productFactory.bind(this);
+    this.cartAction = this.cartAction.bind(this);
 
     this.state = {
       productInStock: [],
@@ -134,7 +137,7 @@ class App extends Component {
       //save this in localStorage instead of state
       currencyModal: false,
       cartModal: false,
-      // opaque is a trigger to styled-components, it darkens the Main stuff when modal opens
+      // opaque is a trigger to styled-components, it darkens the PLP stuff when modal opens
       opaque: "",
       // categorySelected defaults to all
       categorySelected: "all",
@@ -142,7 +145,7 @@ class App extends Component {
   }
 
 
- componentDidMount() {
+  componentDidMount() {
     //fetching the symbols and labels of the currencies
    axios
       .get("http://localhost:4000/graphql?query={currencies{symbol,label}}")
@@ -234,6 +237,41 @@ class App extends Component {
   return product;
 
   };
+  cartAction = (product, attr) => {
+//opens cart modal just to fast check
+    // setTimeout(()=>{
+// this.cartModal()
+// },100)
+    // let product = this.props.productFactory;
+    product.attributesSelected = attr 
+    console.log(product, 'full product action')
+    
+    // to parse string to Obj
+    // JSON.parse(window.localStorage.getItem('cart'))
+    let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
+    //logic to when the user has a Cart LocalStorage object
+    if (getFromLocalStorage !== null) {
+      if (getFromLocalStorage.length >= 2) {
+        let newCart = [];
+        
+        getFromLocalStorage.map((v, i, arr) => newCart.push(v));
+        newCart.push(product);
+        return window.localStorage.setItem("cart", JSON.stringify(newCart));
+      }
+      let newCart = [];
+      
+      newCart.push(getFromLocalStorage[0]);
+      newCart.push(product);
+      return window.localStorage.setItem("cart", JSON.stringify(newCart));
+    }
+    if (getFromLocalStorage === null) {
+      
+      // console.log(product)
+      return window.localStorage.setItem("cart", JSON.stringify([product]));
+    }
+  };
+
+
 
 
   render() {
@@ -244,7 +282,7 @@ class App extends Component {
       <div id="page">
         <Header>
           <HeaderContainer onClick={() => this.turnOffModals()}>
-            <Nav>
+            <Nav onClick={() => this.setState({ categorySelected: "all" })}>
               <Link to={"/"}>
                 {/* decided to fetch 'all' and hard code 'all' by default by now, i imagine every store having a 'all' category */}
                 <div onClick={() => this.setState({ categorySelected: "all" })}>
@@ -255,15 +293,13 @@ class App extends Component {
             {/* mapping the category names */}
             {this.state.allCategoryNames.map((v, i, arr) => {
               return (
-                <Nav key={i}>
+                <Nav key={i} onClick={() => {
+                  this.setState({
+                    categorySelected: this.state.allCategoryNames[i],
+                  });
+                }}>
                   <Link to={"/"}>
-                    <div
-                      onClick={() => {
-                        this.setState({
-                          categorySelected: this.state.allCategoryNames[i],
-                        });
-                      }}
-                    >
+                    <div>
                       {this.state.allCategoryNames[i]}
                     </div>
                   </Link>
@@ -314,7 +350,9 @@ class App extends Component {
 
         {/* opens the PLP/PDP when url changes */}
         {this.props.pdpage ? (
-          <PDPage turnOffModals={()=>this.turnOffModals()} 
+          <PDPage 
+          cartAction={this.cartAction}
+          turnOffModals={()=>this.turnOffModals()} 
           currencyLabels={this.state.currencyLabels}  
           currencySymbols={this.state.currencySymbols}
           opaque={this.state.cartModal || this.state.currencyModal}
@@ -323,7 +361,7 @@ class App extends Component {
           productFactory={this.productFactory(productId)}
           />
         ) : (
-          <Main
+          <PLP
             opaque={this.state.cartModal || this.state.currencyModal}
             onClick={() => this.turnOffModals()}
           >
@@ -331,9 +369,29 @@ class App extends Component {
               {this.state.categorySelected.toUpperCase()}
             </CategoryName>
             <ProductGrid>
-              <Cards state={this.state}></Cards>
+            {this.state.productNames.map((v,i,arr)=>{
+              // console.log(i,' index do map maluco')
+              if (this.state.categorySelected !== "all") {
+                if (
+                  this.state.categorySelected.toLowerCase() !==
+                  this.state.productCategories[i]
+                ) {
+                  return void i++;
+                }
+              }
+              return <Cards
+              cartModal={this.cartModal} key={i} cartAction={this.cartAction}
+              turnOffModals={()=>this.turnOffModals()} 
+              currencyLabels={this.state.currencyLabels}  
+              currencySymbols={this.state.currencySymbols}
+              opaque={this.state.cartModal || this.state.currencyModal}
+              currencyIndex={this.state.currencyIndex}
+              id={i}
+              productFactory={this.productFactory(i)}></Cards>
+            })}
+              {/* <Cards categorySelected={this.state.categorySelected} productCategories={this.state.productCategories} state={this.state} productFactory={this.productFactory}></Cards> */}
             </ProductGrid>
-          </Main>
+          </PLP>
         )}
         {/* opens the PLP/PDP when url changes */}
 

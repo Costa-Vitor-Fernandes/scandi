@@ -3,6 +3,7 @@ import styled from "styled-components";
 import AttributesPicker from "../Classes/AttributesPicker";
 
 const MainProductPage = styled.div`
+
   padding: 2em;
   display: flex;
   flex-direction: row;
@@ -14,33 +15,49 @@ const MainProductPage = styled.div`
 
 const SmallImages = styled.div`
   display: flex;
-  border: 1px solid black;
+  
+  /* border: 1px solid black; */
+  margin-left:2vw;
   flex-direction: column;
+  height:90vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
   /* background-color: red; */
   max-width: 10vw;
   & img {
-    height: auto;
+    box-sizing:border-box;
+    margin: 2px 6px;
+    max-height:10vw;
+    border: 1px solid white;
+    /* height: auto; */
   }
   & :hover {
-    transform: scale(1.1);
+    border:1px solid black;
+    
   }
 `;
 const BigImage = styled.div`
   padding: 0 2em;
   /* display: flex; */
   /* justify-content:center; */
-  border: 1px solid green;
+  /* border: 1px solid green; */
   max-width: 50vw;
+  min-width:40vw;
   & img {
-    width: 100%;
+    /* width: 100%; */
+    object-fit:cover;
+    object-position:center;
+    max-width: 40vw;
+    max-height:90vh;
+
     height: auto;
-    max-width: 50vw;
+    /* max-width: 43vw; */
   }
 `;
 const TextSection = styled.section`
   padding: 2em;
-  border: 1px solid red;
-  width: 40vw;
+  /* border: 1px solid red; */
+  width: 30vw;
 `;
 const Price = styled.div`
   border: 1px solid blue;
@@ -49,7 +66,7 @@ const Price = styled.div`
 export default class PDPage extends Component {
   constructor(props) {
     super(props);
-    this.cartAction = this.cartAction.bind(this);
+    // this.cartAction = this.cartAction.bind(this);
     this.attrGetter = this.attrGetter.bind(this);
     this.state = {
       photoIndex: 0,
@@ -73,44 +90,46 @@ export default class PDPage extends Component {
 
   attrGetter = (props) =>{
     this.setState({attributesSelected: props})
+    return this.state.attributesSelected
   }
 
   //i still need to passs attributes and quantity of products to this function
-  cartAction = () => {
-    let product = this.props.productFactory;
-    product.attributesSelected = [this.state.attributesSelected]
-    console.log(product, 'full product action')
+  // cartAction = () => {
+  //   let product = this.props.productFactory;
+  //   product.attributesSelected = [this.state.attributesSelected]
+  //   console.log(product, 'full product action')
     
-    // to parse string to Obj
-    // JSON.parse(window.localStorage.getItem('cart'))
-    let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
-    //logic to when the user has a Cart LocalStorage object
-    if (getFromLocalStorage !== null) {
-      if (getFromLocalStorage.length >= 2) {
-        let newCart = [];
+  //   // to parse string to Obj
+  //   // JSON.parse(window.localStorage.getItem('cart'))
+  //   let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
+  //   //logic to when the user has a Cart LocalStorage object
+  //   if (getFromLocalStorage !== null) {
+  //     if (getFromLocalStorage.length >= 2) {
+  //       let newCart = [];
         
-        getFromLocalStorage.map((v, i, arr) => newCart.push(v));
-        newCart.push(product);
-        return window.localStorage.setItem("cart", JSON.stringify(newCart));
-      }
-      let newCart = [];
+  //       getFromLocalStorage.map((v, i, arr) => newCart.push(v));
+  //       newCart.push(product);
+  //       return window.localStorage.setItem("cart", JSON.stringify(newCart));
+  //     }
+  //     let newCart = [];
       
-      newCart.push(getFromLocalStorage[0]);
-      newCart.push(product);
-      return window.localStorage.setItem("cart", JSON.stringify(newCart));
-    }
-    if (getFromLocalStorage === null) {
+  //     newCart.push(getFromLocalStorage[0]);
+  //     newCart.push(product);
+  //     return window.localStorage.setItem("cart", JSON.stringify(newCart));
+  //   }
+  //   if (getFromLocalStorage === null) {
       
-      // console.log(product)
-      return window.localStorage.setItem("cart", JSON.stringify([product]));
-    }
-  };
+  //     // console.log(product)
+  //     return window.localStorage.setItem("cart", JSON.stringify([product]));
+  //   }
+  // };
 
 
 
   render() {
     let product = this.props.productFactory;
     //if there is a valid name in product, we load stuff
+    console.log(this.props)
     if (product.name) {
       // console.log(product)
       return (
@@ -156,7 +175,7 @@ export default class PDPage extends Component {
               {this.props.currencySymbols[this.props.currencyIndex]}{" "}
               {product.prices[this.props.currencyIndex].amount}
             </Price>
-            <button onClick={()=>this.props.cartAction(product)}>addToCart</button>
+            <button onClick={()=>this.props.cartAction(product,this.attrGetter() )}>addToCart</button>
             {/* description */}
             <div
               dangerouslySetInnerHTML={{
