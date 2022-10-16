@@ -38,10 +38,28 @@ export default class MiniProduct extends Component {
 
     constructor(props) {
         super(props)
+        this.addAmount = this.addAmount.bind(this)
         this.state = {
             photoIndex:0,
             product:this.props.product,
-            amount:1,
+            amount:this.props.product.amount,
+            index:this.props.idOnLocalStorage
+        }
+    }
+
+    addAmount = ()=>{
+        this.setState({amount:this.state.amount+1})
+        let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
+        getFromLocalStorage[this.state.index].amount = this.state.amount+1;
+        window.localStorage.setItem("cart", JSON.stringify(getFromLocalStorage));
+    }
+
+    minusAmount = ()=>{
+        if(this.state.amount>=1){
+            this.setState({amount:this.state.amount-1})
+            let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
+            getFromLocalStorage[this.state.index].amount = this.state.amount-1;
+            window.localStorage.setItem("cart", JSON.stringify(getFromLocalStorage));
         }
     }
 
@@ -66,9 +84,9 @@ export default class MiniProduct extends Component {
                 </LeftContainer>
                 <RightContainer>
                     <ButtonContainer>
-                    <button onClick={()=>this.setState({amount:this.state.amount+1})}>+</button>
+                    <button onClick={()=>this.addAmount()}>+</button>
                     <h5>{this.state.amount}</h5>
-                    <button onClick={()=>this.setState({amount:this.state.amount-1})}>-</button>
+                    <button onClick={()=>this.minusAmount()}>-</button>
                     </ButtonContainer>
                     <ImageHolder>
                         <img src={this.state.product.imgs[this.state.photoIndex]} alt={this.state.product.imgs[this.state.photoIndex]}></img>
