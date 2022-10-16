@@ -7,23 +7,49 @@ const Attributes = styled.div`
 `;
 const AttrTitle = styled.div`
   display: flex;
-  font-size:1.4em;
   padding:  5px 0;
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 18px;
 `;
 const AttrButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
 const SelectAttr = styled.div`
-  border: ${(props)=> (props.selected ? '1px solid green' : 'none' )};
-  padding:20px;
+  display:flex;
+  width:40px;
+  height:40px;
+  justify-content: center;
+  align-items: center;
+  padding:5px 15px;
+  color: ${(props)=> (props.selected ? 'white' : 'black')};
+  background-color: ${(props)=> (props.selected ? 'black' : 'white')};
+  border: ${(props)=> (props.selected ? '1px solid white' : '1px solid white')};
+  outline: ${(props)=> (props.selected ? '2px solid black' : '2px solid white')};
   margin: 0 3px;
-  background-color: ${(props) => (props.swatch ? props.swatch : "white")};
+  border:1px solid #eee;
   box-shadow: 0px -2px 10px rgba(168, 172, 176, 0.4);
   :hover{
     box-shadow: 0px -2px 50px rgba(168, 172, 176, 0.4) // random shadow
   };
+  
 `;
+const SelectColorAttr = styled.div`
+  width:20px;
+  height:20px;
+  padding:2px;
+  margin: 0 3px;
+  border:1px solid #eee;
+  box-shadow: 0px -2px 10px rgba(168, 172, 176, 0.4);
+  :hover{
+    box-shadow: 0px -2px 50px rgba(168, 172, 176, 0.4) // random shadow
+  };
+  background-color: ${(props) => (props.swatch ? props.swatch : "white")};
+  outline: ${(props)=> (props.selected ? '1px solid  green' : '1px solid white' )};
+`
 
 export default class AttributesPicker extends Component {
 
@@ -74,16 +100,16 @@ export default class AttributesPicker extends Component {
       return attributes.map((e, index, arr) => {
         return (
           <Attributes key={index}>
-            <AttrTitle key={index}>{e.id}</AttrTitle>
+            <AttrTitle key={index}>{e.id.toUpperCase()}:</AttrTitle>
             <AttrButtonsContainer>
               {e.items.map((v, i, arr) => {
 
                 // conditional for colored options 
                 if(e.type ==='swatch'){
-                  return  <SelectAttr selected={this.selectedProps(e.id,i)} key={i} swatch={v.value} onClick={()=>{
+                  return  <SelectColorAttr selected={this.selectedProps(e.id,i)} key={i} swatch={v.value} onClick={()=>{
                     // console.log(index, 'index',i, e.id, v.displayValue)
                     this.attrAction(e.id, i)
-                  }}></SelectAttr>}
+                  }}></SelectColorAttr>}
                 // conditional for colored options
                 return <SelectAttr selected={this.selectedProps(e.id,i)} key={i} onClick={()=>{
                   this.attrAction(e.id, i)

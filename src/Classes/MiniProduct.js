@@ -3,14 +3,24 @@ import MiniAttribute from "./MiniAttribute";
 import styled from "styled-components";
 
 const MiniProductCart = styled.div`
-background-color: red;
+/* background-color: red; */
 display:flex;
 flex-direction: row;
-max-height:250px;
+/* max-width: 100%; */
+/* max-height:200px; */
+margin-bottom: 1px;
 `
 const LeftContainer = styled.div`
+padding: 0 10px;
+margin: 0px 0;
+max-width:50%;
+
 background-color: blue;
 flex-direction:column;
+& h2,h3,h4,h5{
+    padding:1px;
+    margin:0
+}
 `
 const RightContainer = styled.div`
 background-color:green;
@@ -24,12 +34,21 @@ flex-direction:column;
 justify-content:space-between;
 `
 const ImageHolder = styled.div`
+margin-bottom:1px;
+display:flex;
+/* display:block; */
 background-color:gray;
 padding:1px;
-
+min-width:120px;
+max-width:120px;
+height:190px;
+align-items:center; 
 img{
-    max-width:125px;
-height:auto;
+    object-fit:cover;
+    object-position:center;
+    /* min-width:119px; */
+    max-width:120px;
+    max-height:190px;
 }
 `
 
@@ -38,10 +57,28 @@ export default class MiniProduct extends Component {
 
     constructor(props) {
         super(props)
+        this.addAmount = this.addAmount.bind(this)
         this.state = {
             photoIndex:0,
             product:this.props.product,
-            amount:1,
+            amount:this.props.product.amount,
+            index:this.props.idOnLocalStorage
+        }
+    }
+
+    addAmount = ()=>{
+        this.setState({amount:this.state.amount+1})
+        let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
+        getFromLocalStorage[this.state.index].amount = this.state.amount+1;
+        window.localStorage.setItem("cart", JSON.stringify(getFromLocalStorage));
+    }
+
+    minusAmount = ()=>{
+        if(this.state.amount>=1){
+            this.setState({amount:this.state.amount-1})
+            let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
+            getFromLocalStorage[this.state.index].amount = this.state.amount-1;
+            window.localStorage.setItem("cart", JSON.stringify(getFromLocalStorage));
         }
     }
 
@@ -66,9 +103,9 @@ export default class MiniProduct extends Component {
                 </LeftContainer>
                 <RightContainer>
                     <ButtonContainer>
-                    <button onClick={()=>this.setState({amount:this.state.amount+1})}>+</button>
+                    <button onClick={()=>this.addAmount()}>+</button>
                     <h5>{this.state.amount}</h5>
-                    <button onClick={()=>this.setState({amount:this.state.amount-1})}>-</button>
+                    <button onClick={()=>this.minusAmount()}>-</button>
                     </ButtonContainer>
                     <ImageHolder>
                         <img src={this.state.product.imgs[this.state.photoIndex]} alt={this.state.product.imgs[this.state.photoIndex]}></img>
