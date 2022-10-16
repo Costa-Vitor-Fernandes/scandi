@@ -11,6 +11,18 @@ const MainProductPage = styled.div`
   background-color: #fff;
   filter: ${(props) => (props.opaque ? "brightness(80%)" : "brightness(100%)")};
   /* min-height:90vh; */
+  #brand{
+font-family: 'Raleway';
+font-style: 'regular';
+font-weight: 600;
+font-size: 30px;
+  }
+  #name{
+    font-family: 'Raleway';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+  }
 `;
 
 const SmallImages = styled.div`
@@ -19,8 +31,8 @@ const SmallImages = styled.div`
   /* border: 1px solid black; */
   margin-left:2vw;
   flex-direction: column;
-  height:90vh;
-  overflow-y: scroll;
+  /* height:90vh; */
+  /* overflow-y: scroll; */
   overflow-x: hidden;
   /* background-color: red; */
   max-width: 10vw;
@@ -60,8 +72,26 @@ const TextSection = styled.section`
   width: 30vw;
 `;
 const Price = styled.div`
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
+  padding: 10px 0;
 `;
+
+const AddToCart = styled.button`
+display: flex;
+background-color:#5ECE7B;
+width:100%;
+border:none;
+color:#fff;
+justify-content: center;
+padding:16px 32px;
+margin-bottom:10px;
+:hover{
+  background-color:#3dcc61;
+}
+:focus{
+  background-color:#93cfa2;
+}
+`
 
 export default class PDPage extends Component {
   constructor(props) {
@@ -156,13 +186,13 @@ export default class PDPage extends Component {
             />
           </BigImage>
           <TextSection>
-            <h1>{product.brand}</h1>
-            <h3>{product.name}</h3>
+            <h1 id="brand">{product.brand}</h1>
+            <h3 id='name'>{product.name}</h3>
 
             {/* just to log attrs*/}
-            <button onClick={() => console.log(product.attributes)}>
+            {/* <button onClick={() => console.log(product.attributes)}>
               attrs log
-            </button>
+            </button> */}
             {/* calls the attributes */}
             <AttributesPicker
               attributes={product.attributes}
@@ -170,12 +200,12 @@ export default class PDPage extends Component {
             ></AttributesPicker>
             {/* i should have a getter function that gets the attributes picked and passes them to the cartAction function */}
             <Price>
-              <h4>Price</h4>
-              {this.props.currencyLabels[this.props.currencyIndex]}{" "}
-              {this.props.currencySymbols[this.props.currencyIndex]}{" "}
-              {product.prices[this.props.currencyIndex].amount}
+              <h5>PRICE:</h5>
+              <h3>
+              {this.props.currencySymbols[this.props.currencyIndex]}
+              {product.prices[this.props.currencyIndex].amount}</h3>
             </Price>
-            <button onClick={()=>this.props.cartAction(product,this.attrGetter() )}>addToCart</button>
+            <AddToCart onClick={()=>this.props.cartAction(product,this.attrGetter() )}>ADD TO CART</AddToCart>
             {/* description */}
             <div
               dangerouslySetInnerHTML={{
