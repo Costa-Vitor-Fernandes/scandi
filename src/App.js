@@ -6,6 +6,7 @@ import axios from "axios";
 import PDPage from "./View/PDPage";
 import MiniCart from "./Classes/MiniCart";
 import { Link } from "react-router-dom";
+import CartPage from "./View/CartPage";
 
 
 
@@ -37,24 +38,22 @@ const HeaderContainer = styled.div`
   margin: 0 100px;
 `;
 const Logo = styled(HeaderContainer)`
-  background-color: green;
   width: 2em;
+  #logoImg{
+
+  }
   /* height:2em; */
 `;
 const ActionsMenu = styled(HeaderContainer)`
-  /* background-color:green; */
   display: flex;
   justify-content: space-around;
-  /* ???? query to size ???? */
 `;
 
 const PLP = styled.main`
   display: flex;
-  /* padding-left:1vw; */
   flex-direction: column;
   background-color: #fff;
-  /* background-color:  ${(props) =>
-    props.primary ? "white" : "palevioletred"}; */
+
   filter: ${(props) => (props.opaque ? "brightness(80%)" : "brightness(100%)")};
 `;
 const CategoryName = styled.h1`
@@ -74,7 +73,7 @@ const ActionButton = styled.div`
   display: flex;
   align-self: center;
   flex-direction: row;
-  padding: 0.75em;
+  padding: 1.25em 0.75em;
   /* background-color: red; */
   height: 1.25em;
   &:hover {
@@ -87,7 +86,7 @@ const Modal = styled.div`
   align-self: flex-end;
   margin: 0 4vw;
   width: 20em;
-  top: 50px;
+  top: 75px;
   /* border:1px solid black; */
   background-color: #fff;
   z-index: 3;
@@ -243,6 +242,7 @@ class App extends Component {
 // this.cartModal()
 // },100)
     // let product = this.props.productFactory;
+    product.amount = 1
     product.attributesSelected = attr 
     console.log(product, 'full product action')
     
@@ -307,7 +307,7 @@ class App extends Component {
               );
             })}
           </HeaderContainer>
-          <Logo></Logo>
+          <Logo><img src={'/logo transparent.png'} alt={'logo'}></img></Logo>
           <ActionsMenu>
             <ActionButton onClick={() => this.currencyModal()}>
               <img src="/dollar-sign.svg" alt="dollar-sign" />
@@ -343,24 +343,12 @@ class App extends Component {
         {/* opens the mini cart Modal */}
         {this.state.cartModal ? (
           <Modal>
-            <MiniCart currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}></MiniCart>
+            <MiniCart turnOffModals={this.turnOffModals} currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}></MiniCart>
           </Modal>
         ) : null}
         {/* opens the mini cart Modal */}
-
-        {/* opens the PLP/PDP when url changes */}
-        {this.props.pdpage ? (
-          <PDPage 
-          cartAction={this.cartAction}
-          turnOffModals={()=>this.turnOffModals()} 
-          currencyLabels={this.state.currencyLabels}  
-          currencySymbols={this.state.currencySymbols}
-          opaque={this.state.cartModal || this.state.currencyModal}
-          currencyIndex={this.state.currencyIndex}
-          id={productId}
-          productFactory={this.productFactory(productId)}
-          />
-        ) : (
+        {/* this opens the PLP */}
+        {this.props.plpage ? (
           <PLP
             opaque={this.state.cartModal || this.state.currencyModal}
             onClick={() => this.turnOffModals()}
@@ -392,8 +380,23 @@ class App extends Component {
               {/* <Cards categorySelected={this.state.categorySelected} productCategories={this.state.productCategories} state={this.state} productFactory={this.productFactory}></Cards> */}
             </ProductGrid>
           </PLP>
-        )}
-        {/* opens the PLP/PDP when url changes */}
+        ): null}
+        {/* opens the PDP when url changes */}
+        {this.props.pdpage ? (
+          <PDPage 
+          cartAction={this.cartAction}
+          turnOffModals={()=>this.turnOffModals()} 
+          currencyLabels={this.state.currencyLabels}  
+          currencySymbols={this.state.currencySymbols}
+          opaque={this.state.cartModal || this.state.currencyModal}
+          currencyIndex={this.state.currencyIndex}
+          id={productId}
+          productFactory={this.productFactory(productId)}
+          />
+        ) : null}
+
+        {/* opens the cartPage when url changes */}
+        {this.props.cartPage ? <CartPage currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}/> : null}
 
         <Footer>JustAFooterSpacer</Footer>
       </div>
