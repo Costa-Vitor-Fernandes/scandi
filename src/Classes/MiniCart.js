@@ -5,7 +5,9 @@ import {Link} from 'react-router-dom'
 
 const Scrollable = styled.div`
 overflow-y:scroll;
+/* overflow-x:hidden; */
 height:80vh;
+max-width:325px;
 `
 
 const DivFlex = styled.div`
@@ -13,6 +15,7 @@ display:flex;
 flex-direction:row;
 justify-content:space-around;
 `
+
 
 
 export default class MiniCart extends Component {
@@ -32,8 +35,9 @@ export default class MiniCart extends Component {
         console.log(this.state.cart, 'cartstate')
         if(this.state.cart === null){
 
-            return (<div>nothing here
-        </div>)
+            return (<DivFlex>
+                <h1>My bag,</h1><p>0 items</p>
+                </DivFlex>)
         }
         // this first div must be scrollable and custom scroll
         return(<Scrollable>
@@ -43,13 +47,13 @@ export default class MiniCart extends Component {
 
             {this.state.cart.map((v,i,arr)=>{
                 // console.log(v)
-                  return  <MiniProduct key={i} product={arr[i]} currencyIndex={this.props.currencyIndex} currencySymbols={this.props.currencySymbols}>                
+                  return  <MiniProduct key={i} idOnLocalStorage={i} product={arr[i]} currencyIndex={this.props.currencyIndex} currencySymbols={this.props.currencySymbols}>                
                   </MiniProduct>
             })}
             {/* BUTTONS */}
             <DivFlex>
                 {/* same components here, primary secondary */}
-                <Link to={'/cart'}><button>view bag</button></Link>
+                <Link to={'/cart'}><button onClick={this.props.turnOffModals}>view bag</button></Link>
                 <button>checkout</button>
             </DivFlex>
         </Scrollable>)

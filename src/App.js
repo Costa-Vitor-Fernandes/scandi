@@ -93,7 +93,7 @@ const Modal = styled.div`
 `;
 
 const CurrencyModal = styled(Modal)`
-  margin: 0 12vw;
+  margin: 0 15vw;
   padding: 0.5em 0;
   width: 8em;
 `;
