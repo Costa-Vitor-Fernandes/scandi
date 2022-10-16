@@ -7,8 +7,6 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import CartPage from './View/CartPage';
-import PDPage from './View/PDPage';
 import NotFound from './View/NotFound';
 
 
@@ -17,15 +15,15 @@ import NotFound from './View/NotFound';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App pdpage={false} />,
+    element: <App pdpage={false} cartPage={false} plpage={true} />,
   },
   {
     path: '/cart',
-    element: <CartPage />
+    element: <App pdpage={false} cartPage={true} />
   },
   {
     path:'/products/:id',
-    element: <App pdpage={true} />,
+    element: <App pdpage={true} cartPage={false} />,
   },
   {
     path: '*',
@@ -37,9 +35,9 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
