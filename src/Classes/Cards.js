@@ -103,19 +103,6 @@ enumerable: true
 
 
   render() {
-    // let currencyIndex = this.props.state.currencyIndex;
-      // const allCards = this.props.state.productNames.map((v, i, arr) => {
-      //   //this conditional is for loading the categories
-      //   if (this.props.categorySelected !== "all") {
-      //     if (
-      //       this.props.categorySelected.toLowerCase() !==
-      //       this.props.productCategories[i]
-      //     ) {
-      //       return void i++;
-      //     }
-      //   }
-      //this conditional is for loading the categories
-
 
     let product = this.props.productFactory
     console.log(this.props, 'props cards')
@@ -125,7 +112,7 @@ enumerable: true
     }
 
       return (
-        <ProductCard>
+        <ProductCard onClick={()=>window.scrollTo(0,0)}>
           <Link to={{ pathname: `/products/${this.props.id}`}}>
             <ImageHolder>
               <img
