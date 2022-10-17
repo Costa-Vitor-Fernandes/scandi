@@ -35,16 +35,15 @@ const HeaderContainer = styled.div`
   align-self: center;
   height: 2em;
   width: 14em;
-  margin: 0 100px;
+  margin: 0 0 0 65px;
 `;
 const Logo = styled(HeaderContainer)`
   width: 2em;
-  #logoImg{
-
-  }
   /* height:2em; */
 `;
 const ActionsMenu = styled(HeaderContainer)`
+/* background-color: blue; */
+margin: 0 65px 0 15px;
   display: flex;
   justify-content: space-around;
 `;
@@ -76,6 +75,13 @@ const ActionButton = styled.div`
   padding: 1.25em 0.75em;
   /* background-color: red; */
   height: 1.25em;
+  font-size:26px;
+  line-height:0px;
+  #relative{
+    position:relative;
+    left:-7px;
+    top:-9px;
+  }
   &:hover {
     background-color: rgb(249, 249, 249);
     transform: scale(1.15);
@@ -86,14 +92,14 @@ const Modal = styled.div`
   align-self: flex-end;
   margin: 0 4vw;
   width: 20em;
-  top: 75px;
+  top: 80px;
   /* border:1px solid black; */
   background-color: #fff;
   z-index: 3;
 `;
 
 const CurrencyModal = styled(Modal)`
-  margin: 0 15vw;
+  margin: 0 16.4vw;
   padding: 0.5em 0;
   width: 8em;
 `;
@@ -101,15 +107,33 @@ const CurrencyModal = styled(Modal)`
 const CurrencyActionButton = styled(ActionButton)`
   width: 4em;
   height: 1em;
+  font-size:16px;
   margin-left: 0.5em;
-  padding-right: 2em;
+  padding: 1em 0.75em;
+  padding-right: 2.1em;
 `;
 
 const Footer = styled.div`
   margin-top: 1.5em;
-  background-color: #fefece;
+  background-color: #fefefe;
   height: 50px;
+  color:rgb(245, 245, 245);
+  text-align: center;
 `;
+const  CartCounter = styled.div`
+display: ${(props)=> (props.counter >= 1 ? 'block' : 'none')};
+background-color:black;
+width:20px;
+height:20px;
+border-radius: 20px;
+position: relative;
+top:-8px;
+left:-12px;
+color:white;
+font-size:12px;
+text-align:center;
+line-height:21px;
+`
 
 class App extends Component {
   constructor(props) {
@@ -118,6 +142,7 @@ class App extends Component {
     this.cartModal = this.cartModal.bind(this);
     this.productFactory = this.productFactory.bind(this);
     this.cartAction = this.cartAction.bind(this);
+    this.refreshLS =this.refreshLS.bind(this)
 
     this.state = {
       productInStock: [],
@@ -132,7 +157,7 @@ class App extends Component {
       currencyLabels: [],
       allCategoryNames: [],
       //save this in localStorage instead of state
-      currencyIndex: 0,
+      currencyIndex: window.localStorage.getItem('currencyIndex') || 0,
       //save this in localStorage instead of state
       currencyModal: false,
       cartModal: false,
@@ -140,14 +165,15 @@ class App extends Component {
       opaque: "",
       // categorySelected defaults to all
       categorySelected: "all",
+      cartCount:0,
     };
   }
 
 
   componentDidMount() {
     //fetching the symbols and labels of the currencies
-   axios
-      .get("http://localhost:4000/graphql?query={currencies{symbol,label}}")
+    
+   axios.get("http://localhost:4000/graphql?query={currencies{symbol,label}}")
       .then((res) => {
         let allCurrencies = res.data.data.currencies;
         let arrAllSymbols = allCurrencies.map((v, i, arr) => {
@@ -205,6 +231,10 @@ class App extends Component {
           allCategoryNames: allCategories,
         });
       });
+      this.refreshLS()
+
+      
+
   }
   currencyModal = () => {
     this.setState({
@@ -226,6 +256,7 @@ class App extends Component {
   productFactory = (id) => {
     let product = {
     name: this.state.productNames[id],
+    inStock: this.state.productInStock[id],
     brand:this.state.productBrands[id],
     category: this.state.productCategories[id],
     imgs: this.state.productImgs[id],
@@ -241,7 +272,6 @@ class App extends Component {
     // setTimeout(()=>{
 // this.cartModal()
 // },100)
-    // let product = this.props.productFactory;
     product.amount = 1
     product.attributesSelected = attr 
     console.log(product, 'full product action')
@@ -270,6 +300,20 @@ class App extends Component {
       return window.localStorage.setItem("cart", JSON.stringify([product]));
     }
   };
+  refreshLS = () =>{
+
+    let CartLocalstorage = JSON.parse(window.localStorage.getItem("cart"))
+    if(CartLocalstorage === null){
+      return 
+    }
+
+    console.log(CartLocalstorage)
+    let counter = 0 
+    CartLocalstorage.map((v, i, arr)=>{
+      return counter= counter+v.amount
+    })
+    this.setState({cartCount: counter, currencyIndex:window.localStorage.getItem("currencyIndex")})
+  }
 
 
 
@@ -293,28 +337,31 @@ class App extends Component {
             {/* mapping the category names */}
             {this.state.allCategoryNames.map((v, i, arr) => {
               return (
+                <Link to={"/"}>
                 <Nav key={i} onClick={() => {
                   this.setState({
                     categorySelected: this.state.allCategoryNames[i],
                   });
                 }}>
-                  <Link to={"/"}>
                     <div>
                       {this.state.allCategoryNames[i]}
                     </div>
-                  </Link>
                 </Nav>
+                  </Link>
               );
             })}
           </HeaderContainer>
           <Logo><img src={'/logo transparent.png'} alt={'logo'}></img></Logo>
           <ActionsMenu>
             <ActionButton onClick={() => this.currencyModal()}>
-              <img src="/dollar-sign.svg" alt="dollar-sign" />
+              <p id="relative">{this.state.currencySymbols[this.state.currencyIndex]}</p>
               <img src="/caret-down.svg" alt="sign" />
             </ActionButton>
             <ActionButton onClick={() => this.cartModal()}>
-              <img src="/cart-shopping.svg" alt="cart" />
+              <img src="/Empty Cart black.svg" alt="cart" />
+              <CartCounter counter={this.state.cartCount}>
+                {this.state.cartCount}
+              </CartCounter>
             </ActionButton>
           </ActionsMenu>
         </Header>
@@ -329,6 +376,8 @@ class App extends Component {
                   onClick={() => {
                     this.setState({ currencyIndex: i });
                     this.setState({ currencyModal: false });
+                    window.localStorage.setItem('currencyIndex',JSON.stringify(i));
+                    this.refreshLS()
                   }}
                 >
                   {this.state.currencySymbols[i]} {this.state.currencyLabels[i]}
@@ -343,13 +392,14 @@ class App extends Component {
         {/* opens the mini cart Modal */}
         {this.state.cartModal ? (
           <Modal>
-            <MiniCart turnOffModals={this.turnOffModals} currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}></MiniCart>
+            <MiniCart turnOffModals={this.turnOffModals} refreshLS={this.refreshLS} cartCount={this.state.cartCount} currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}></MiniCart>
           </Modal>
         ) : null}
         {/* opens the mini cart Modal */}
         {/* this opens the PLP */}
         {this.props.plpage ? (
           <PLP
+            
             opaque={this.state.cartModal || this.state.currencyModal}
             onClick={() => this.turnOffModals()}
           >
@@ -368,6 +418,8 @@ class App extends Component {
                 }
               }
               return <Cards
+              
+              refreshLS={this.refreshLS}
               cartModal={this.cartModal} key={i} cartAction={this.cartAction}
               turnOffModals={()=>this.turnOffModals()} 
               currencyLabels={this.state.currencyLabels}  
@@ -392,13 +444,15 @@ class App extends Component {
           currencyIndex={this.state.currencyIndex}
           id={productId}
           productFactory={this.productFactory(productId)}
+          refreshLS={this.refreshLS}
+
           />
         ) : null}
 
         {/* opens the cartPage when url changes */}
         {this.props.cartPage ? <CartPage currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}/> : null}
 
-        <Footer>JustAFooterSpacer</Footer>
+        <Footer>JustAFooterSpacerFor TM and links</Footer>
       </div>
     );
   }
