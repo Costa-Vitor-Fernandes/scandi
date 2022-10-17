@@ -10,7 +10,7 @@ const ProductCard = styled.div`
     box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.4); //0.4 instead of 0.19 to better contrast
     #cartAction{
       /* display:block; */
-      display:${(props)=> (props.inStock ? 'none' : 'block')};
+      display:${(props)=> (props.inStock ?  'block': 'none')};
     }
   }
 `;
@@ -30,7 +30,7 @@ const ImageHolder = styled.div`
   padding: 1vw 1vw 1.5vw 1vw;
   /* this is for the inStock=false props  */
   /* filter: opacity(0.9) blur(5px); */
-  filter: ${(props) => (props.inStock ? 'opacity(0.9) blur(5px)' : "brightness(100%)")};
+  filter: ${(props) => (props.inStock ?  "brightness(100%)" : 'opacity(0.9) blur(5px)')};
   /* this is for the inStock=false props  */
     max-width: 25vw;
     max-height:25vw;
@@ -78,7 +78,7 @@ background-color: #5ECE7B;
 }
 `
 const OutOfStock = styled.div`
-display:${(props)=> (props.inStock ? 'block' : 'none')};
+display:${(props)=> (props.inStock ? 'none' : 'block')};
 /* position:relative; */
 &{
   color:gray;

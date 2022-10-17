@@ -78,19 +78,20 @@ const Price = styled.div`
 
 const AddToCart = styled.button`
 display: flex;
-background-color:#5ECE7B;
+background-color:${(props)=> (props.inStock ?'#5ECE7B': 'black')};
+/* background-color:#5ECE7B; */
 width:100%;
 border:none;
 color:#fff;
 justify-content: center;
 padding:16px 32px;
 margin-bottom:10px;
+
 :hover{
-  background-color:#3dcc61;
+  background-color:${(props)=> (props.inStock ?'#3dcc61':'black')};
+  
 }
-:focus{
-  background-color:#93cfa2;
-}
+
 `
 
 export default class PDPage extends Component {
@@ -205,10 +206,12 @@ export default class PDPage extends Component {
               {this.props.currencySymbols[this.props.currencyIndex]}
               {product.prices[this.props.currencyIndex].amount}</h3>
             </Price>
-            <AddToCart onClick={()=>{
-              this.props.cartAction(product,this.attrGetter() )
-              this.props.refreshLS()
-            }}>ADD TO CART</AddToCart>
+            <AddToCart inStock={product.inStock} onClick={()=>{
+              if(product.inStock){ 
+                this.props.cartAction(product,this.attrGetter() )
+                this.props.refreshLS()
+              }
+            }}>{product.inStock ?'ADD TO CART': 'OUT OF STOCK'}</AddToCart>
             {/* description */}
             <div
               dangerouslySetInnerHTML={{
