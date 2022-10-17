@@ -6,16 +6,18 @@ const MiniProductCart = styled.div`
 /* background-color: red; */
 display:flex;
 flex-direction: row;
-/* max-width: 100%; */
+max-width: 100%;
 /* max-height:200px; */
-margin-bottom: 1px;
+margin-bottom: 2px;
+border: 1px solid #eee;
 `
 const LeftContainer = styled.div`
 padding: 0 10px;
 margin: 0px 0;
-max-width:50%;
-
-background-color: blue;
+width:125px;
+/* max-width:125px; */
+display:flex;
+/* background-color: blue; */
 flex-direction:column;
 & h2,h3,h4,h5{
     padding:1px;
@@ -23,32 +25,41 @@ flex-direction:column;
 }
 `
 const RightContainer = styled.div`
-background-color:green;
+/* background-color:green; */
 display:flex;
 flex-direction:row;
 align-items: space-around;
+max-width:50%;
+min-width:50%;
 `
 const ButtonContainer = styled.div`
 display: flex;
 flex-direction:column;
 justify-content:space-between;
+margin: 10px 0;
+button{
+    background-color:white;
+    border: 1px solid black;
+}
 `
 const ImageHolder = styled.div`
-margin-bottom:1px;
+/* margin-bottom:1px; */
 display:flex;
-/* display:block; */
-background-color:gray;
-padding:1px;
-min-width:120px;
-max-width:120px;
-height:190px;
 align-items:center; 
-img{
+/* display:block; */
+/* background-color:gray; */
+padding:1px;
+min-width:130px;
+max-width:130px;
+height:200px;
+/* margin-right:50px; */
+#img{
+    padding-left:2px;
     object-fit:cover;
     object-position:center;
-    /* min-width:119px; */
-    max-width:120px;
-    max-height:190px;
+    /* min-width:120px; */
+    max-width:130px;
+    /* max-height:200px; */
 }
 `
 
@@ -103,12 +114,16 @@ export default class MiniProduct extends Component {
                 </LeftContainer>
                 <RightContainer>
                     <ButtonContainer>
-                    <button onClick={()=>this.addAmount()}>+</button>
+                    <button onClick={()=>{this.addAmount()
+                        this.props.refreshLS()
+                    }}>+</button>
                     <h5>{this.state.amount}</h5>
-                    <button onClick={()=>this.minusAmount()}>-</button>
+                    <button onClick={()=>{
+                        this.minusAmount()
+                        this.props.refreshLS()}}>-</button>
                     </ButtonContainer>
                     <ImageHolder>
-                        <img src={this.state.product.imgs[this.state.photoIndex]} alt={this.state.product.imgs[this.state.photoIndex]}></img>
+                        <img id="img" src={this.state.product.imgs[this.state.photoIndex]} alt={this.state.product.imgs[this.state.photoIndex]}></img>
                     </ImageHolder>
                 </RightContainer>
             </MiniProductCart>
