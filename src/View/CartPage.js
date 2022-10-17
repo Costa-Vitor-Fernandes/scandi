@@ -27,7 +27,7 @@ margin-bottom:10px;
 `
 
 const OrderInfosDiv = styled.div`
-padding-left: 50px;
+padding-left: 65px;
 width:30%;
 `
 

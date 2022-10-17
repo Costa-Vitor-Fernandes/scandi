@@ -5,28 +5,32 @@ import { Link } from "react-router-dom";
 const ProductCard = styled.div`
   /* background-color: red; */
   min-width: 27vw;
-  #absolute{
-    position:absolute;
-    background-color: white;
-    z-index: 0;
-    width:25%;
-    height:1px;
-    transform: translateY(-13px);
-  }
   &:hover {
     background-color: #fff;
     box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.4); //0.4 instead of 0.19 to better contrast
     #cartAction{
-      z-index: 0;
-      display:block;
+      /* display:block; */
+      display:${(props)=> (props.inStock ? 'none' : 'block')};
     }
   }
 `;
+
+const Absolute = styled.div`
+position:absolute;
+    /* background-color: white; */
+    z-index: 0;
+    width:25%;
+    height:1px;
+    transform: translateY(-13px);
+`
+
+
 const ImageHolder = styled.div`
   display: flex;
   padding: 1vw 1vw 1.5vw 1vw;
   /* this is for the inStock=false props  */
   /* filter: opacity(0.9) blur(5px); */
+  filter: ${(props) => (props.inStock ? 'opacity(0.9) blur(5px)' : "brightness(100%)")};
   /* this is for the inStock=false props  */
     max-width: 25vw;
     max-height:25vw;
@@ -41,6 +45,8 @@ const ImageHolder = styled.div`
   
   }
 `;
+
+
 const ProductName = styled.h3`
   margin: 1em 0.75em;
   margin-bottom: 0;
@@ -69,6 +75,20 @@ background-color: #5ECE7B;
   }
 &:hover{
   transform:scale(1.1)
+}
+`
+const OutOfStock = styled.div`
+display:${(props)=> (props.inStock ? 'block' : 'none')};
+/* position:relative; */
+&{
+  color:gray;
+  position:relative;
+  padding:0;
+  margin:0;
+  top:-200px;
+  text-align:center;
+  padding-left:15px
+
 }
 `
 
@@ -112,25 +132,28 @@ enumerable: true
     }
 
       return (
-        <ProductCard onClick={()=>window.scrollTo(0,0)}>
+        <ProductCard inStock={product.inStock} onClick={()=>window.scrollTo(0,0)}>
           <Link to={{ pathname: `/products/${this.props.id}`}}>
-            <ImageHolder>
+            <ImageHolder inStock={product.inStock}>
               <img
                 id="productImg"
                 src={product.imgs[0]}
                 alt={product.name}
-              ></img>
+                ></img>
             </ImageHolder>
+                
           </Link>
-          <div id='absolute'>
-
+          <Absolute id='absolute'>
+            
             <MiniCartAction id='cartAction' onClick={()=>
               {
                 this.props.cartAction(product, this.state.attributes)
+                this.props.refreshLS()
               }}>
-                <img id='whiteCart' src={'/Empty Cart.svg'} alt={'emptyCart'}></img>
+                <img id='whiteCart' src={'/Empty Cart.svg'} alt={'Cart Icon'}></img>
             </MiniCartAction>
-            </div>
+            <OutOfStock id='outOfStock' inStock={product.inStock}><h1>OUT OF STOCK</h1></OutOfStock>
+            </Absolute>
             <Link to={{ pathname: `/products/${this.props.id}`}}>
 
             <ProductName>{product.brand}{' '}{product.name}</ProductName>

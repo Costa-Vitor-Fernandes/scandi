@@ -205,7 +205,10 @@ export default class PDPage extends Component {
               {this.props.currencySymbols[this.props.currencyIndex]}
               {product.prices[this.props.currencyIndex].amount}</h3>
             </Price>
-            <AddToCart onClick={()=>this.props.cartAction(product,this.attrGetter() )}>ADD TO CART</AddToCart>
+            <AddToCart onClick={()=>{
+              this.props.cartAction(product,this.attrGetter() )
+              this.props.refreshLS()
+            }}>ADD TO CART</AddToCart>
             {/* description */}
             <div
               dangerouslySetInnerHTML={{
