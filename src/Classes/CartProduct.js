@@ -5,9 +5,9 @@ const CartItemContainer = styled.div`
 display:flex;
 flex-direction:row;
 justify-content:space-between;
-margin: 0 4vw;
+margin: 0 65px;
 border-top: 1px solid #ccc;
-border-bottom: 1px solid #ccc;
+border-bottom: 1px solid #eee;
 height:288px;
 #brand{
 font-family: 'Raleway';
