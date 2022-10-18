@@ -1,11 +1,11 @@
 import { Component } from "react";
 import styled from "styled-components";
 
-const Attributes = styled.div`
+export const Attributes = styled.div`
   /* background-color: gray; */
   padding:3px 0;
 `;
-const AttrTitle = styled.div`
+export const AttrTitle = styled.div`
   display: flex;
   padding:  5px 0;
   font-family: 'Roboto Condensed';
@@ -14,11 +14,11 @@ const AttrTitle = styled.div`
   font-size: 18px;
   line-height: 18px;
 `;
-const AttrButtonsContainer = styled.div`
+export const AttrButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
-const SelectAttr = styled.div`
+export const SelectAttr = styled.div`
   display:flex;
   width:40px;
   height:40px;
@@ -37,7 +37,7 @@ const SelectAttr = styled.div`
   };
   
 `;
-const SelectColorAttr = styled.div`
+export const SelectColorAttr = styled.div`
   width:20px;
   height:20px;
   padding:2px;
@@ -86,9 +86,8 @@ export default class AttributesPicker extends Component {
       this.props.attrGetter(this.state.attributes)
     }
     selectedProps = (firstId,secondId) =>{
-      // console.log(this.state.attributes[firstId], secondId, 'wtf')
+      
       if(this.state.attributes[firstId] === secondId){
-        // console.log(this.state.attributes[firstId], secondId, 'works now')
         return true
       }else
       return false

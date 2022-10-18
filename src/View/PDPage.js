@@ -78,6 +78,7 @@ const Price = styled.div`
 
 const AddToCart = styled.button`
 display: flex;
+cursor: ${(props)=> (props.inStock ? null : 'not-allowed')};
 background-color:${(props)=> (props.inStock ?'#5ECE7B': 'black')};
 /* background-color:#5ECE7B; */
 width:100%;
