@@ -452,7 +452,7 @@ class App extends Component {
         {/* opens the cartPage when url changes */}
         {this.props.cartPage ? <CartPage currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}/> : null}
 
-        <Footer>JustAFooterSpacerFor TM and links</Footer>
+        <Footer><p>Just A Footer Spacer For TM and links</p><a href="https://www.linkedin.com/in/costa-vitor-fernandes">costa.vitor.fernandes</a><p>_</p></Footer>
       </div>
     );
   }
