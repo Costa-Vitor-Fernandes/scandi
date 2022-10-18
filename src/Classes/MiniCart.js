@@ -28,8 +28,10 @@ flex-direction:row;
 justify-content:space-around;
 /* align-items: center; */
 
-& button{
-    display:flex;
+`
+
+const Button = styled.button`
+display:flex;
     background-color: #5ECE7B;
     padding: 16px 24px;
     margin: 20px 0;
@@ -37,8 +39,19 @@ justify-content:space-around;
     border:none;
     color:white;
     /* padding:16px 24px; */
-    
-}
+`
+
+const DivFlexAround = styled(DivFlex)`
+display:flex;
+justify-content:space-around;
+margin:0;
+padding:0;
+`
+
+const ViewBag = styled(Button)`
+color:black;
+background-color:white;
+border:1px solid black;
 `
 
 
@@ -47,13 +60,38 @@ export default class MiniCart extends Component {
 
     constructor(props) {
         super(props);
+        this.processData = this.processData.bind(this);
         this.state={
             cart:JSON.parse(window.localStorage.getItem('cart')),
             cartCount:this.props.cartCount,
+            subTotal:0,
+            taxes:0,
+            totalPlusTaxes:0,
+            quantity:0,
+
         }
         
     }
+    componentDidMount() {
+        this.processData()
+    }
 
+    processData = () =>{
+        //this is the info in the end
+        let quantity = 0
+        let sum = 0
+        this.state.cart.map((v,i,arr)=>{
+            quantity = quantity+v.amount
+           return sum = sum + v.prices[this.props.currencyIndex].amount*v.amount
+        })
+        this.setState({
+            subTotal: sum,
+            taxes: parseFloat(sum*0.21),
+            totalPlusTaxes: parseFloat(sum*1.21),
+            quantity: quantity,
+
+        })
+}
 
     
 
@@ -63,7 +101,7 @@ export default class MiniCart extends Component {
         if(this.state.cart === null){
 
             return (<DivFlex>
-                <h1>My bag,</h1><p>0 items</p>
+                <h1>My bag,</h1><p>{this.state.quantity} items</p>
                 </DivFlex>)
         }
         // this first div must be scrollable and custom scroll
@@ -78,13 +116,17 @@ export default class MiniCart extends Component {
                   </MiniProduct>
             })}
             {/* BUTTONS */}
+            <DivFlexAround>
+            <p>Total:</p>
+            <p>$50</p>
+            </DivFlexAround>
             <ButtonContainer>
                 {/* same components here, primary secondary */}
                 <Link to={'/cart'}>
-                <button onClick={this.props.turnOffModals}>VIEW BAG</button>
+                <ViewBag onClick={this.props.turnOffModals}>VIEW BAG</ViewBag>
                 </Link>
                 <Link to={'/cart'}>
-                <button onClick={this.props.turnOffModals}>CHECKOUT</button>
+                <Button onClick={this.props.turnOffModals}>CHECKOUT</Button>
                 </Link>
                 {/* <button>a</button>
                 <button>a</button> */}
