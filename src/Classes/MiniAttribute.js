@@ -8,9 +8,6 @@ const MiniAttrTitle = styled(AttrTitle)`
 font-weight: 400;
 font-size: 14px;`
 
-const MiniAttrButtonsContainer = styled(AttrButtonsContainer)`
-padding:0;
-margin:0;`
 
 const MiniSelectColorAttr = styled(SelectColorAttr)`
 width:16px;

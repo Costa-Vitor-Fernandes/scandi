@@ -1,5 +1,6 @@
 import { Component } from "react";
 import styled from "styled-components";
+import MiniAttribute from "./MiniAttribute";
 
 const CartItemContainer = styled.div`
 display:flex;
@@ -8,7 +9,7 @@ justify-content:space-between;
 margin: 0 65px;
 border-top: 1px solid #ccc;
 border-bottom: 1px solid #eee;
-height:288px;
+padding:10px 0;
 #brand{
 font-family: 'Raleway';
 font-style: 'regular';
@@ -37,7 +38,8 @@ display:flex;
 flex-direction:row;
 `
 const ImageHolder = styled.div`
-margin: 10px 75px;
+margin: 10px 0;
+margin-left:16px;
 width: 230px;
 height:270px;
 background-color: red;
@@ -108,8 +110,8 @@ export default class CartProduct extends Component {
               <h3>
               {this.props.currencySymbols[this.props.currencyIndex]}
               {product.prices[this.props.currencyIndex].amount}</h3>
-            {/* attributes shower */}
-            {JSON.stringify(product.attributesSelected)}
+              <MiniAttribute attributes={product.attributes} selected={product.attributesSelected}/>
+            {/* {JSON.stringify(product.attributesSelected)} */}
             </FlexDiv>
             <FlexRowDiv>
 
