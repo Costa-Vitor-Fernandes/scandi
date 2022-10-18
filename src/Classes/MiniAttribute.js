@@ -21,7 +21,7 @@ box-shadow: none;
 const MiniSelectAttr = styled(SelectAttr)`
 width:24px;
 height:24px;
-padding:0 4px;;
+padding:0 7px;
 box-shadow: none;
 &{font-size:12px;}
 &:hover{
