@@ -19,6 +19,10 @@ export const AttrButtonsContainer = styled.div`
   flex-direction: row;
 `;
 export const SelectAttr = styled.div`
+font-family: 'Roboto Condensed';
+font-style: normal;
+font-weight: 700;
+font-size: 18px;
   display:flex;
   width:40px;
   height:40px;
