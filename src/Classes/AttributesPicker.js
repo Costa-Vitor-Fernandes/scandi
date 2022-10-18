@@ -9,10 +9,9 @@ export const AttrTitle = styled.div`
   display: flex;
   padding:  5px 0;
   font-family: 'Roboto Condensed';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 18px;
+font-style: normal;
+font-weight: 700;
+font-size: 18px;
 `;
 export const AttrButtonsContainer = styled.div`
   display: flex;
@@ -32,7 +31,7 @@ font-size: 18px;
   color: ${(props)=> (props.selected ? 'white' : 'black')};
   background-color: ${(props)=> (props.selected ? 'black' : 'white')};
   border: ${(props)=> (props.selected ? '1px solid white' : '1px solid white')};
-  outline: ${(props)=> (props.selected ? '2px solid black' : '2px solid white')};
+  /* outline: ${(props)=> (props.selected ? '2px solid black' : '2px solid white')}; */
   margin: 0 3px;
   border:1px solid #eee;
   box-shadow: 0px -2px 10px rgba(168, 172, 176, 0.4);
@@ -69,8 +68,10 @@ export default class AttributesPicker extends Component {
     }
     componentDidMount(){
       const attrStatePrep= {};
-      // console.log(this.props.attributes,' componentDidMount');
-      this.props.attributes.map((v, i, arr)=>{
+      if(!this.props.selectedAtLS){
+
+        // console.log(this.props.attributes,' componentDidMount');
+        this.props.attributes.map((v, i, arr)=>{
        return Object.defineProperty(attrStatePrep,v.id, {
         value:0,
         writable: true,
@@ -80,6 +81,8 @@ export default class AttributesPicker extends Component {
       })
       this.setState({attributes:attrStatePrep});
       this.props.attrGetter(attrStatePrep)
+    }
+    else this.setState({attributes:this.props.selected})
 
     }
 

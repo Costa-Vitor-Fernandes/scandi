@@ -1,6 +1,7 @@
 import { Component } from "react";
 import styled from "styled-components";
-import MiniAttribute from "./MiniAttribute";
+import AttributesPicker from "./AttributesPicker";
+// import MiniAttribute from "./MiniAttribute";
 
 const CartItemContainer = styled.div`
 display:flex;
@@ -112,7 +113,7 @@ export default class CartProduct extends Component {
               <h3 id='price'>
               {this.props.currencySymbols[this.props.currencyIndex]}
               {product.prices[this.props.currencyIndex].amount}</h3>
-              <MiniAttribute attributes={product.attributes} selected={product.attributesSelected}/>
+              <AttributesPicker attributes={product.attributes} selected={product.attributesSelected} selectedAtLS={true}/>
             {/* {JSON.stringify(product.attributesSelected)} */}
             </FlexDiv>
             <FlexRowDiv>
