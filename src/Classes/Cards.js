@@ -125,7 +125,7 @@ enumerable: true
   render() {
 
     let product = this.props.productFactory
-    console.log(this.props, 'props cards')
+    // console.log(this.props, 'props cards')
     
     if(!product){
       return <div>loading</div>

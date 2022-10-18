@@ -12,7 +12,7 @@ margin-bottom: 2px;
 border: 1px solid #eee;
 `
 const LeftContainer = styled.div`
-padding: 0 10px;
+padding: 10px 16px;
 margin: 0px 0;
 width:125px;
 /* max-width:125px; */
@@ -62,6 +62,16 @@ height:200px;
     /* max-height:200px; */
 }
 `
+const Brand = styled.p`
+padding: 0;
+margin: 10px 0 5px 0;
+font-weight: 300;
+font-size: 16px;`
+const Name = styled(Brand)`
+font-size: 16px;`
+const Price = styled.h5`
+font-size: 16px;
+font-weight: 500;`
 
 
 export default class MiniProduct extends Component {
@@ -105,12 +115,12 @@ export default class MiniProduct extends Component {
         return(
             <MiniProductCart>
                 <LeftContainer>
-                <h2>{this.state.product.brand}</h2>
-                <h3>{this.state.product.name}</h3>
-                <h4>
+                <Brand>{this.state.product.brand}</Brand>
+                <Name>{this.state.product.name}</Name>
+                <Price>
               {this.props.currencySymbols[this.props.currencyIndex]}{" "}
-              {this.state.product.prices[this.props.currencyIndex].amount}</h4>
-              <MiniAttribute selected={this.state.product.attributesSelected}></MiniAttribute>
+              {this.state.product.prices[this.props.currencyIndex].amount}</Price>
+              <MiniAttribute attributes={this.props.product.attributes} selected={this.state.product.attributesSelected}></MiniAttribute>
                 </LeftContainer>
                 <RightContainer>
                     <ButtonContainer>
