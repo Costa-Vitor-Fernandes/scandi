@@ -4,9 +4,8 @@
 *{
   scroll-behavior: smooth;
   font-family: 'Raleway', sans-serif;
-  font-weight: 'regular';
-  src: url('../fonts/Raleway/static/Raleway-Regular.ttf') format('truetype'); /* IE9 Compat Modes */
-  src: local(''),
+  /* font-weight: 'regular';
+  src: url('../fonts/Raleway/static/Raleway-Regular.ttf') format('truetype'); /* IE9 Compat Modes  */
  
 }
 body {
