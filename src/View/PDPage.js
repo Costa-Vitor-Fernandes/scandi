@@ -27,19 +27,15 @@ font-size: 30px;
 
 const SmallImages = styled.div`
   display: flex;
-  
-  /* border: 1px solid black; */
-  margin-left:2vw;
+  margin-left:70px;
   flex-direction: column;
-  /* height:90vh; */
-  /* overflow-y: scroll; */
   overflow-x: hidden;
-  /* background-color: red; */
-  max-width: 10vw;
+  min-width:80px;
   & img {
     box-sizing:border-box;
     margin: 2px 6px;
-    max-height:10vw;
+    max-width:100px;;
+    /* width:auto; */
     border: 1px solid white;
     /* height: auto; */
   }
@@ -53,15 +49,12 @@ const BigImage = styled.div`
   /* display: flex; */
   /* justify-content:center; */
   /* border: 1px solid green; */
-  max-width: 50vw;
-  min-width:40vw;
+  max-width: 35vw;
+  min-width:35vw;
   & img {
-    /* width: 100%; */
+    width: 100%;
     object-fit:cover;
     object-position:center;
-    max-width: 40vw;
-    max-height:90vh;
-
     height: auto;
     /* max-width: 43vw; */
   }
@@ -164,7 +157,7 @@ export default class PDPage extends Component {
   render() {
     let product = this.props.productFactory;
     //if there is a valid name in product, we load stuff
-    console.log(this.props)
+    // console.log(this.props)
     if (product.name) {
       // console.log(product)
       return (

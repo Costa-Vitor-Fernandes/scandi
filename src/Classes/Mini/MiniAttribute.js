@@ -1,6 +1,6 @@
 import { Component } from "react";
 import styled from "styled-components";
-import { Attributes, AttrTitle, AttrButtonsContainer, SelectAttr, SelectColorAttr } from "./AttributesPicker";
+import { Attributes, AttrTitle, AttrButtonsContainer, SelectAttr, SelectColorAttr } from "../AttributesPicker";
 /* {JSON.stringify(this.state.attributes)} */
 
 
@@ -23,9 +23,10 @@ box-shadow: none;
 }`
 
 const MiniSelectAttr = styled(SelectAttr)`
-width:24px;
-height:24px;
+width:23px;
+height:23px;
 padding:0 7px;
+margin:0 3px;
 box-shadow: none;
 &{font-size:12px;}
 &:hover{
@@ -35,7 +36,12 @@ box-shadow: none;
 const ButtonText = styled.p`
 font-weight: 100;
 font-size: 12px;
+`
 
+const MiniAttrButtonsContainer = styled(AttrButtonsContainer)`
+/* padding-right:10px; */
+padding: 0;
+margin-left:-6px;
 `
 
 
@@ -57,31 +63,31 @@ export default class MiniAttribute extends Component {
   }
 
   render() {
-    console.log(this.state.attributes, " state attrs");
+    // console.log(this.state.attributes, " state attrs");
     if (!this.state.attributes[0]) return null; 
     return this.state.attributes.map((v, index, arr) => {
       if (v.type === "swatch")
         return (
-          <Attributes>
+          <Attributes key={index}>
             <MiniAttrTitle>{v.id}:</MiniAttrTitle>
-            <AttrButtonsContainer>
+            <MiniAttrButtonsContainer>
 
             {this.state.attributes[index].items.map((v, i, array) => {
-                return <MiniSelectColorAttr selected={this.selectedAttr(arr[index].id,i)} swatch={v.value}/>;
+                return <MiniSelectColorAttr key={i} selected={this.selectedAttr(arr[index].id,i)} swatch={v.value}/>;
             })}
-            </AttrButtonsContainer>
+            </MiniAttrButtonsContainer>
           </Attributes>
         );
       else
         return (
-          <Attributes>
+          <Attributes key={index}>
             <MiniAttrTitle>{v.id}:</MiniAttrTitle>
-            <AttrButtonsContainer>
+            <MiniAttrButtonsContainer>
             {this.state.attributes[index].items.map((v, i, array) => {
                 
-              return <MiniSelectAttr selected={this.selectedAttr(arr[index].id, i)}><ButtonText>{v.value}</ButtonText></MiniSelectAttr>;
+              return <MiniSelectAttr key={i} selected={this.selectedAttr(arr[index].id, i)}><ButtonText>{v.value}</ButtonText></MiniSelectAttr>;
             })}
-            </AttrButtonsContainer>
+            </MiniAttrButtonsContainer>
           </Attributes>
         );
     });

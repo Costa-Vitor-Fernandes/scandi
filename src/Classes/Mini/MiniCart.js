@@ -4,9 +4,9 @@ import MiniProduct from "./MiniProduct";
 import {Link} from 'react-router-dom'
 
 const Scrollable = styled.div`
-overflow-y:scroll;
+overflow-y:auto;
 overflow-x:hidden;
-height:80vh;
+max-height:80vh;
 max-width:325px;
 display:flex;
 flex-direction:column;
@@ -64,6 +64,7 @@ h1{
 }
 `
 
+
 export default class MiniCart extends Component {
 
     constructor(props) {
@@ -110,7 +111,7 @@ export default class MiniCart extends Component {
     render(){
         
 
-        console.log(this.state.cart, 'cartstate')
+        // console.log(this.state.cart, 'cartstate')
         if(this.state.cart === null){
 
             return (<DivFlex>

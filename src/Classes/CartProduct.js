@@ -72,13 +72,38 @@ const PhotoButtonContainer = styled.div`
   top: -50px;
   left: 160px;
   justify-content:space-between;
-  & div{
-    padding: 0 5px;
+  /* background-color:red; */
+
+`;
+const DivLeft = styled.div`
+opacity: 0.7;
+padding: 4px 6px 4px 4px;
     background-color:black;
     color:white;
-    /* border:1px solid red; */
-  }
-`;
+`
+const DivRight = styled.div`
+opacity: 0.7;
+    padding: 4px 4px 4px 6px;
+    background-color:black;
+    color:white;
+`
+
+const ArrowLeft = styled.div`
+  width: 0; 
+  height: 0; 
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent; 
+  border-right:7px solid white;
+`
+const ArrowRight = styled.div`
+  width: 0; 
+  height: 0; 
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 7px solid white;
+  /* padding: 7px; */
+`
+
 
 export default class CartProduct extends Component {
   constructor(props) {
@@ -167,8 +192,8 @@ export default class CartProduct extends Component {
               alt={product.imgs[this.state.photoIndex]}
             ></img>
             {product.imgs.length >1? <PhotoButtonContainer>
-              <div onClick={() => this.prevPhoto()}>-</div>
-              <div onClick={() => this.nextPhoto()}>+</div>
+              <DivLeft onClick={() => this.prevPhoto()}><ArrowLeft/></DivLeft>
+              <DivRight onClick={() => this.nextPhoto()}><ArrowRight/></DivRight>
             </PhotoButtonContainer> :null}
             
           </ImageHolder>

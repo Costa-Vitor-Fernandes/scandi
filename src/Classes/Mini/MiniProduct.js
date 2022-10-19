@@ -12,9 +12,10 @@ const MiniProductCart = styled.div`
   border: 1px solid #eee;
 `;
 const LeftContainer = styled.div`
-  padding: 10px 16px;
+  padding: 10px 0px 10px 16px;
+
   margin: 0px 0;
-  width: 125px;
+  width: 130px;
   /* max-width:125px; */
   display: flex;
   /* background-color: blue; */
@@ -34,6 +35,7 @@ const RightContainer = styled.div`
   align-items: space-around;
   max-width: 50%;
   min-width: 50%;
+  margin-left:6px;
 `;
 const ButtonContainer = styled.div`
   display: flex;
@@ -52,14 +54,14 @@ const ImageHolder = styled.div`
   /* display:block;   */
   /* background-color:gray; */
   padding: 0 3px;
-  max-width: 130px;
+  width: 120px;
   #img {
     /* padding-left:2px; */
 
     object-fit: cover;
     object-position: center;
-    min-width: 120px;
-    max-width: 100%;
+    /* min-width: 120px; */
+    max-width: 120px;
     /* max-height:200px; */
   }
 `;
@@ -81,17 +83,42 @@ const PhotoButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
-  min-width:3em;
-  left: -60px;
+  min-width:2.5em;
+  left: -50px;
   top: 70px;
   justify-content: space-between;
-  & div {
-    padding: 0 5px;
-    background-color: black;
-    color: white;
-    /* border: 1px solid red; */
-  }
+
 `;
+
+const DivLeft = styled.div`
+opacity: 0.7;
+padding: 4px 6px 4px 4px;
+    background-color:black;
+    color:white;
+`
+const DivRight = styled.div`
+opacity: 0.7;
+    padding: 4px 4px 4px 6px;
+    background-color:black;
+    color:white;
+`
+
+const ArrowLeft = styled.div`
+  width: 0; 
+  height: 0; 
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent; 
+  border-right:7px solid white;
+`
+const ArrowRight = styled.div`
+  width: 0; 
+  height: 0; 
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 7px solid white;
+  /* padding: 7px; */
+`
+
 
 export default class MiniProduct extends Component {
   constructor(props) {
@@ -144,10 +171,10 @@ export default class MiniProduct extends Component {
     // let currencyIndex = this.props.currencyIndex
     // let currencySymbol = this.props.currencySymbols[currencyIndex]
     // console.log(product, 'this is mini product on mini cart')
-    console.log(
-      this.state.product,
-      "this is inside the miniproduct when it renders"
-    );
+    // console.log(
+    //   this.state.product,
+    //   "this is inside the miniproduct when it renders"
+    // );
     if (this.state.product !== null && this.state.product !== []) {
       return (
         <MiniProductCart>
@@ -191,8 +218,8 @@ export default class MiniProduct extends Component {
               ></img>
               {this.state.product.imgs.length > 1 ? (
                 <PhotoButtonContainer>
-                  <div onClick={() => this.prevPhoto()}>-</div>
-                  <div onClick={() => this.nextPhoto()}>+</div>
+                  <DivLeft onClick={() => this.prevPhoto()}><ArrowLeft/></DivLeft>
+                  <DivRight onClick={() => this.nextPhoto()}><ArrowRight/></DivRight>
                 </PhotoButtonContainer>
               ) : null}
             </ImageHolder>

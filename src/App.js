@@ -4,35 +4,30 @@ import { Component } from "react";
 import Cards from "./Classes/Cards";
 import axios from "axios";
 import PDPage from "./View/PDPage";
-import MiniCart from "./Classes/MiniCart";
+import MiniCart from "./Classes/Mini/MiniCart";
 import { Link } from "react-router-dom";
 import CartPage from "./View/CartPage";
-
-
-
 
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
   height: 80px;
-  /* border-bottom: 1px solid black; */
 `;
 
 const Nav = styled.nav`
   padding: 0px 1em;
   font-size: 16px;
   line-height: 1.25em;
-  height:50px;
+  height: 50px;
   text-transform: uppercase;
-  border-bottom: ${(props)=> props.selected ? '1px solid green': 'none'};
+  border-bottom: ${(props) => (props.selected ? "1px solid #5ECE7B" : "none")};
   &:hover {
-    border-bottom: 1px solid green;
+    border-bottom: 1px solid #5ece7b;
   }
-  /* media query here to size */
 `;
 const HeaderContainer = styled.div`
   display: flex;
-  /* background-color: blue; */
+
   flex-direction: row;
   align-self: center;
   height: 2em;
@@ -41,11 +36,9 @@ const HeaderContainer = styled.div`
 `;
 const Logo = styled(HeaderContainer)`
   width: 2em;
-  /* height:2em; */
 `;
 const ActionsMenu = styled(HeaderContainer)`
-/* background-color: blue; */
-margin: 0 65px 0 15px;
+  margin: 0 65px 0 15px;
   display: flex;
   justify-content: space-around;
 `;
@@ -58,12 +51,11 @@ const PLP = styled.main`
   filter: ${(props) => (props.opaque ? "brightness(80%)" : "brightness(100%)")};
 `;
 const CategoryName = styled.h1`
-font-family: 'Raleway';
-font-style: normal;
-font-weight: 400;
-font-size: 42px;
-padding-left: 80px;
-
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 42px;
+  padding-left: 80px;
 `;
 
 const ProductGrid = styled.div`
@@ -72,83 +64,61 @@ const ProductGrid = styled.div`
   grid-template-columns: 23vw 23vw 23vw;
   gap: 7vw;
   width: 88vw;
-  /* media query here to display flex column */
+ 
 `;
-// const ActionButton = styled.div`
-//   display: flex;
-//   align-self: center;
-//   flex-direction: row;
-//   padding: 1.25em 0.75em;  
-//   background-color:green;
-//   font-size:26px;
-//   line-height:0px;
-//   #relative{
-//     position:relative;
-
-//   }
-//   &:hover {
-//     background-color: rgb(249, 249, 249);
-//     transform: scale(1.15);
-//   }
-// `;
 
 const OpenCurrencyModal = styled.div`
   display: flex;
   align-self: center;
-  flex-direction: row;  
+  flex-direction: row;
   /* background-color:aqua; */
   padding: 20px 20px;
-  padding-right:30px;
-  #relative{
-    position:relative;
+  padding-right: 30px;
+  #relative {
+    position: relative;
   }
   &:hover {
     background-color: rgb(249, 249, 249);
     transform: scale(1.1);
   }
-`
+`;
 const OpenMiniCartModal = styled.div`
   display: flex;
   align-self: center;
   flex-direction: row;
-  /* background-color:orange; */
   padding: 40px 20px;
   padding-right: 23px;
-  
-  font-size:26px;
-  line-height:0px;
-  #relative{
-    position:relative;
+
+  font-size: 26px;
+  line-height: 0px;
+  #relative {
+    position: relative;
   }
   &:hover {
     background-color: rgb(249, 249, 249);
     transform: scale(1.1);
   }
-`
+`;
 
 const Modal = styled.div`
   position: absolute;
   align-self: flex-end;
-  margin: 0 4vw;  
+  margin: 0 4vw;
   width: 20em;
   top: 80px;
-  /* border:1px solid black; */
   background-color: #fff;
   z-index: 3;
   box-shadow: 0px -2px 50px rgba(168, 172, 176, 0.4);
 `;
 
-
 const CartModal = styled.div`
   position: absolute;
   align-self: flex-end;
-  margin: 0 4vw;  
+  margin: 0 4vw;
   width: 20em;
   top: 80px;
-  /* border:1px solid black; */
   background-color: #fff;
   z-index: 3;
-  
 `;
 
 const CurrencyModal = styled(Modal)`
@@ -158,52 +128,50 @@ const CurrencyModal = styled(Modal)`
 `;
 
 const CurrencyActionButton = styled.div`
-/* text-align: center; */
+
   width: 7em;
-  font-size:16px;
+  font-size: 16px;
   margin-left: 0.35em;
   padding: 1.25em 0em;
-  :hover{
-    background-color:rgb(245,245,245);
+  :hover {
+    background-color: rgb(245, 245, 245);
     transform: scale(1.1);
   }
-& {
-  padding-left:5px;
-}
-  
+  & {
+    padding-left: 5px;
+  }
 `;
 
 const Footer = styled.div`
   margin-top: 1.5em;
   background-color: #fefefe;
   height: 50px;
-  color:rgb(245, 245, 245);
+  color: rgb(245, 245, 245);
   text-align: center;
 `;
 
 const Absolute = styled.div`
-position:absolute;
-width:20px;
-`
+  position: absolute;
+  width: 20px;
+`;
 
 const CartCounter = styled.div`
-display: ${(props)=> (props.counter >= 1 ? 'block' : 'none')};
-background-color:black;
-width:20px;
-height:20px;
-border-radius: 20px;
-position: relative;
-top:-8px;
-left:10px;
-color:white;
-font-size:12px;
-text-align:center;
-line-height:18px;
-`
+  display: ${(props) => (props.counter >= 1 ? "block" : "none")};
+  background-color: black;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  position: relative;
+  top: -8px;
+  left: 10px;
+  color: white;
+  font-size: 12px;
+  text-align: center;
+  line-height: 18px;
+`;
 const CategorySelector = styled.div`
-color:${(props)=> props.selected ? 'green': 'black'};
-
-`
+  color: ${(props) => (props.selected ? "#5ECE7B" : "black")};
+`;
 
 class App extends Component {
   constructor(props) {
@@ -212,7 +180,7 @@ class App extends Component {
     this.cartModal = this.cartModal.bind(this);
     this.productFactory = this.productFactory.bind(this);
     this.cartAction = this.cartAction.bind(this);
-    this.refreshLS =this.refreshLS.bind(this)
+    this.refreshLS = this.refreshLS.bind(this);
 
     this.state = {
       productInStock: [],
@@ -227,7 +195,7 @@ class App extends Component {
       currencyLabels: [],
       allCategoryNames: [],
       //save this in localStorage instead of state
-      currencyIndex: window.localStorage.getItem('currencyIndex') || 0,
+      currencyIndex: window.localStorage.getItem("currencyIndex") || 0,
       //save this in localStorage instead of state
       currencyModal: false,
       cartModal: false,
@@ -235,19 +203,21 @@ class App extends Component {
       opaque: "",
       // categorySelected defaults to all
       categorySelected: "all",
-      cartCount:0,
+      cartCount: 0,
     };
   }
 
-
   componentDidMount() {
     //fetching the symbols and labels of the currencies
-    axios.get('http://localhost:4000/graphql?query={categories{name}}').then((res)=>{
-      console.log(res.data.data.categories, 'resdatadata')
-      let allCategories = res.data.data.categories.map((v,i,arr)=>v.name)
-      this.setState({allCategoryNames:allCategories})
-    })
-   axios.get("http://localhost:4000/graphql?query={currencies{symbol,label}}")
+    axios
+      .get("http://localhost:4000/graphql?query={categories{name}}")
+      .then((res) => {
+        // console.log(res.data.data.categories, "resdatadata");
+        let allCategories = res.data.data.categories.map((v, i, arr) => v.name);
+        this.setState({ allCategoryNames: allCategories });
+      });
+    axios
+      .get("http://localhost:4000/graphql?query={currencies{symbol,label}}")
       .then((res) => {
         let allCurrencies = res.data.data.currencies;
         let arrAllSymbols = allCurrencies.map((v, i, arr) => {
@@ -262,7 +232,7 @@ class App extends Component {
         });
       });
     //fetching product stuff
-   axios
+    axios
       .get(
         `http://localhost:4000/graphql?query={category{products{attributes{id,name,type,items{id,value,displayValue}},category,brand,inStock,gallery,name,description,prices{amount,currency{symbol}}}}}`
       )
@@ -280,7 +250,7 @@ class App extends Component {
         //this could be a req to the graphql server
         // let allCategories = [...new Set(arrAllCategories)];
         //this could be a req to the graphql server
-        
+
         let arrAllDescriptions = allProducts.map(
           (v, i, arr) => arr[i].description
         );
@@ -289,7 +259,7 @@ class App extends Component {
         let arrAllProductAttributes = allProducts.map(
           (v, i, arr) => arr[i].attributes
         );
-     
+
         this.setState({
           productInStock: arrInStock,
           productDescription: arrAllDescriptions,
@@ -302,11 +272,8 @@ class App extends Component {
           // allCategoryNames: allCategories,
         });
       });
-     
-      this.refreshLS()
 
-      
-
+    this.refreshLS();
   }
   currencyModal = () => {
     this.setState({
@@ -327,27 +294,23 @@ class App extends Component {
   };
   productFactory = (id) => {
     let product = {
-    name: this.state.productNames[id],
-    inStock: this.state.productInStock[id],
-    brand:this.state.productBrands[id],
-    category: this.state.productCategories[id],
-    imgs: this.state.productImgs[id],
-    prices: this.state.productPrices[id],
-    attributes: this.state.productAttributes[id],
-    description: this.state.productDescription[id],
-  };
-  return product;
-
+      name: this.state.productNames[id],
+      inStock: this.state.productInStock[id],
+      brand: this.state.productBrands[id],
+      category: this.state.productCategories[id],
+      imgs: this.state.productImgs[id],
+      prices: this.state.productPrices[id],
+      attributes: this.state.productAttributes[id],
+      description: this.state.productDescription[id],
+    };
+    return product;
   };
   cartAction = (product, attr) => {
-//opens cart modal just to fast check
-    // setTimeout(()=>{
-// this.cartModal()
-// },100)
-    product.amount = 1
-    product.attributesSelected = attr 
-    console.log(product, 'full product action')
-    
+
+    product.amount = 1;
+    product.attributesSelected = attr;
+    // console.log(product, "full product action");
+
     // to parse string to Obj
     // JSON.parse(window.localStorage.getItem('cart'))
     let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
@@ -355,45 +318,43 @@ class App extends Component {
     if (getFromLocalStorage !== null) {
       if (getFromLocalStorage.length >= 2) {
         let newCart = [];
-        
+
         getFromLocalStorage.map((v, i, arr) => newCart.push(v));
         newCart.push(product);
         return window.localStorage.setItem("cart", JSON.stringify(newCart));
       }
       let newCart = [];
-      
+
       newCart.push(getFromLocalStorage[0]);
       newCart.push(product);
       return window.localStorage.setItem("cart", JSON.stringify(newCart));
     }
     if (getFromLocalStorage === null) {
-      
-      // console.log(product)
+   
       return window.localStorage.setItem("cart", JSON.stringify([product]));
     }
   };
-  refreshLS = () =>{
-
-    let CartLocalstorage = JSON.parse(window.localStorage.getItem("cart"))
-    if(CartLocalstorage === null){
-      return 
+  refreshLS = () => {
+    let CartLocalstorage = JSON.parse(window.localStorage.getItem("cart"));
+    if (CartLocalstorage === null) {
+      return;
     }
 
-    console.log(CartLocalstorage)
-    let counter = 0 
-    CartLocalstorage.map((v, i, arr)=>{
-      return counter= counter+v.amount
-    })
-    this.setState({cartCount: counter, currencyIndex:window.localStorage.getItem("currencyIndex")})
-  }
 
-
-
+    let counter = 0;
+    CartLocalstorage.map((v, i, arr) => {
+      return (counter = counter + v.amount);
+    });
+    this.setState({
+      cartCount: counter,
+      currencyIndex: window.localStorage.getItem("currencyIndex"),
+    });
+  };
 
   render() {
-    console.log(this.state)
+
     // console.log(this.state)
-    // console.log(window.location.pathname, " window href"); // /kids
+    // console.log(window.location.pathname, " window href"); // 
     let productId = window.location.pathname.slice(10);
     return (
       <div id="page">
@@ -401,39 +362,49 @@ class App extends Component {
           <HeaderContainer onClick={() => this.turnOffModals()}>
             {/* mapping the category names */}
             {this.state.allCategoryNames.map((v, i, arr) => {
-              let selected = false
-              if(this.state.allCategoryNames[i] === this.state.categorySelected){
-                selected = true
-              }else{
-                selected = false
+              let selected = false;
+              if (
+                this.state.allCategoryNames[i] === this.state.categorySelected
+              ) {
+                selected = true;
+              } else {
+                selected = false;
               }
               return (
-                <Link to={"/"}>
-                <Nav key={i} selected={selected} onClick={() => {
-                  this.setState({
-                    categorySelected: this.state.allCategoryNames[i],
-                  });
-                }}>
+                <Link key={i} to={"/"}>
+                  <Nav
+                    key={i}
+                    selected={selected}
+                    onClick={() => {
+                      this.setState({
+                        categorySelected: this.state.allCategoryNames[i],
+                      });
+                    }}
+                  >
                     <CategorySelector selected={selected}>
                       {this.state.allCategoryNames[i]}
                     </CategorySelector>
-                </Nav>
-                  </Link>
+                  </Nav>
+                </Link>
               );
             })}
           </HeaderContainer>
-          <Logo><img src={'/logo transparent.png'} alt={'logo'}></img></Logo>
+          <Logo>
+            <img src={"/logo transparent.png"} alt={"logo"}></img>
+          </Logo>
           <ActionsMenu>
             <OpenCurrencyModal onClick={() => this.currencyModal()}>
-              <p id="relative">{this.state.currencySymbols[this.state.currencyIndex]}</p>
+              <p id="relative">
+                {this.state.currencySymbols[this.state.currencyIndex]}
+              </p>
               <img src="/caret-down.svg" alt="sign" />
             </OpenCurrencyModal>
             <OpenMiniCartModal onClick={() => this.cartModal()}>
               <img src="/Empty Cart black.svg" alt="cart" />
               <Absolute>
-              <CartCounter counter={this.state.cartCount}>
-                {this.state.cartCount}
-              </CartCounter>
+                <CartCounter counter={this.state.cartCount}>
+                  {this.state.cartCount}
+                </CartCounter>
               </Absolute>
             </OpenMiniCartModal>
           </ActionsMenu>
@@ -449,8 +420,11 @@ class App extends Component {
                   onClick={() => {
                     this.setState({ currencyIndex: i });
                     this.setState({ currencyModal: false });
-                    window.localStorage.setItem('currencyIndex',JSON.stringify(i));
-                    this.refreshLS()
+                    window.localStorage.setItem(
+                      "currencyIndex",
+                      JSON.stringify(i)
+                    );
+                    this.refreshLS();
                   }}
                 >
                   {this.state.currencySymbols[i]} {this.state.currencyLabels[i]}
@@ -465,14 +439,19 @@ class App extends Component {
         {/* opens the mini cart Modal */}
         {this.state.cartModal ? (
           <CartModal>
-            <MiniCart turnOffModals={this.turnOffModals} refreshLS={this.refreshLS} cartCount={this.state.cartCount} currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}></MiniCart>
+            <MiniCart
+              turnOffModals={this.turnOffModals}
+              refreshLS={this.refreshLS}
+              cartCount={this.state.cartCount}
+              currencyIndex={this.state.currencyIndex}
+              currencySymbols={this.state.currencySymbols}
+            ></MiniCart>
           </CartModal>
         ) : null}
         {/* opens the mini cart Modal */}
         {/* this opens the PLP */}
         {this.props.plpage ? (
           <PLP
-            
             opaque={this.state.cartModal}
             onClick={() => this.turnOffModals()}
           >
@@ -480,52 +459,67 @@ class App extends Component {
               {this.state.categorySelected.toUpperCase()}
             </CategoryName>
             <ProductGrid>
-            {this.state.productNames.map((v,i,arr)=>{
-              // console.log(i,' index do map maluco')
-              if (this.state.categorySelected !== "all") {
-                if (
-                  this.state.categorySelected.toLowerCase() !==
-                  this.state.productCategories[i]
-                ) {
-                  return void i++;
+              {this.state.productNames.map((v, i, arr) => {
+                // console.log(i,' index do map maluco')
+                if (this.state.categorySelected !== "all") {
+                  if (
+                    this.state.categorySelected.toLowerCase() !==
+                    this.state.productCategories[i]
+                  ) {
+                    return void i++;
+                  }
                 }
-              }
-              return <Cards
-              
-              refreshLS={this.refreshLS}
-              cartModal={this.cartModal} key={i} cartAction={this.cartAction}
-              turnOffModals={()=>this.turnOffModals()} 
-              currencyLabels={this.state.currencyLabels}  
-              currencySymbols={this.state.currencySymbols}
-              opaque={this.state.cartModal}
-              currencyIndex={this.state.currencyIndex}
-              id={i}
-              productFactory={this.productFactory(i)}></Cards>
-            })}
+                return (
+                  <Cards
+                    refreshLS={this.refreshLS}
+                    cartModal={this.cartModal}
+                    key={i}
+                    cartAction={this.cartAction}
+                    turnOffModals={() => this.turnOffModals()}
+                    currencyLabels={this.state.currencyLabels}
+                    currencySymbols={this.state.currencySymbols}
+                    opaque={this.state.cartModal}
+                    currencyIndex={this.state.currencyIndex}
+                    id={i}
+                    productFactory={this.productFactory(i)}
+                  ></Cards>
+                );
+              })}
               {/* <Cards categorySelected={this.state.categorySelected} productCategories={this.state.productCategories} state={this.state} productFactory={this.productFactory}></Cards> */}
             </ProductGrid>
           </PLP>
-        ): null}
+        ) : null}
         {/* opens the PDP when url changes */}
         {this.props.pdpage ? (
-          <PDPage 
-          cartAction={this.cartAction}
-          turnOffModals={()=>this.turnOffModals()} 
-          currencyLabels={this.state.currencyLabels}  
-          currencySymbols={this.state.currencySymbols}
-          opaque={this.state.cartModal}
-          currencyIndex={this.state.currencyIndex}
-          id={productId}
-          productFactory={this.productFactory(productId)}
-          refreshLS={this.refreshLS}
-
+          <PDPage
+            cartAction={this.cartAction}
+            turnOffModals={() => this.turnOffModals()}
+            currencyLabels={this.state.currencyLabels}
+            currencySymbols={this.state.currencySymbols}
+            opaque={this.state.cartModal}
+            currencyIndex={this.state.currencyIndex}
+            id={productId}
+            productFactory={this.productFactory(productId)}
+            refreshLS={this.refreshLS}
           />
         ) : null}
 
         {/* opens the cartPage when url changes */}
-        {this.props.cartPage ? <CartPage opaque={this.state.cartModal}  currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}/> : null}
+        {this.props.cartPage ? (
+          <CartPage
+            opaque={this.state.cartModal}
+            currencyIndex={this.state.currencyIndex}
+            currencySymbols={this.state.currencySymbols}
+          />
+        ) : null}
 
-        <Footer><p>Just A Footer Spacer For TM and links</p><a href="https://www.linkedin.com/in/costa-vitor-fernandes">costa.vitor.fernandes</a><p>_</p></Footer>
+        <Footer>
+          <p>Just A Footer Spacer For TM and links</p>
+          <a href="https://www.linkedin.com/in/costa-vitor-fernandes">
+            costa.vitor.fernandes
+          </a>
+          <p>_</p>
+        </Footer>
       </div>
     );
   }
