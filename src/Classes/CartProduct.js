@@ -80,12 +80,18 @@ opacity: 0.7;
 padding: 4px 6px 4px 4px;
     background-color:black;
     color:white;
+    :hover{
+  opacity:1;
+}
 `
 const DivRight = styled.div`
 opacity: 0.7;
     padding: 4px 4px 4px 6px;
     background-color:black;
     color:white;
+    :hover{
+  opacity:1;
+}
 `
 
 const ArrowLeft = styled.div`
@@ -102,6 +108,23 @@ const ArrowRight = styled.div`
   border-bottom: 7px solid transparent;
   border-left: 7px solid white;
   /* padding: 7px; */
+`
+const TrashCan = styled.div`
+/* background-color:red; */
+opacity:0.7;
+position:relative;
+left:240px;
+top:16px;
+width:1.25em;
+border-radius: 40px;
+img{
+  padding:5px;
+  background-color:  black;
+  color:white;
+}
+:hover{
+  opacity:1;
+}
 `
 
 
@@ -159,9 +182,12 @@ export default class CartProduct extends Component {
     }
   };
 
+  
+
   render() {
     let product = this.props.product;
     // console.log(product)
+    console.log(this.props)
     return (
       <CartItemContainer>
         <FlexDiv>
@@ -184,6 +210,11 @@ export default class CartProduct extends Component {
             <h5>{this.state.amount}</h5>
             <button onClick={() => this.minusAmount()}>-</button>
           </ButtonContainer>
+          <TrashCan onClick={() => {
+            this.props.trashAction(this.props.idOnLocalStorage)
+            this.props.refreshLS()
+            this.props.refreshCart()
+            }}><img src="/trash-can.svg" alt="trash icon to delete"></img></TrashCan>
           {/* amount buttons */}
           <ImageHolder>
             <img
@@ -194,6 +225,7 @@ export default class CartProduct extends Component {
             {product.imgs.length >1? <PhotoButtonContainer>
               <DivLeft onClick={() => this.prevPhoto()}><ArrowLeft/></DivLeft>
               <DivRight onClick={() => this.nextPhoto()}><ArrowRight/></DivRight>
+              
             </PhotoButtonContainer> :null}
             
           </ImageHolder>

@@ -120,7 +120,7 @@ const CartModal = styled.div`
 `;
 
 const CurrencyModal = styled(Modal)`
-  margin: 0 16.4vw;
+  margin: 0 201px;
   padding: 0.5em 0;
   width: 8.05em;
 `;
@@ -393,9 +393,30 @@ class App extends Component {
       return window.localStorage.setItem("cart", JSON.stringify([product]));
     }
   };
+
+  trashAction = (idOnLS) => {
+
+    
+    let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
+    if(idOnLS === 0 && getFromLocalStorage.length ===1){
+      // let newLS =[]
+      return window.localStorage.removeItem("cart");
+    }
+    else{
+      // console.log(getFromLocalStorage,'old LS');
+      getFromLocalStorage.splice(idOnLS,1);
+      // console.log(getFromLocalStorage,'newLS')
+      // console.log('removed',removed)
+      return window.localStorage.setItem("cart", JSON.stringify(getFromLocalStorage));
+      
+      // this.refreshLS();
+    }
+  }
+
   refreshLS = () => {
     let CartLocalstorage = JSON.parse(window.localStorage.getItem("cart"));
     if (CartLocalstorage === null) {
+      this.setState({cartCount:0})
       return;
     }
 
@@ -497,6 +518,7 @@ class App extends Component {
         {this.state.cartModal ? (
           <CartModal>
             <MiniCart
+              trashAction={this.trashAction}
               turnOffModals={this.turnOffModals}
               refreshLS={this.refreshLS}
               cartCount={this.state.cartCount}
@@ -564,6 +586,8 @@ class App extends Component {
         {/* opens the cartPage when url changes */}
         {this.props.cartPage ? (
           <CartPage
+            refreshLS={this.refreshLS}
+            trashAction={this.trashAction}
             opaque={this.state.cartModal}
             currencyIndex={this.state.currencyIndex}
             currencySymbols={this.state.currencySymbols}
@@ -573,7 +597,7 @@ class App extends Component {
         <Footer>
           <p>Just A Footer Spacer For TM and links</p>
           <a href="https://www.linkedin.com/in/costa-vitor-fernandes">
-            costa.vitor.fernandes
+            costa.vitor.fernandes@gmail.com
           </a>
           <p>_</p>
         </Footer>

@@ -109,13 +109,13 @@ export default class MiniCart extends Component {
     
 
     render(){
-        
+        // this.props.refreshLS()
 
         // console.log(this.state.cart, 'cartstate')
         if(this.state.cart === null){
 
             return (<DivFlex>
-                <h1>My bag,</h1><p>{this.state.quantity} items</p>
+                <h1>My bag,</h1><p>{this.state.cartCount} items</p>
                 </DivFlex>)
         }
         // this first div must be scrollable and custom scroll
@@ -126,13 +126,13 @@ export default class MiniCart extends Component {
 
             {this.state.cart.map((v,i,arr)=>{
                 // console.log(v)
-                  return  <MiniProduct refreshLS={this.props.refreshLS} key={i} idOnLocalStorage={i} product={arr[i]} currencyIndex={this.props.currencyIndex} currencySymbols={this.props.currencySymbols}>                
+                  return  <MiniProduct turnOffModals={this.props.turnOffModals} trashAction={this.props.trashAction} refreshLS={this.props.refreshLS} key={i} idOnLocalStorage={i} product={arr[i]} currencyIndex={this.props.currencyIndex} currencySymbols={this.props.currencySymbols}>                
                   </MiniProduct>
             })}
             {/* BUTTONS */}
             <DivFlexAround>
             <p>Total:</p>
-            <p>{this.state.totalPlusTaxes.toFixed(2)}</p>
+            <p>{this.props.currencySymbols[this.props.currencyIndex]}{this.state.totalPlusTaxes.toFixed(2)}</p>
             </DivFlexAround>
             <ButtonContainer>
                 {/* same components here, primary secondary */}

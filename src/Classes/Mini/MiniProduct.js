@@ -2,6 +2,8 @@ import { Component } from "react";
 import MiniAttribute from "./MiniAttribute";
 import styled from "styled-components";
 
+
+
 const MiniProductCart = styled.div`
   /* background-color: red; */
   display: flex;
@@ -118,6 +120,27 @@ const ArrowRight = styled.div`
   border-left: 7px solid white;
   /* padding: 7px; */
 `
+const MiniTrash = styled.div`
+position:relative;
+top:5px;
+left:115px;
+opacity:0.7;
+height: 22px;
+background-color:black;
+color:white;
+/* width:1.25em; */
+padding:2px;
+/* border-radius: 40px; */
+/* border: 1px solid red; */
+/* img{
+  padding:5px;
+  background-color:  black;
+  color:white;
+} */
+:hover{
+  opacity:1;
+}
+`
 
 
 export default class MiniProduct extends Component {
@@ -210,6 +233,11 @@ export default class MiniProduct extends Component {
                 -
               </button>
             </ButtonContainer>
+            <MiniTrash onClick={() => {
+            this.props.trashAction(this.props.idOnLocalStorage)
+            this.props.turnOffModals()
+            this.props.refreshLS()
+            }}>x</MiniTrash>
             <ImageHolder>
               <img
                 id="img"
