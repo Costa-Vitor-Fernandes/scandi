@@ -6,7 +6,10 @@ import { Attributes, AttrTitle, AttrButtonsContainer, SelectAttr, SelectColorAtt
 
 const MiniAttrTitle = styled(AttrTitle)`
 font-weight: 400;
-font-size: 14px;`
+font-size: 14px;
+/* text-transform: uppercase; */
+
+`
 
 
 const MiniSelectColorAttr = styled(SelectColorAttr)`
@@ -21,7 +24,7 @@ box-shadow: none;
 const MiniSelectAttr = styled(SelectAttr)`
 width:24px;
 height:24px;
-padding:0 4px;;
+padding:0 7px;
 box-shadow: none;
 &{font-size:12px;}
 &:hover{
@@ -31,6 +34,7 @@ box-shadow: none;
 const ButtonText = styled.p`
 font-weight: 100;
 font-size: 12px;
+
 `
 
 

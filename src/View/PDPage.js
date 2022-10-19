@@ -199,6 +199,7 @@ export default class PDPage extends Component {
             <AttributesPicker
               attributes={product.attributes}
               attrGetter={this.attrGetter}
+              selectedAtLS={false}
             ></AttributesPicker>
             {/* i should have a getter function that gets the attributes picked and passes them to the cartAction function */}
             <Price>
