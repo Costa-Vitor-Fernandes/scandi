@@ -1,4 +1,4 @@
-# This Project is my resolution on the technical test for the Junior React Developer position at Scandiweb 
+# This Project is my resolution of the technical test for the Junior React Developer position at Scandiweb 
 done by me, Vítor Fernandes Fonseca da Costa
 
 # Getting Started with Create React App
