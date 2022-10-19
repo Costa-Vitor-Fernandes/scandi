@@ -121,9 +121,11 @@ export default class MiniCart extends Component {
         // console.log(this.state.cart, 'cartstate')
         if(this.state.cart === null){
 
-            return (<DivFlex>
+            return (
+                <MiniCartHeader>
                 <h1>My bag,</h1><p>{this.state.cartCount} items</p>
-                </DivFlex>)
+                </MiniCartHeader>
+                )
         }
         // this first div must be scrollable and custom scroll
         return(<Scrollable>
