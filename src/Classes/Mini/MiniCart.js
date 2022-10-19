@@ -39,6 +39,9 @@ display:flex;
     /* border:1px solid black; */
     border:none;
     color:white;
+    :hover{
+        background-color: #3dcc61;
+    }
     /* padding:16px 24px; */
 `
 
@@ -53,6 +56,10 @@ const ViewBag = styled(Button)`
 color:black;
 background-color:white;
 border:1px solid black;
+:hover{
+    background-color:white;
+    box-shadow: 0px -2px 50px rgba(168, 172, 176, 0.4) 
+}
 `
 const MiniCartHeader = styled.div`
 display:flex;

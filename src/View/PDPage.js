@@ -96,6 +96,7 @@ export default class PDPage extends Component {
     super(props);
     // this.cartAction = this.cartAction.bind(this);
     this.attrGetter = this.attrGetter.bind(this);
+    this.setDefaultAttr = this.setDefaultAttr.bind(this);
     this.state = {
       photoIndex: 0,
       name: "",
@@ -119,6 +120,20 @@ export default class PDPage extends Component {
   attrGetter = (props) =>{
     this.setState({attributesSelected: props})
     return this.state.attributesSelected
+  }
+  setDefaultAttr = () =>{
+    let product = this.props.productFactory;
+    const defaultAttrStatePrep= {};
+
+    product.attributes.map((v, i, arr)=>{
+      return Object.defineProperty(defaultAttrStatePrep,v.id, {
+       value:0,
+       writable: true,
+       configurable: true,
+       enumerable: true
+      })
+     })
+     return defaultAttrStatePrep    
   }
 
   //i still need to passs attributes and quantity of products to this function
@@ -206,7 +221,7 @@ export default class PDPage extends Component {
             </Price>
             <AddToCart inStock={product.inStock} onClick={()=>{
               if(product.inStock){ 
-                this.props.cartAction(product,this.attrGetter() )
+                this.props.cartAction(product, this.attrGetter() || this.setDefaultAttr() )
                 this.props.refreshLS()
               }
             }}>{product.inStock ?'ADD TO CART': 'OUT OF STOCK'}</AddToCart>

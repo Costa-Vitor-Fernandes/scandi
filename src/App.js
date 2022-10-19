@@ -207,6 +207,8 @@ class App extends Component {
   componentDidMount() {
     //fetching the symbols and labels of the currencies
 
+    window.localStorage.setItem('currencyIndex', '0')
+
     fetch("http://localhost:4000/graphql?query={categories{name}}")
       .then((response) => response.json())
       .then((data) => {
