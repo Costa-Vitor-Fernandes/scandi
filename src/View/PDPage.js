@@ -74,6 +74,9 @@ const TextSection = styled.section`
 const Price = styled.div`
   /* border: 1px solid blue; */
   padding: 10px 0;
+  #price{
+    font-family: 'Raleway';
+  }
 `;
 
 const AddToCart = styled.button`
@@ -203,8 +206,8 @@ export default class PDPage extends Component {
             ></AttributesPicker>
             {/* i should have a getter function that gets the attributes picked and passes them to the cartAction function */}
             <Price>
-              <h5>PRICE:</h5>
-              <h3>
+              <h5 id="price-label">PRICE:</h5>
+              <h3 id="price">
               {this.props.currencySymbols[this.props.currencyIndex]}
               {product.prices[this.props.currencyIndex].amount}</h3>
             </Price>

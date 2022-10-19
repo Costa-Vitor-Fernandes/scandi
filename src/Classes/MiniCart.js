@@ -10,6 +10,7 @@ height:80vh;
 max-width:325px;
 display:flex;
 flex-direction:column;
+box-shadow:none;
 
 `
 
@@ -53,8 +54,15 @@ color:black;
 background-color:white;
 border:1px solid black;
 `
-
-
+const MiniCartHeader = styled.div`
+display:flex;
+flex-direction:row;
+align-items:center;
+h1{
+    margin-left:15px;
+    font-size:16px;
+}
+`
 
 export default class MiniCart extends Component {
 
@@ -106,9 +114,9 @@ export default class MiniCart extends Component {
         }
         // this first div must be scrollable and custom scroll
         return(<Scrollable>
-            <DivFlex>
+            <MiniCartHeader>
             <h1>My bag,</h1><p>{this.state.cartCount}{' '}items</p>
-            </DivFlex>
+            </MiniCartHeader>
 
             {this.state.cart.map((v,i,arr)=>{
                 // console.log(v)
@@ -118,7 +126,7 @@ export default class MiniCart extends Component {
             {/* BUTTONS */}
             <DivFlexAround>
             <p>Total:</p>
-            <p>$50</p>
+            <p>{this.state.totalPlusTaxes.toFixed(2)}</p>
             </DivFlexAround>
             <ButtonContainer>
                 {/* same components here, primary secondary */}

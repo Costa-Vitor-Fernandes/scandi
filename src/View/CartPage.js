@@ -5,7 +5,7 @@ import CartProduct from "../Classes/CartProduct"
 const Cart = styled.div`
 font-size: 3em;
 padding-top: 0.7em;
-padding-left: 100px;
+padding-left: 70px;
 margin-bottom: 20px;
 `
 
@@ -29,6 +29,11 @@ margin-bottom:10px;
 const OrderInfosDiv = styled.div`
 padding-left: 65px;
 width:30%;
+`
+const CartPageDiv = styled.div`
+background-color:#fff;
+filter: ${(props) => (props.opaque ? "brightness(80%)" : "brightness(100%)")};
+
 `
 
 export default class CartPage extends Component{
@@ -90,7 +95,7 @@ export default class CartPage extends Component{
         //     quantity: quantity,
 
         // })
-        return(<div id="page">
+        return(<CartPageDiv opaque={this.props.opaque} id="page">
             <Cart>CART</Cart>
             {this.state.cart.map((v,i,arr)=>{
                 return <CartProduct amountChanged={this.amountChanged} key={i} idOnLocalStorage={i} currencyIndex={this.props.currencyIndex} currencySymbols={this.props.currencySymbols} product={v} />
@@ -98,9 +103,9 @@ export default class CartPage extends Component{
             <OrderInfosDiv>
             <h3>TAX 21% : {this.props.currencySymbols[this.props.currencyIndex]} {parseFloat(this.state.taxes).toFixed(2)}</h3>
             <h3>Quantity: {this.state.quantity}</h3>
-            <h3>Total:{this.props.currencySymbols[this.props.currencyIndex]} {parseFloat(this.state.totalPlusTaxes).toFixed(2)}</h3>
+            <h3>Total : {this.props.currencySymbols[this.props.currencyIndex]} {' '} {parseFloat(this.state.totalPlusTaxes).toFixed(2)}</h3>
             <Order onClick={()=>console.warn('you ordered this',this.state.cart, this.state.total,)}>ORDER</Order>
             </OrderInfosDiv>
-        </div>)
+        </CartPageDiv>)
     }
 }

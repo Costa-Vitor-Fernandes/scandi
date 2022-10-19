@@ -20,9 +20,11 @@ const Header = styled.header`
 
 const Nav = styled.nav`
   padding: 0px 1em;
-  font-size: 1em;
+  font-size: 16px;
   line-height: 1.25em;
   height:50px;
+  text-transform: uppercase;
+  border-bottom: ${(props)=> props.selected ? '1px solid green': 'none'};
   &:hover {
     border-bottom: 1px solid green;
   }
@@ -56,8 +58,12 @@ const PLP = styled.main`
   filter: ${(props) => (props.opaque ? "brightness(80%)" : "brightness(100%)")};
 `;
 const CategoryName = styled.h1`
-  font-size: 3em;
-  padding-left: 100px;
+font-family: 'Raleway';
+font-style: normal;
+font-weight: 400;
+font-size: 42px;
+padding-left: 80px;
+
 `;
 
 const ProductGrid = styled.div`
@@ -68,49 +74,102 @@ const ProductGrid = styled.div`
   width: 88vw;
   /* media query here to display flex column */
 `;
-const ActionButton = styled.div`
+// const ActionButton = styled.div`
+//   display: flex;
+//   align-self: center;
+//   flex-direction: row;
+//   padding: 1.25em 0.75em;  
+//   background-color:green;
+//   font-size:26px;
+//   line-height:0px;
+//   #relative{
+//     position:relative;
+
+//   }
+//   &:hover {
+//     background-color: rgb(249, 249, 249);
+//     transform: scale(1.15);
+//   }
+// `;
+
+const OpenCurrencyModal = styled.div`
+  display: flex;
+  align-self: center;
+  flex-direction: row;  
+  /* background-color:aqua; */
+  padding: 20px 20px;
+  padding-right:30px;
+  #relative{
+    position:relative;
+  }
+  &:hover {
+    background-color: rgb(249, 249, 249);
+    transform: scale(1.1);
+  }
+`
+const OpenMiniCartModal = styled.div`
   display: flex;
   align-self: center;
   flex-direction: row;
-  padding: 1.25em 0.75em;
-  /* background-color: red; */
-  height: 1.25em;
+  /* background-color:orange; */
+  padding: 40px 0;
+  padding-left:15px;
   font-size:26px;
   line-height:0px;
   #relative{
     position:relative;
-    left:-7px;
-    top:-9px;
   }
   &:hover {
     background-color: rgb(249, 249, 249);
-    transform: scale(1.15);
+    transform: scale(1.1);
   }
-`;
+`
+
 const Modal = styled.div`
   position: absolute;
   align-self: flex-end;
-  margin: 0 4vw;
+  margin: 0 4vw;  
   width: 20em;
   top: 80px;
   /* border:1px solid black; */
   background-color: #fff;
   z-index: 3;
+  box-shadow: 0px -2px 50px rgba(168, 172, 176, 0.4);
+`;
+
+
+const CartModal = styled.div`
+  position: absolute;
+  align-self: flex-end;
+  margin: 0 4vw;  
+  width: 20em;
+  top: 80px;
+  /* border:1px solid black; */
+  background-color: #fff;
+  z-index: 3;
+  
 `;
 
 const CurrencyModal = styled(Modal)`
   margin: 0 16.4vw;
   padding: 0.5em 0;
-  width: 8em;
+  width: 8.05em;
 `;
 
-const CurrencyActionButton = styled(ActionButton)`
-  width: 4em;
-  height: 1em;
+const CurrencyActionButton = styled.div`
+/* text-align: center; */
+  width: 7em;
   font-size:16px;
-  margin-left: 0.5em;
-  padding: 1em 0.75em;
-  padding-right: 2.1em;
+  margin-left: 0.35em;
+  padding: 1.25em 0em;
+  :hover{
+    background-color:rgb(245,245,245);
+    transform: scale(1.1);
+  }
+& {
+  padding-left:5px;
+}
+  
 `;
 
 const Footer = styled.div`
@@ -132,7 +191,11 @@ left:-12px;
 color:white;
 font-size:12px;
 text-align:center;
-line-height:21px;
+line-height:18px;
+`
+const CategorySelector = styled.div`
+color:${(props)=> props.selected ? 'green': 'black'};
+
 `
 
 class App extends Component {
@@ -172,7 +235,11 @@ class App extends Component {
 
   componentDidMount() {
     //fetching the symbols and labels of the currencies
-    
+    axios.get('http://localhost:4000/graphql?query={categories{name}}').then((res)=>{
+      console.log(res.data.data.categories, 'resdatadata')
+      let allCategories = res.data.data.categories.map((v,i,arr)=>v.name)
+      this.setState({allCategoryNames:allCategories})
+    })
    axios.get("http://localhost:4000/graphql?query={currencies{symbol,label}}")
       .then((res) => {
         let allCurrencies = res.data.data.currencies;
@@ -203,11 +270,8 @@ class App extends Component {
 
         let arrAllProductImgs = allProducts.map((v, i, arr) => arr[i].gallery);
         // returning a arr with links to the product images
-        let arrAllCategories = allProducts.map((v, i, arr) =>
-          arr[i].category.toUpperCase()
-        );
         //this could be a req to the graphql server
-        let allCategories = [...new Set(arrAllCategories)];
+        // let allCategories = [...new Set(arrAllCategories)];
         //this could be a req to the graphql server
         
         let arrAllDescriptions = allProducts.map(
@@ -228,9 +292,10 @@ class App extends Component {
           productNames: arrAllProductNames,
           productImgs: arrAllProductImgs,
           productPrices: arrAllProductPrices,
-          allCategoryNames: allCategories,
+          // allCategoryNames: allCategories,
         });
       });
+     
       this.refreshLS()
 
       
@@ -319,6 +384,7 @@ class App extends Component {
 
 
   render() {
+    console.log(this.state)
     // console.log(this.state)
     // console.log(window.location.pathname, " window href"); // /kids
     let productId = window.location.pathname.slice(10);
@@ -326,26 +392,24 @@ class App extends Component {
       <div id="page">
         <Header>
           <HeaderContainer onClick={() => this.turnOffModals()}>
-            <Nav onClick={() => this.setState({ categorySelected: "all" })}>
-              <Link to={"/"}>
-                {/* decided to fetch 'all' and hard code 'all' by default by now, i imagine every store having a 'all' category */}
-                <div onClick={() => this.setState({ categorySelected: "all" })}>
-                  ALL
-                </div>
-              </Link>
-            </Nav>
             {/* mapping the category names */}
             {this.state.allCategoryNames.map((v, i, arr) => {
+              let selected = false
+              if(this.state.allCategoryNames[i] === this.state.categorySelected){
+                selected = true
+              }else{
+                selected = false
+              }
               return (
                 <Link to={"/"}>
-                <Nav key={i} onClick={() => {
+                <Nav key={i} selected={selected} onClick={() => {
                   this.setState({
                     categorySelected: this.state.allCategoryNames[i],
                   });
                 }}>
-                    <div>
+                    <CategorySelector selected={selected}>
                       {this.state.allCategoryNames[i]}
-                    </div>
+                    </CategorySelector>
                 </Nav>
                   </Link>
               );
@@ -353,16 +417,16 @@ class App extends Component {
           </HeaderContainer>
           <Logo><img src={'/logo transparent.png'} alt={'logo'}></img></Logo>
           <ActionsMenu>
-            <ActionButton onClick={() => this.currencyModal()}>
+            <OpenCurrencyModal onClick={() => this.currencyModal()}>
               <p id="relative">{this.state.currencySymbols[this.state.currencyIndex]}</p>
               <img src="/caret-down.svg" alt="sign" />
-            </ActionButton>
-            <ActionButton onClick={() => this.cartModal()}>
+            </OpenCurrencyModal>
+            <OpenMiniCartModal onClick={() => this.cartModal()}>
               <img src="/Empty Cart black.svg" alt="cart" />
               <CartCounter counter={this.state.cartCount}>
                 {this.state.cartCount}
               </CartCounter>
-            </ActionButton>
+            </OpenMiniCartModal>
           </ActionsMenu>
         </Header>
 
@@ -391,16 +455,16 @@ class App extends Component {
 
         {/* opens the mini cart Modal */}
         {this.state.cartModal ? (
-          <Modal>
+          <CartModal>
             <MiniCart turnOffModals={this.turnOffModals} refreshLS={this.refreshLS} cartCount={this.state.cartCount} currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}></MiniCart>
-          </Modal>
+          </CartModal>
         ) : null}
         {/* opens the mini cart Modal */}
         {/* this opens the PLP */}
         {this.props.plpage ? (
           <PLP
             
-            opaque={this.state.cartModal || this.state.currencyModal}
+            opaque={this.state.cartModal}
             onClick={() => this.turnOffModals()}
           >
             <CategoryName id="categoryName">
@@ -424,7 +488,7 @@ class App extends Component {
               turnOffModals={()=>this.turnOffModals()} 
               currencyLabels={this.state.currencyLabels}  
               currencySymbols={this.state.currencySymbols}
-              opaque={this.state.cartModal || this.state.currencyModal}
+              opaque={this.state.cartModal}
               currencyIndex={this.state.currencyIndex}
               id={i}
               productFactory={this.productFactory(i)}></Cards>
@@ -440,7 +504,7 @@ class App extends Component {
           turnOffModals={()=>this.turnOffModals()} 
           currencyLabels={this.state.currencyLabels}  
           currencySymbols={this.state.currencySymbols}
-          opaque={this.state.cartModal || this.state.currencyModal}
+          opaque={this.state.cartModal}
           currencyIndex={this.state.currencyIndex}
           id={productId}
           productFactory={this.productFactory(productId)}
@@ -450,7 +514,7 @@ class App extends Component {
         ) : null}
 
         {/* opens the cartPage when url changes */}
-        {this.props.cartPage ? <CartPage currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}/> : null}
+        {this.props.cartPage ? <CartPage opaque={this.state.cartModal}  currencyIndex={this.state.currencyIndex} currencySymbols={this.state.currencySymbols}/> : null}
 
         <Footer><p>Just A Footer Spacer For TM and links</p><a href="https://www.linkedin.com/in/costa-vitor-fernandes">costa.vitor.fernandes</a><p>_</p></Footer>
       </div>

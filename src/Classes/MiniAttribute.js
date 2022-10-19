@@ -15,7 +15,8 @@ font-size: 14px;
 const MiniSelectColorAttr = styled(SelectColorAttr)`
 width:16px;
 height:16px;
-padding:0;
+padding:0 7px;
+margin:0 1px;
 box-shadow: none;
 &:hover{
     box-shadow:none
