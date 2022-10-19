@@ -5,7 +5,7 @@ import CartProduct from "../Classes/CartProduct"
 const Cart = styled.div`
 font-size: 3em;
 padding-top: 0.7em;
-padding-left: 100px;
+padding-left: 70px;
 margin-bottom: 20px;
 `
 
@@ -29,6 +29,12 @@ margin-bottom:10px;
 const OrderInfosDiv = styled.div`
 padding-left: 65px;
 width:30%;
+`
+const CartPageDiv = styled.div`
+font-family:"Raleway";
+background-color:#fff;
+filter: ${(props) => (props.opaque ? "brightness(80%)" : "brightness(100%)")};
+
 `
 
 export default class CartPage extends Component{
@@ -55,17 +61,20 @@ export default class CartPage extends Component{
                 //this is the info in the end
                 let quantity = 0
                 let sum = 0
-                this.state.cart.map((v,i,arr)=>{
-                    quantity = quantity+v.amount
-                   return sum = sum + v.prices[this.props.currencyIndex].amount*v.amount
+                if(this.state.cart !== null){
+
+                    this.state.cart.map((v,i,arr)=>{
+                        quantity = quantity+v.amount
+                        return sum = sum + v.prices[this.props.currencyIndex].amount*v.amount
                 })
                 this.setState({
                     subTotal: sum,
                     taxes: parseFloat(sum*0.21),
                     totalPlusTaxes: parseFloat(sum*1.21),
                     quantity: quantity,
-        
+                    
                 })
+            }
     }
 
     amountChanged = () =>{
@@ -77,20 +86,12 @@ export default class CartPage extends Component{
     }
 
     render(){
-        // let quantity = 0
-        // let sum = 0
-        // this.state.cart.map((v,i,arr)=>{
-        //     quantity = quantity+v.amount
-        //    return sum = sum + v.prices[this.props.currencyIndex].amount*v.amount
-        // })
-        // this.setState({
-        //     subTotal: sum,
-        //     taxes: parseFloat(sum*0.21),
-        //     totalPlusTaxes: parseFloat(sum*1.21),
-        //     quantity: quantity,
+        if(this.state.cart === null){
 
-        // })
-        return(<div id="page">
+            return (<CartPageDiv opaque={this.props.opaque}><Cart>CART</Cart><div><Cart>There is nothing in here yet</Cart></div></CartPageDiv>)
+        }
+
+        return(<CartPageDiv opaque={this.props.opaque} id="page">
             <Cart>CART</Cart>
             {this.state.cart.map((v,i,arr)=>{
                 return <CartProduct amountChanged={this.amountChanged} key={i} idOnLocalStorage={i} currencyIndex={this.props.currencyIndex} currencySymbols={this.props.currencySymbols} product={v} />
@@ -98,9 +99,9 @@ export default class CartPage extends Component{
             <OrderInfosDiv>
             <h3>TAX 21% : {this.props.currencySymbols[this.props.currencyIndex]} {parseFloat(this.state.taxes).toFixed(2)}</h3>
             <h3>Quantity: {this.state.quantity}</h3>
-            <h3>Total:{this.props.currencySymbols[this.props.currencyIndex]} {parseFloat(this.state.totalPlusTaxes).toFixed(2)}</h3>
-            <Order onClick={()=>console.warn('you ordered this',this.state.cart, this.state.total,)}>ORDER</Order>
+            <h3>Total : {this.props.currencySymbols[this.props.currencyIndex]} {' '} {parseFloat(this.state.totalPlusTaxes).toFixed(2)}</h3>
+            <Order onClick={()=>alert(`directing you to our payment page! your bill should be ${this.state.totalPlusTaxes.toFixed(2)} bucks ! \n\n\nand your order is this bunch of code :\n\n ${JSON.stringify(this.state.cart)}`)}>ORDER</Order>
             </OrderInfosDiv>
-        </div>)
+        </CartPageDiv>)
     }
 }

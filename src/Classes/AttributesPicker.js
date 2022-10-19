@@ -4,6 +4,7 @@ import styled from "styled-components";
 export const Attributes = styled.div`
   /* background-color: gray; */
   padding:3px 0;
+  padding-right:50px; 
 `;
 export const AttrTitle = styled.div`
   display: flex;
@@ -16,6 +17,9 @@ font-size: 18px;
 export const AttrButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content:flex-start;
+  margin-left:-5px;
+  padding:0;
 `;
 export const SelectAttr = styled.div`
 font-family: 'Roboto Condensed';
@@ -32,9 +36,9 @@ font-size: 18px;
   background-color: ${(props)=> (props.selected ? 'black' : 'white')};
   border: ${(props)=> (props.selected ? '1px solid white' : '1px solid white')};
   /* outline: ${(props)=> (props.selected ? '2px solid black' : '2px solid white')}; */
-  margin: 0 3px;
+  margin: 0 4px;
   border:1px solid #eee;
-  box-shadow: 0px -2px 10px rgba(168, 172, 176, 0.4);
+  /* box-shadow: 0px -2px 10px rgba(168, 172, 176, 0.4); */
   :hover{
     box-shadow: 0px -2px 50px rgba(168, 172, 176, 0.4) // random shadow
   };
@@ -46,7 +50,7 @@ export const SelectColorAttr = styled.div`
   padding:2px;
   margin: 0 3px;
   border:1px solid #eee;
-  box-shadow: 0px -2px 10px rgba(168, 172, 176, 0.4);
+  /* box-shadow: 0px -2px 10px rgba(168, 172, 176, 0.4); */
   :hover{
     box-shadow: 0px -2px 50px rgba(168, 172, 176, 0.4) // random shadow
   };
@@ -90,7 +94,9 @@ export default class AttributesPicker extends Component {
       let attrs = this.state.attributes
       attrs[firstId] = secondId
       this.setState({attributes:attrs});
-      this.props.attrGetter(this.state.attributes)
+      if(!this.props.selectedAtLS){
+        this.props.attrGetter(this.state.attributes)
+      }
     }
     selectedProps = (firstId,secondId) =>{
       

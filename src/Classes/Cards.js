@@ -79,13 +79,16 @@ background-color: #5ECE7B;
 `
 const OutOfStock = styled.div`
 display:${(props)=> (props.inStock ? 'none' : 'block')};
-/* position:relative; */
-&{
+
+& h1{
+  font-family:"Raleway";
+font-weight: 400;
+font-size: 24px;
   color:gray;
   position:relative;
   padding:0;
   margin:0;
-  top:-200px;
+  top:-15vw;
   text-align:center;
   padding-left:15px
 
