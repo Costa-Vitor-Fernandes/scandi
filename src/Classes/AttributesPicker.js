@@ -79,12 +79,13 @@ export default class AttributesPicker extends Component {
        return Object.defineProperty(attrStatePrep,v.id, {
         value:0,
         writable: true,
-  configurable: true,
-  enumerable: true
+        configurable: true,
+        enumerable: true
        })
       })
       this.setState({attributes:attrStatePrep});
-      this.props.attrGetter(attrStatePrep)
+        this.props.attrGetter(attrStatePrep)
+    
     }
     else this.setState({attributes:this.props.selected})
 

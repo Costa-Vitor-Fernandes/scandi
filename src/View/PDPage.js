@@ -76,7 +76,6 @@ const AddToCart = styled.button`
 display: flex;
 cursor: ${(props)=> (props.inStock ? null : 'not-allowed')};
 background-color:${(props)=> (props.inStock ?'#5ECE7B': 'black')};
-/* background-color:#5ECE7B; */
 width:100%;
 border:none;
 color:#fff;
@@ -89,6 +88,10 @@ margin-bottom:10px;
   
 }
 
+`;
+
+const Loading = styled.div`
+padding:50px;
 `
 
 export default class PDPage extends Component {
@@ -96,6 +99,7 @@ export default class PDPage extends Component {
     super(props);
     // this.cartAction = this.cartAction.bind(this);
     this.attrGetter = this.attrGetter.bind(this);
+    this.setDefaultAttr = this.setDefaultAttr.bind(this);
     this.state = {
       photoIndex: 0,
       name: "",
@@ -120,46 +124,28 @@ export default class PDPage extends Component {
     this.setState({attributesSelected: props})
     return this.state.attributesSelected
   }
+  setDefaultAttr = () =>{
+    let product = this.props.productFactory;
+    const defaultAttrStatePrep= {};
 
-  //i still need to passs attributes and quantity of products to this function
-  // cartAction = () => {
-  //   let product = this.props.productFactory;
-  //   product.attributesSelected = [this.state.attributesSelected]
-  //   console.log(product, 'full product action')
-    
-  //   // to parse string to Obj
-  //   // JSON.parse(window.localStorage.getItem('cart'))
-  //   let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
-  //   //logic to when the user has a Cart LocalStorage object
-  //   if (getFromLocalStorage !== null) {
-  //     if (getFromLocalStorage.length >= 2) {
-  //       let newCart = [];
-        
-  //       getFromLocalStorage.map((v, i, arr) => newCart.push(v));
-  //       newCart.push(product);
-  //       return window.localStorage.setItem("cart", JSON.stringify(newCart));
-  //     }
-  //     let newCart = [];
-      
-  //     newCart.push(getFromLocalStorage[0]);
-  //     newCart.push(product);
-  //     return window.localStorage.setItem("cart", JSON.stringify(newCart));
-  //   }
-  //   if (getFromLocalStorage === null) {
-      
-  //     // console.log(product)
-  //     return window.localStorage.setItem("cart", JSON.stringify([product]));
-  //   }
-  // };
+    product.attributes.map((v, i, arr)=>{
+      return Object.defineProperty(defaultAttrStatePrep,v.id, {
+       value:0,
+       writable: true,
+       configurable: true,
+       enumerable: true
+      })
+     })
+     return defaultAttrStatePrep    
+  }
+
 
 
 
   render() {
     let product = this.props.productFactory;
     //if there is a valid name in product, we load stuff
-    // console.log(this.props)
     if (product.name) {
-      // console.log(product)
       return (
         <MainProductPage
           opaque={this.props.opaque}
@@ -187,17 +173,11 @@ export default class PDPage extends Component {
             <h1 id="brand">{product.brand}</h1>
             <h3 id='name'>{product.name}</h3>
 
-            {/* just to log attrs*/}
-            {/* <button onClick={() => console.log(product.attributes)}>
-              attrs log
-            </button> */}
-            {/* calls the attributes */}
             <AttributesPicker
               attributes={product.attributes}
               attrGetter={this.attrGetter}
               selectedAtLS={false}
             ></AttributesPicker>
-            {/* i should have a getter function that gets the attributes picked and passes them to the cartAction function */}
             <Price>
               <h5 id="price-label">PRICE:</h5>
               <h3 id="price">
@@ -206,7 +186,7 @@ export default class PDPage extends Component {
             </Price>
             <AddToCart inStock={product.inStock} onClick={()=>{
               if(product.inStock){ 
-                this.props.cartAction(product,this.attrGetter() )
+                this.props.cartAction(product, this.attrGetter() || this.setDefaultAttr() )
                 this.props.refreshLS()
               }
             }}>{product.inStock ?'ADD TO CART': 'OUT OF STOCK'}</AddToCart>
@@ -221,6 +201,6 @@ export default class PDPage extends Component {
         </MainProductPage>
       );
     }
-    return <div>Loading...</div>;
+    return <Loading>Loading...</Loading>;
   }
 }

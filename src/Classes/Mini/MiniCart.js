@@ -39,6 +39,9 @@ display:flex;
     /* border:1px solid black; */
     border:none;
     color:white;
+    :hover{
+        background-color: #3dcc61;
+    }
     /* padding:16px 24px; */
 `
 
@@ -53,6 +56,10 @@ const ViewBag = styled(Button)`
 color:black;
 background-color:white;
 border:1px solid black;
+:hover{
+    background-color:white;
+    box-shadow: 0px -2px 50px rgba(168, 172, 176, 0.4) 
+}
 `
 const MiniCartHeader = styled.div`
 display:flex;
@@ -109,14 +116,16 @@ export default class MiniCart extends Component {
     
 
     render(){
-        
+        // this.props.refreshLS()
 
         // console.log(this.state.cart, 'cartstate')
         if(this.state.cart === null){
 
-            return (<DivFlex>
-                <h1>My bag,</h1><p>{this.state.quantity} items</p>
-                </DivFlex>)
+            return (
+                <MiniCartHeader>
+                <h1>My bag,</h1><p>{this.state.cartCount} items</p>
+                </MiniCartHeader>
+                )
         }
         // this first div must be scrollable and custom scroll
         return(<Scrollable>
@@ -126,13 +135,13 @@ export default class MiniCart extends Component {
 
             {this.state.cart.map((v,i,arr)=>{
                 // console.log(v)
-                  return  <MiniProduct refreshLS={this.props.refreshLS} key={i} idOnLocalStorage={i} product={arr[i]} currencyIndex={this.props.currencyIndex} currencySymbols={this.props.currencySymbols}>                
+                  return  <MiniProduct turnOffModals={this.props.turnOffModals} trashAction={this.props.trashAction} refreshLS={this.props.refreshLS} key={i} idOnLocalStorage={i} product={arr[i]} currencyIndex={this.props.currencyIndex} currencySymbols={this.props.currencySymbols}>                
                   </MiniProduct>
             })}
             {/* BUTTONS */}
             <DivFlexAround>
             <p>Total:</p>
-            <p>{this.state.totalPlusTaxes.toFixed(2)}</p>
+            <p>{this.props.currencySymbols[this.props.currencyIndex]}{this.state.totalPlusTaxes.toFixed(2)}</p>
             </DivFlexAround>
             <ButtonContainer>
                 {/* same components here, primary secondary */}

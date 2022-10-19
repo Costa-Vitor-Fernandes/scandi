@@ -7,6 +7,14 @@ font-size: 3em;
 padding-top: 0.7em;
 padding-left: 70px;
 margin-bottom: 20px;
+#home{
+    color:blue;
+    text-decoration: underline;
+    :hover{
+        color:#002991;
+        text-decoration: underline;
+    }
+}
 `
 
 const Order = styled.button`
@@ -45,6 +53,7 @@ export default class CartPage extends Component{
         // this.subTotal = this.subTotal.bind(this);
         this.processData = this.processData.bind(this);
         this.amountChanged = this.amountChanged.bind(this);
+        this.refreshCart = this.refreshCart.bind(this);
         this.state={
             cart:JSON.parse(window.localStorage.getItem('cart')),
             subTotal:0,
@@ -56,7 +65,6 @@ export default class CartPage extends Component{
     componentDidMount() {        
     this.processData()
     }
-
     processData = () =>{
                 //this is the info in the end
                 let quantity = 0
@@ -85,16 +93,20 @@ export default class CartPage extends Component{
         },100)
     }
 
+    refreshCart =()=>{
+        this.setState({cart:JSON.parse(window.localStorage.getItem('cart'))});
+    }
+
     render(){
         if(this.state.cart === null){
 
-            return (<CartPageDiv opaque={this.props.opaque}><Cart>CART</Cart><div><Cart>There is nothing in here yet</Cart></div></CartPageDiv>)
+            return (<CartPageDiv opaque={this.props.opaque}><Cart>CART</Cart><div><Cart>There is nothing in here, go to our <a href="/" id="home">Home</a> to find products</Cart></div></CartPageDiv>)
         }
 
         return(<CartPageDiv opaque={this.props.opaque} id="page">
             <Cart>CART</Cart>
             {this.state.cart.map((v,i,arr)=>{
-                return <CartProduct amountChanged={this.amountChanged} key={i} idOnLocalStorage={i} currencyIndex={this.props.currencyIndex} currencySymbols={this.props.currencySymbols} product={v} />
+                return <CartProduct refreshCart={this.refreshCart} refreshLS={this.props.refreshLS} trashAction={this.props.trashAction} amountChanged={this.amountChanged} key={i} idOnLocalStorage={i} currencyIndex={this.props.currencyIndex} currencySymbols={this.props.currencySymbols} product={v} />
             })}
             <OrderInfosDiv>
             <h3>TAX 21% : {this.props.currencySymbols[this.props.currencyIndex]} {parseFloat(this.state.taxes).toFixed(2)}</h3>
