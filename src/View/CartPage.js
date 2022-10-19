@@ -49,8 +49,6 @@ export default class CartPage extends Component{
 
     constructor(props) {
         super(props);
-        // this.totalPlusTaxes = this.totalPlusTaxes.bind(this);
-        // this.subTotal = this.subTotal.bind(this);
         this.processData = this.processData.bind(this);
         this.amountChanged = this.amountChanged.bind(this);
         this.refreshCart = this.refreshCart.bind(this);
@@ -112,7 +110,7 @@ export default class CartPage extends Component{
             <h3>TAX 21% : {this.props.currencySymbols[this.props.currencyIndex]} {parseFloat(this.state.taxes).toFixed(2)}</h3>
             <h3>Quantity: {this.state.quantity}</h3>
             <h3>Total : {this.props.currencySymbols[this.props.currencyIndex]} {' '} {parseFloat(this.state.totalPlusTaxes).toFixed(2)}</h3>
-            <Order onClick={()=>alert(`directing you to our payment page! your bill should be ${this.state.totalPlusTaxes.toFixed(2)} bucks ! \n\n\nand your order is this bunch of code :\n\n ${JSON.stringify(this.state.cart)}`)}>ORDER</Order>
+            <Order onClick={()=>alert(`directing you to our payment page! Total should be: \n ${this.props.currencySymbols[this.props.currencyIndex]} ${this.state.totalPlusTaxes.toFixed(2)} \n\n\nand your order : \n\n ${JSON.stringify(this.state.cart)}`)}>ORDER</Order>
             </OrderInfosDiv>
         </CartPageDiv>)
     }

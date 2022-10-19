@@ -2,14 +2,11 @@ import { Component } from "react";
 import MiniAttribute from "./MiniAttribute";
 import styled from "styled-components";
 
-
-
 const MiniProductCart = styled.div`
-  /* background-color: red; */
   display: flex;
   flex-direction: row;
   max-width: 100%;
-  /* max-height:200px; */
+
   margin-bottom: 2px;
   border: 1px solid #eee;
 `;
@@ -18,9 +15,9 @@ const LeftContainer = styled.div`
 
   margin: 0px 0;
   width: 130px;
-  /* max-width:125px; */
+
   display: flex;
-  /* background-color: blue; */
+
   flex-direction: column;
   & h2,
   h3,
@@ -31,13 +28,12 @@ const LeftContainer = styled.div`
   }
 `;
 const RightContainer = styled.div`
-  /* background-color:green; */
   display: flex;
   flex-direction: row;
   align-items: space-around;
   max-width: 50%;
   min-width: 50%;
-  margin-left:6px;
+  margin-left: 6px;
 `;
 const ButtonContainer = styled.div`
   display: flex;
@@ -50,21 +46,16 @@ const ButtonContainer = styled.div`
   }
 `;
 const ImageHolder = styled.div`
-  /* margin-bottom:1px; */
   display: flex;
   align-items: center;
-  /* display:block;   */
-  /* background-color:gray; */
+
   padding: 0 3px;
   width: 120px;
   #img {
-    /* padding-left:2px; */
-
     object-fit: cover;
     object-position: center;
-    /* min-width: 120px; */
+
     max-width: 120px;
-    /* max-height:200px; */
   }
 `;
 const Brand = styled.p`
@@ -85,63 +76,53 @@ const PhotoButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
-  min-width:2.5em;
+  min-width: 2.5em;
   left: -50px;
   top: 70px;
   justify-content: space-between;
-
 `;
 
 const DivLeft = styled.div`
-opacity: 0.7;
-padding: 4px 6px 4px 4px;
-    background-color:black;
-    color:white;
-`
+  opacity: 0.7;
+  padding: 4px 6px 4px 4px;
+  background-color: black;
+  color: white;
+`;
 const DivRight = styled.div`
-opacity: 0.7;
-    padding: 4px 4px 4px 6px;
-    background-color:black;
-    color:white;
-`
+  opacity: 0.7;
+  padding: 4px 4px 4px 6px;
+  background-color: black;
+  color: white;
+`;
 
 const ArrowLeft = styled.div`
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-top: 7px solid transparent;
-  border-bottom: 7px solid transparent; 
-  border-right:7px solid white;
-`
+  border-bottom: 7px solid transparent;
+  border-right: 7px solid white;
+`;
 const ArrowRight = styled.div`
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-top: 7px solid transparent;
   border-bottom: 7px solid transparent;
   border-left: 7px solid white;
-  /* padding: 7px; */
-`
+`;
 const MiniTrash = styled.div`
-position:relative;
-top:5px;
-left:115px;
-opacity:0.7;
-height: 22px;
-background-color:black;
-color:white;
-/* width:1.25em; */
-padding:2px;
-/* border-radius: 40px; */
-/* border: 1px solid red; */
-/* img{
-  padding:5px;
-  background-color:  black;
-  color:white;
-} */
-:hover{
-  opacity:1;
-}
-`
+  position: relative;
+  top: 5px;
+  left: 115px;
+  opacity: 0.7;
+  height: 22px;
+  background-color: black;
+  color: white;
 
+  padding: 2px;
+  :hover {
+    opacity: 1;
+  }
+`;
 
 export default class MiniProduct extends Component {
   constructor(props) {
@@ -191,13 +172,6 @@ export default class MiniProduct extends Component {
   };
 
   render() {
-    // let currencyIndex = this.props.currencyIndex
-    // let currencySymbol = this.props.currencySymbols[currencyIndex]
-    // console.log(product, 'this is mini product on mini cart')
-    // console.log(
-    //   this.state.product,
-    //   "this is inside the miniproduct when it renders"
-    // );
     if (this.state.product !== null && this.state.product !== []) {
       return (
         <MiniProductCart>
@@ -233,11 +207,15 @@ export default class MiniProduct extends Component {
                 -
               </button>
             </ButtonContainer>
-            <MiniTrash onClick={() => {
-            this.props.trashAction(this.props.idOnLocalStorage)
-            this.props.turnOffModals()
-            this.props.refreshLS()
-            }}>x</MiniTrash>
+            <MiniTrash
+              onClick={() => {
+                this.props.trashAction(this.props.idOnLocalStorage);
+                this.props.turnOffModals();
+                this.props.refreshLS();
+              }}
+            >
+              x
+            </MiniTrash>
             <ImageHolder>
               <img
                 id="img"
@@ -246,8 +224,12 @@ export default class MiniProduct extends Component {
               ></img>
               {this.state.product.imgs.length > 1 ? (
                 <PhotoButtonContainer>
-                  <DivLeft onClick={() => this.prevPhoto()}><ArrowLeft/></DivLeft>
-                  <DivRight onClick={() => this.nextPhoto()}><ArrowRight/></DivRight>
+                  <DivLeft onClick={() => this.prevPhoto()}>
+                    <ArrowLeft />
+                  </DivLeft>
+                  <DivRight onClick={() => this.nextPhoto()}>
+                    <ArrowRight />
+                  </DivRight>
                 </PhotoButtonContainer>
               ) : null}
             </ImageHolder>

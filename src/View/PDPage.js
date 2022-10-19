@@ -3,101 +3,91 @@ import styled from "styled-components";
 import AttributesPicker from "../Classes/AttributesPicker";
 
 const MainProductPage = styled.div`
-
   padding: 2em;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   background-color: #fff;
   filter: ${(props) => (props.opaque ? "brightness(80%)" : "brightness(100%)")};
-  /* min-height:90vh; */
-  #brand{
-font-family: 'Raleway';
-font-style: 'regular';
-font-weight: 600;
-font-size: 30px;
+
+  #brand {
+    font-family: "Raleway";
+    font-style: "regular";
+    font-weight: 600;
+    font-size: 30px;
   }
-  #name{
-    font-family: 'Raleway';
-font-style: normal;
-font-weight: 400;
-font-size: 30px;
+  #name {
+    font-family: "Raleway";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
   }
 `;
 
 const SmallImages = styled.div`
   display: flex;
-  margin-left:70px;
+  margin-left: 70px;
   flex-direction: column;
   overflow-x: hidden;
-  min-width:80px;
+  min-width: 80px;
   & img {
-    box-sizing:border-box;
+    box-sizing: border-box;
     margin: 2px 6px;
-    max-width:100px;;
-    /* width:auto; */
+    max-width: 100px;
+
     border: 1px solid white;
-    /* height: auto; */
   }
   & :hover {
-    border:1px solid black;
-    
+    border: 1px solid black;
   }
 `;
 const BigImage = styled.div`
   padding: 0 2em;
-  /* display: flex; */
-  /* justify-content:center; */
-  /* border: 1px solid green; */
+
   max-width: 35vw;
-  min-width:35vw;
+  min-width: 35vw;
   & img {
     width: 100%;
-    object-fit:cover;
-    object-position:center;
+    object-fit: cover;
+    object-position: center;
     height: auto;
-    /* max-width: 43vw; */
   }
 `;
 const TextSection = styled.section`
   padding: 2em;
-  /* border: 1px solid red; */
+
   width: 30vw;
 `;
 const Price = styled.div`
-  /* border: 1px solid blue; */
   padding: 10px 0;
-  #price{
-    font-family: 'Raleway';
+  #price {
+    font-family: "Raleway";
   }
 `;
 
 const AddToCart = styled.button`
-display: flex;
-cursor: ${(props)=> (props.inStock ? null : 'not-allowed')};
-background-color:${(props)=> (props.inStock ?'#5ECE7B': 'black')};
-width:100%;
-border:none;
-color:#fff;
-justify-content: center;
-padding:16px 32px;
-margin-bottom:10px;
+  display: flex;
+  cursor: ${(props) => (props.inStock ? null : "not-allowed")};
+  background-color: ${(props) => (props.inStock ? "#5ECE7B" : "black")};
+  width: 100%;
+  border: none;
+  color: #fff;
+  justify-content: center;
+  padding: 16px 32px;
+  margin-bottom: 10px;
 
-:hover{
-  background-color:${(props)=> (props.inStock ?'#3dcc61':'black')};
-  
-}
-
+  :hover {
+    background-color: ${(props) => (props.inStock ? "#3dcc61" : "black")};
+  }
 `;
 
 const Loading = styled.div`
-padding:50px;
-`
+  padding: 50px;
+`;
 
 export default class PDPage extends Component {
   constructor(props) {
     super(props);
-    // this.cartAction = this.cartAction.bind(this);
     this.attrGetter = this.attrGetter.bind(this);
     this.setDefaultAttr = this.setDefaultAttr.bind(this);
     this.state = {
@@ -106,7 +96,7 @@ export default class PDPage extends Component {
       description: "",
       currencyIndex: "",
       imgs: "",
-      attributesSelected:[],
+      attributesSelected: [],
     };
   }
 
@@ -120,27 +110,24 @@ export default class PDPage extends Component {
     });
   }
 
-  attrGetter = (props) =>{
-    this.setState({attributesSelected: props})
-    return this.state.attributesSelected
-  }
-  setDefaultAttr = () =>{
+  attrGetter = (props) => {
+    this.setState({ attributesSelected: props });
+    return this.state.attributesSelected;
+  };
+  setDefaultAttr = () => {
     let product = this.props.productFactory;
-    const defaultAttrStatePrep= {};
+    const defaultAttrStatePrep = {};
 
-    product.attributes.map((v, i, arr)=>{
-      return Object.defineProperty(defaultAttrStatePrep,v.id, {
-       value:0,
-       writable: true,
-       configurable: true,
-       enumerable: true
-      })
-     })
-     return defaultAttrStatePrep    
-  }
-
-
-
+    product.attributes.map((v, i, arr) => {
+      return Object.defineProperty(defaultAttrStatePrep, v.id, {
+        value: 0,
+        writable: true,
+        configurable: true,
+        enumerable: true,
+      });
+    });
+    return defaultAttrStatePrep;
+  };
 
   render() {
     let product = this.props.productFactory;
@@ -171,7 +158,7 @@ export default class PDPage extends Component {
           </BigImage>
           <TextSection>
             <h1 id="brand">{product.brand}</h1>
-            <h3 id='name'>{product.name}</h3>
+            <h3 id="name">{product.name}</h3>
 
             <AttributesPicker
               attributes={product.attributes}
@@ -181,15 +168,24 @@ export default class PDPage extends Component {
             <Price>
               <h5 id="price-label">PRICE:</h5>
               <h3 id="price">
-              {this.props.currencySymbols[this.props.currencyIndex]}
-              {product.prices[this.props.currencyIndex].amount}</h3>
+                {this.props.currencySymbols[this.props.currencyIndex]}
+                {product.prices[this.props.currencyIndex].amount}
+              </h3>
             </Price>
-            <AddToCart inStock={product.inStock} onClick={()=>{
-              if(product.inStock){ 
-                this.props.cartAction(product, this.attrGetter() || this.setDefaultAttr() )
-                this.props.refreshLS()
-              }
-            }}>{product.inStock ?'ADD TO CART': 'OUT OF STOCK'}</AddToCart>
+            <AddToCart
+              inStock={product.inStock}
+              onClick={() => {
+                if (product.inStock) {
+                  this.props.cartAction(
+                    product,
+                    this.attrGetter() || this.setDefaultAttr()
+                  );
+                  this.props.refreshLS();
+                }
+              }}
+            >
+              {product.inStock ? "ADD TO CART" : "OUT OF STOCK"}
+            </AddToCart>
             {/* description */}
             <div
               dangerouslySetInnerHTML={{
