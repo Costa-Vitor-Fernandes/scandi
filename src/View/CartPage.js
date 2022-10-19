@@ -31,6 +31,7 @@ padding-left: 65px;
 width:30%;
 `
 const CartPageDiv = styled.div`
+font-family:"Raleway";
 background-color:#fff;
 filter: ${(props) => (props.opaque ? "brightness(80%)" : "brightness(100%)")};
 

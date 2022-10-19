@@ -112,8 +112,9 @@ const OpenMiniCartModal = styled.div`
   align-self: center;
   flex-direction: row;
   /* background-color:orange; */
-  padding: 40px 0;
-  padding-left:15px;
+  padding: 40px 20px;
+  padding-right: 23px;
+  
   font-size:26px;
   line-height:0px;
   #relative{
@@ -179,7 +180,13 @@ const Footer = styled.div`
   color:rgb(245, 245, 245);
   text-align: center;
 `;
-const  CartCounter = styled.div`
+
+const Absolute = styled.div`
+position:absolute;
+width:20px;
+`
+
+const CartCounter = styled.div`
 display: ${(props)=> (props.counter >= 1 ? 'block' : 'none')};
 background-color:black;
 width:20px;
@@ -187,7 +194,7 @@ height:20px;
 border-radius: 20px;
 position: relative;
 top:-8px;
-left:-12px;
+left:10px;
 color:white;
 font-size:12px;
 text-align:center;
@@ -423,9 +430,11 @@ class App extends Component {
             </OpenCurrencyModal>
             <OpenMiniCartModal onClick={() => this.cartModal()}>
               <img src="/Empty Cart black.svg" alt="cart" />
+              <Absolute>
               <CartCounter counter={this.state.cartCount}>
                 {this.state.cartCount}
               </CartCounter>
+              </Absolute>
             </OpenMiniCartModal>
           </ActionsMenu>
         </Header>
