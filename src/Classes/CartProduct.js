@@ -1,7 +1,6 @@
 import { Component } from "react";
 import styled from "styled-components";
 import AttributesPicker from "./AttributesPicker";
-// import MiniAttribute from "./MiniAttribute";
 
 const CartItemContainer = styled.div`
   display: flex;
@@ -47,11 +46,8 @@ const ImageHolder = styled.div`
   margin-left: 16px;
   width: 230px;
   height: 270px;
-  /* background-color: red; */
-  /* max-width: 200px;
-max-height:300px; */
+
   #img {
-    /* border:1px solid black; */
     object-fit: cover;
     object-position: 50% 10%;
     width: 100%;
@@ -67,66 +63,61 @@ const ButtonContainer = styled.div`
 const PhotoButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  width:3em;
+  width: 3em;
   position: relative;
   top: -50px;
   left: 160px;
-  justify-content:space-between;
-  /* background-color:red; */
-
+  justify-content: space-between;
 `;
 const DivLeft = styled.div`
-opacity: 0.7;
-padding: 4px 6px 4px 4px;
-    background-color:black;
-    color:white;
-    :hover{
-  opacity:1;
-}
-`
+  opacity: 0.7;
+  padding: 4px 6px 4px 4px;
+  background-color: black;
+  color: white;
+  :hover {
+    opacity: 1;
+  }
+`;
 const DivRight = styled.div`
-opacity: 0.7;
-    padding: 4px 4px 4px 6px;
-    background-color:black;
-    color:white;
-    :hover{
-  opacity:1;
-}
-`
+  opacity: 0.7;
+  padding: 4px 4px 4px 6px;
+  background-color: black;
+  color: white;
+  :hover {
+    opacity: 1;
+  }
+`;
 
 const ArrowLeft = styled.div`
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-top: 7px solid transparent;
-  border-bottom: 7px solid transparent; 
-  border-right:7px solid white;
-`
+  border-bottom: 7px solid transparent;
+  border-right: 7px solid white;
+`;
 const ArrowRight = styled.div`
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-top: 7px solid transparent;
   border-bottom: 7px solid transparent;
   border-left: 7px solid white;
-  /* padding: 7px; */
-`
+`;
 const TrashCan = styled.div`
-/* background-color:red; */
-opacity:0.7;
-position:relative;
-left:240px;
-top:16px;
-width:1.25em;
-border-radius: 40px;
-img{
-  padding:5px;
-  background-color:  black;
-  color:white;
-}
-:hover{
-  opacity:1;
-}
-`
-
+  opacity: 0.7;
+  position: relative;
+  left: 240px;
+  top: 16px;
+  width: 1.25em;
+  border-radius: 40px;
+  img {
+    padding: 5px;
+    background-color: black;
+    color: white;
+  }
+  :hover {
+    opacity: 1;
+  }
+`;
 
 export default class CartProduct extends Component {
   constructor(props) {
@@ -164,30 +155,28 @@ export default class CartProduct extends Component {
     }, 100);
   };
   nextPhoto = () => {
-    let max = this.props.product.imgs.length
-    let newPhotoIndex = this.state.photoIndex +1
-    if (newPhotoIndex === max){
-      return  this.setState({ photoIndex: 0 });
-    }else{
+    let max = this.props.product.imgs.length;
+    let newPhotoIndex = this.state.photoIndex + 1;
+    if (newPhotoIndex === max) {
+      return this.setState({ photoIndex: 0 });
+    } else {
       this.setState({ photoIndex: newPhotoIndex });
     }
   };
   prevPhoto = () => {
-    let max = this.props.product.imgs.length-1
-    if(this.state.photoIndex === 0){
-     return this.setState({ photoIndex: max });
-    }else{
-      let newPhotoIndex = this.state.photoIndex -1
+    let max = this.props.product.imgs.length - 1;
+    if (this.state.photoIndex === 0) {
+      return this.setState({ photoIndex: max });
+    } else {
+      let newPhotoIndex = this.state.photoIndex - 1;
       this.setState({ photoIndex: newPhotoIndex });
     }
   };
 
-  
-
   render() {
     let product = this.props.product;
     // console.log(product)
-    console.log(this.props)
+    console.log(this.props);
     return (
       <CartItemContainer>
         <FlexDiv>
@@ -202,7 +191,6 @@ export default class CartProduct extends Component {
             selected={product.attributesSelected}
             selectedAtLS={true}
           />
-          {/* {JSON.stringify(product.attributesSelected)} */}
         </FlexDiv>
         <FlexRowDiv>
           <ButtonContainer>
@@ -210,24 +198,31 @@ export default class CartProduct extends Component {
             <h5>{this.state.amount}</h5>
             <button onClick={() => this.minusAmount()}>-</button>
           </ButtonContainer>
-          <TrashCan onClick={() => {
-            this.props.trashAction(this.props.idOnLocalStorage)
-            this.props.refreshLS()
-            this.props.refreshCart()
-            }}><img src="/trash-can.svg" alt="trash icon to delete"></img></TrashCan>
-          {/* amount buttons */}
+          <TrashCan
+            onClick={() => {
+              this.props.trashAction(this.props.idOnLocalStorage);
+              this.props.refreshLS();
+              this.props.refreshCart();
+            }}
+          >
+            <img src="/trash-can.svg" alt="trash icon to delete"></img>
+          </TrashCan>
           <ImageHolder>
             <img
               id="img"
               src={product.imgs[this.state.photoIndex]}
               alt={product.imgs[this.state.photoIndex]}
             ></img>
-            {product.imgs.length >1? <PhotoButtonContainer>
-              <DivLeft onClick={() => this.prevPhoto()}><ArrowLeft/></DivLeft>
-              <DivRight onClick={() => this.nextPhoto()}><ArrowRight/></DivRight>
-              
-            </PhotoButtonContainer> :null}
-            
+            {product.imgs.length > 1 ? (
+              <PhotoButtonContainer>
+                <DivLeft onClick={() => this.prevPhoto()}>
+                  <ArrowLeft />
+                </DivLeft>
+                <DivRight onClick={() => this.nextPhoto()}>
+                  <ArrowRight />
+                </DivRight>
+              </PhotoButtonContainer>
+            ) : null}
           </ImageHolder>
         </FlexRowDiv>
       </CartItemContainer>
