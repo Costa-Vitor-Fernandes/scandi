@@ -88,23 +88,28 @@ export default class MiniCart extends Component {
         //this is the info in the end
         let quantity = 0
         let sum = 0
-        this.state.cart.map((v,i,arr)=>{
-            quantity = quantity+v.amount
-           return sum = sum + v.prices[this.props.currencyIndex].amount*v.amount
-        })
-        this.setState({
-            subTotal: sum,
-            taxes: parseFloat(sum*0.21),
-            totalPlusTaxes: parseFloat(sum*1.21),
-            quantity: quantity,
+        if(this.state.cart !== null){
 
-        })
-}
+            
+            this.state.cart.map((v,i,arr)=>{
+                quantity = quantity+v.amount
+                return sum = sum + v.prices[this.props.currencyIndex].amount*v.amount
+            })
+            this.setState({
+                subTotal: sum,
+                taxes: parseFloat(sum*0.21),
+                totalPlusTaxes: parseFloat(sum*1.21),
+                quantity: quantity,
+                
+            })
+        }
+    }
 
     
 
     render(){
-        // console.log(this.state.cart, JSON.parse(window.localStorage.getItem('cart')))
+        
+
         console.log(this.state.cart, 'cartstate')
         if(this.state.cart === null){
 
