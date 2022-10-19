@@ -215,14 +215,6 @@ class App extends Component {
         let allCategories = data.data.categories.map((v, i, arr) => v.name);
         this.setState({ allCategoryNames: allCategories });
       });
-    // axios
-    //   .get("http://localhost:4000/graphql?query={categories{name}}")
-    //   .then((res) => {
-    //     // console.log(res.data.data.categories, "resdatadata");
-    // let allCategories = res.data.data.categories.map((v, i, arr) => v.name);
-    // this.setState({ allCategoryNames: allCategories });
-    //   });
-
     fetch("http://localhost:4000/graphql?query={currencies{symbol,label}}")
       .then((res) => res.json())
       .then((data) => {
@@ -238,22 +230,7 @@ class App extends Component {
           currencyLabels: arrAllLabels,
         });
       });
-    // axios
-    //   .get("http://localhost:4000/graphql?query={currencies{symbol,label}}")
-    //   .then((res) => {
-    //     let allCurrencies = res.data.data.currencies;
-    //     let arrAllSymbols = allCurrencies.map((v, i, arr) => {
-    //       return arr[i].symbol;
-    //     });
-    //     let arrAllLabels = allCurrencies.map((v, i, arr) => {
-    //       return arr[i].label;
-    //     });
-    //     this.setState({
-    //       currencySymbols: arrAllSymbols,
-    //       currencyLabels: arrAllLabels,
-    //     });
-    //   });
-    //fetching product stuff
+
 
     fetch(
       "http://localhost:4000/graphql?query={category{products{attributes{id,name,type,items{id,value,displayValue}},category,brand,inStock,gallery,name,description,prices{amount,currency{symbol}}}}}"
@@ -266,14 +243,7 @@ class App extends Component {
           (v, i, arr) => arr[i].category
         );
         let arrAllProductPrices = allProducts.map((v, i, arr) => arr[i].prices);
-        // returning a obj for each product with {amount : x, currency: {symbol : y} }
-
-        let arrAllProductImgs = allProducts.map((v, i, arr) => arr[i].gallery);
-        // returning a arr with links to the product images
-        //this could be a req to the graphql server
-        // let allCategories = [...new Set(arrAllCategories)];
-        //this could be a req to the graphql server
-
+        let arrAllProductImgs = allProducts.map((v, i, arr) => arr[i].gallery)
         let arrAllDescriptions = allProducts.map(
           (v, i, arr) => arr[i].description
         );
@@ -282,7 +252,6 @@ class App extends Component {
         let arrAllProductAttributes = allProducts.map(
           (v, i, arr) => arr[i].attributes
         );
-
         this.setState({
           productInStock: arrInStock,
           productDescription: arrAllDescriptions,
@@ -292,49 +261,9 @@ class App extends Component {
           productNames: arrAllProductNames,
           productImgs: arrAllProductImgs,
           productPrices: arrAllProductPrices,
-          // allCategoryNames: allCategories,
+          
         });
       });
-    // axios
-    //   .get(
-    //     `http://localhost:4000/graphql?query={category{products{attributes{id,name,type,items{id,value,displayValue}},category,brand,inStock,gallery,name,description,prices{amount,currency{symbol}}}}}`
-    //   )
-    //   .then((res) => {
-    //     let allProducts = res.data.data.category.products;
-    //     let arrAllProductNames = allProducts.map((v, i, arr) => arr[i].name);
-    //     let arrAllProductCategories = allProducts.map(
-    //       (v, i, arr) => arr[i].category
-    //     );
-    //     let arrAllProductPrices = allProducts.map((v, i, arr) => arr[i].prices);
-    //     // returning a obj for each product with {amount : x, currency: {symbol : y} }
-
-    //     let arrAllProductImgs = allProducts.map((v, i, arr) => arr[i].gallery);
-    //     // returning a arr with links to the product images
-    //     //this could be a req to the graphql server
-    //     // let allCategories = [...new Set(arrAllCategories)];
-    //     //this could be a req to the graphql server
-
-    //     let arrAllDescriptions = allProducts.map(
-    //       (v, i, arr) => arr[i].description
-    //     );
-    //     let arrAllBrands = allProducts.map((v, i, arr) => arr[i].brand);
-    //     let arrInStock = allProducts.map((v, i, arr) => arr[i].inStock);
-    //     let arrAllProductAttributes = allProducts.map(
-    //       (v, i, arr) => arr[i].attributes
-    //     );
-
-    //     this.setState({
-    //       productInStock: arrInStock,
-    //       productDescription: arrAllDescriptions,
-    //       productAttributes: arrAllProductAttributes,
-    //       productBrands: arrAllBrands,
-    //       productCategories: arrAllProductCategories,
-    //       productNames: arrAllProductNames,
-    //       productImgs: arrAllProductImgs,
-    //       productPrices: arrAllProductPrices,
-    //       // allCategoryNames: allCategories,
-    //     });
-    //   });
 
     this.refreshLS();
   }
@@ -371,10 +300,7 @@ class App extends Component {
   cartAction = (product, attr) => {
     product.amount = 1;
     product.attributesSelected = attr;
-    // console.log(product, "full product action");
 
-    // to parse string to Obj
-    // JSON.parse(window.localStorage.getItem('cart'))
     let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
     //logic to when the user has a Cart LocalStorage object
     if (getFromLocalStorage !== null) {
@@ -401,17 +327,16 @@ class App extends Component {
     
     let getFromLocalStorage = JSON.parse(window.localStorage.getItem("cart"));
     if(idOnLS === 0 && getFromLocalStorage.length ===1){
-      // let newLS =[]
+
       return window.localStorage.removeItem("cart");
     }
     else{
-      // console.log(getFromLocalStorage,'old LS');
+
       getFromLocalStorage.splice(idOnLS,1);
-      // console.log(getFromLocalStorage,'newLS')
-      // console.log('removed',removed)
+
       return window.localStorage.setItem("cart", JSON.stringify(getFromLocalStorage));
       
-      // this.refreshLS();
+
     }
   }
 
@@ -433,8 +358,7 @@ class App extends Component {
   };
 
   render() {
-    // console.log(this.state)
-    // console.log(window.location.pathname, " window href"); //
+
     let productId = window.location.pathname.slice(10);
     return (
       <div id="page">
@@ -468,6 +392,7 @@ class App extends Component {
                 </Link>
               );
             })}
+                        {/* mapping the category names */}
           </HeaderContainer>
           <Logo>
             <img src={"/logo transparent.png"} alt={"logo"}></img>
@@ -530,6 +455,7 @@ class App extends Component {
           </CartModal>
         ) : null}
         {/* opens the mini cart Modal */}
+
         {/* this opens the PLP */}
         {this.props.plpage ? (
           <PLP
@@ -570,6 +496,8 @@ class App extends Component {
             </ProductGrid>
           </PLP>
         ) : null}
+         {/* this opens the PLP */}
+
         {/* opens the PDP when url changes */}
         {this.props.pdpage ? (
           <PDPage
@@ -584,6 +512,7 @@ class App extends Component {
             refreshLS={this.refreshLS}
           />
         ) : null}
+        {/* opens the PDP when url changes */}
 
         {/* opens the cartPage when url changes */}
         {this.props.cartPage ? (
@@ -595,6 +524,7 @@ class App extends Component {
             currencySymbols={this.state.currencySymbols}
           />
         ) : null}
+        {/* opens the cartPage when url changes */}
 
         <Footer>
           <p>Just A Footer Spacer For TM and links</p>
