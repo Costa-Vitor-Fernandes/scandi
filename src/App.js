@@ -2,7 +2,6 @@ import "./App.css";
 import styled from "styled-components";
 import { Component } from "react";
 import Cards from "./Classes/Cards";
-import axios from "axios";
 import PDPage from "./View/PDPage";
 import MiniCart from "./Classes/Mini/MiniCart";
 import { Link } from "react-router-dom";
@@ -64,7 +63,6 @@ const ProductGrid = styled.div`
   grid-template-columns: 23vw 23vw 23vw;
   gap: 7vw;
   width: 88vw;
- 
 `;
 
 const OpenCurrencyModal = styled.div`
@@ -128,7 +126,6 @@ const CurrencyModal = styled(Modal)`
 `;
 
 const CurrencyActionButton = styled.div`
-
   width: 7em;
   font-size: 16px;
   margin-left: 0.35em;
@@ -209,17 +206,25 @@ class App extends Component {
 
   componentDidMount() {
     //fetching the symbols and labels of the currencies
-    axios
-      .get("http://localhost:4000/graphql?query={categories{name}}")
-      .then((res) => {
-        // console.log(res.data.data.categories, "resdatadata");
-        let allCategories = res.data.data.categories.map((v, i, arr) => v.name);
+
+    fetch("http://localhost:4000/graphql?query={categories{name}}")
+      .then((response) => response.json())
+      .then((data) => {
+        let allCategories = data.data.categories.map((v, i, arr) => v.name);
         this.setState({ allCategoryNames: allCategories });
       });
-    axios
-      .get("http://localhost:4000/graphql?query={currencies{symbol,label}}")
-      .then((res) => {
-        let allCurrencies = res.data.data.currencies;
+    // axios
+    //   .get("http://localhost:4000/graphql?query={categories{name}}")
+    //   .then((res) => {
+    //     // console.log(res.data.data.categories, "resdatadata");
+    // let allCategories = res.data.data.categories.map((v, i, arr) => v.name);
+    // this.setState({ allCategoryNames: allCategories });
+    //   });
+
+    fetch("http://localhost:4000/graphql?query={currencies{symbol,label}}")
+      .then((res) => res.json())
+      .then((data) => {
+        let allCurrencies = data.data.currencies;
         let arrAllSymbols = allCurrencies.map((v, i, arr) => {
           return arr[i].symbol;
         });
@@ -231,13 +236,29 @@ class App extends Component {
           currencyLabels: arrAllLabels,
         });
       });
+    // axios
+    //   .get("http://localhost:4000/graphql?query={currencies{symbol,label}}")
+    //   .then((res) => {
+    //     let allCurrencies = res.data.data.currencies;
+    //     let arrAllSymbols = allCurrencies.map((v, i, arr) => {
+    //       return arr[i].symbol;
+    //     });
+    //     let arrAllLabels = allCurrencies.map((v, i, arr) => {
+    //       return arr[i].label;
+    //     });
+    //     this.setState({
+    //       currencySymbols: arrAllSymbols,
+    //       currencyLabels: arrAllLabels,
+    //     });
+    //   });
     //fetching product stuff
-    axios
-      .get(
-        `http://localhost:4000/graphql?query={category{products{attributes{id,name,type,items{id,value,displayValue}},category,brand,inStock,gallery,name,description,prices{amount,currency{symbol}}}}}`
-      )
-      .then((res) => {
-        let allProducts = res.data.data.category.products;
+
+    fetch(
+      "http://localhost:4000/graphql?query={category{products{attributes{id,name,type,items{id,value,displayValue}},category,brand,inStock,gallery,name,description,prices{amount,currency{symbol}}}}}"
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        let allProducts = data.data.category.products;
         let arrAllProductNames = allProducts.map((v, i, arr) => arr[i].name);
         let arrAllProductCategories = allProducts.map(
           (v, i, arr) => arr[i].category
@@ -272,6 +293,46 @@ class App extends Component {
           // allCategoryNames: allCategories,
         });
       });
+    // axios
+    //   .get(
+    //     `http://localhost:4000/graphql?query={category{products{attributes{id,name,type,items{id,value,displayValue}},category,brand,inStock,gallery,name,description,prices{amount,currency{symbol}}}}}`
+    //   )
+    //   .then((res) => {
+    //     let allProducts = res.data.data.category.products;
+    //     let arrAllProductNames = allProducts.map((v, i, arr) => arr[i].name);
+    //     let arrAllProductCategories = allProducts.map(
+    //       (v, i, arr) => arr[i].category
+    //     );
+    //     let arrAllProductPrices = allProducts.map((v, i, arr) => arr[i].prices);
+    //     // returning a obj for each product with {amount : x, currency: {symbol : y} }
+
+    //     let arrAllProductImgs = allProducts.map((v, i, arr) => arr[i].gallery);
+    //     // returning a arr with links to the product images
+    //     //this could be a req to the graphql server
+    //     // let allCategories = [...new Set(arrAllCategories)];
+    //     //this could be a req to the graphql server
+
+    //     let arrAllDescriptions = allProducts.map(
+    //       (v, i, arr) => arr[i].description
+    //     );
+    //     let arrAllBrands = allProducts.map((v, i, arr) => arr[i].brand);
+    //     let arrInStock = allProducts.map((v, i, arr) => arr[i].inStock);
+    //     let arrAllProductAttributes = allProducts.map(
+    //       (v, i, arr) => arr[i].attributes
+    //     );
+
+    //     this.setState({
+    //       productInStock: arrInStock,
+    //       productDescription: arrAllDescriptions,
+    //       productAttributes: arrAllProductAttributes,
+    //       productBrands: arrAllBrands,
+    //       productCategories: arrAllProductCategories,
+    //       productNames: arrAllProductNames,
+    //       productImgs: arrAllProductImgs,
+    //       productPrices: arrAllProductPrices,
+    //       // allCategoryNames: allCategories,
+    //     });
+    //   });
 
     this.refreshLS();
   }
@@ -306,7 +367,6 @@ class App extends Component {
     return product;
   };
   cartAction = (product, attr) => {
-
     product.amount = 1;
     product.attributesSelected = attr;
     // console.log(product, "full product action");
@@ -330,7 +390,6 @@ class App extends Component {
       return window.localStorage.setItem("cart", JSON.stringify(newCart));
     }
     if (getFromLocalStorage === null) {
-   
       return window.localStorage.setItem("cart", JSON.stringify([product]));
     }
   };
@@ -339,7 +398,6 @@ class App extends Component {
     if (CartLocalstorage === null) {
       return;
     }
-
 
     let counter = 0;
     CartLocalstorage.map((v, i, arr) => {
@@ -352,9 +410,8 @@ class App extends Component {
   };
 
   render() {
-
     // console.log(this.state)
-    // console.log(window.location.pathname, " window href"); // 
+    // console.log(window.location.pathname, " window href"); //
     let productId = window.location.pathname.slice(10);
     return (
       <div id="page">
